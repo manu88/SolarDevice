@@ -28,15 +28,14 @@ def test_display():
             if event.type == pygame.QUIT:
                 loop = False
 
+        disp.load_mire("mire.png")
         disp.update(background)
         win.blit(background, (0, 0))
 
         pygame.display.flip()
         clock.tick(10)
 
-    pygame.image.save(background, "test.png")
-
 
 if __name__ == "__main__":
-    gen_mire()
-    # test_display()
+    # gen_mire()
+    test_display()
