@@ -1,5 +1,6 @@
 from infoclimat.api import API
 from display.display import Display
+from display.mire import gen_mire
 import pygame
 
 
@@ -21,10 +22,11 @@ def test_display():
     background = pygame.Surface(win.get_size())
 
     disp = Display(res)
-    while True:
+    loop = True
+    while loop:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                return
+                loop = False
 
         disp.update(background)
         win.blit(background, (0, 0))
@@ -32,6 +34,9 @@ def test_display():
         pygame.display.flip()
         clock.tick(10)
 
+    pygame.image.save(background, "test.png")
+
 
 if __name__ == "__main__":
-    test_display()
+    gen_mire()
+    # test_display()
