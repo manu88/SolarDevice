@@ -23,12 +23,13 @@ def test_display():
 
     disp = Display(res)
     loop = True
+    disp.load_mapping("panels_conf.json")
+    disp.load_mire("mire.png")
     while loop:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 loop = False
 
-        disp.load_mire("mire.png")
         disp.update(background)
         win.blit(background, (0, 0))
 
