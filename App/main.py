@@ -14,18 +14,18 @@ def test_api():
 
 
 def test_display():
+    res = (1024, 640)
     pygame.init()
     clock = pygame.time.Clock()
-    win = pygame.display.set_mode((640, 480))
+    win = pygame.display.set_mode(res)
     background = pygame.Surface(win.get_size())
 
-    disp = Display()
+    disp = Display(res)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
 
-        
         disp.update(background)
         win.blit(background, (0, 0))
 
