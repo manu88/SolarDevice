@@ -57,10 +57,17 @@ class API:
 
             current_entry, next_entry = _get_interval_entries(
                 current_datetime.hour, times)
-            print(current_datetime, current_entry, next_entry)
-            assert current_entry != -1 or next_entry != -1  # can't have both
 
-            if next_entry == -1:
+            if current_entry == -1 and next_entry == -1:
+                return "", ""
+            if current_entry == -1:
+                # check previous day, 11pm-ish
+                prev_day = current_datetime - datetime.timedelta(days=1)
+                prev_day = prev_day.replace(hour=23)
+                current_entry, _ = self._get_bounds_dates(
+                    prev_day, just_check_current=True)
+                return current_entry, times[next_entry]
+            if next_entry == -1 and just_check_current is False:
                 # check next day, midnight-ish
                 next_day = current_datetime + datetime.timedelta(days=1)
                 next_day = next_day.replace(hour=0)
@@ -117,7 +124,11 @@ if __name__ == "__main__":
 
     assert resp.get_current(datetime.datetime(2026, 3, 25, 23, 22, 4)) == (
         "2026-03-25 22:00:00", "2026-03-26 01:00:00")
+
+    assert resp.get_current(datetime.datetime(2026, 3, 26, 00, 22, 4)) == (
+        "2026-03-25 22:00:00", "2026-03-26 01:00:00")
+
     print("----------------------")
     current_entry, next_entry = resp.get_current(
-        datetime.datetime(2026, 3, 25, 23, 22, 4))
+        datetime.datetime(2026, 3, 26, 00, 22, 4))
     print(f"between {current_entry} and {next_entry}")
