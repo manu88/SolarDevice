@@ -1,3 +1,4 @@
+from infoclimat.state import WeatherState
 import requests
 import time
 from typing import Optional, Dict, Any, Iterable, Tuple
@@ -75,11 +76,13 @@ class API:
                 return times[current_entry], next_entry
             return times[current_entry] if current_entry != -1 else "", times[next_entry] if next_entry != -1 else ""
 
-        def get_current(self, current_datetime: Optional[datetime.datetime] = None):
+        def get_current(self, current_datetime: Optional[datetime.datetime] = None) -> WeatherState:
             if current_datetime is None:
                 current_datetime = datetime.datetime.now()
-
-            return self._get_bounds_dates(current_datetime)
+            current_date, next_date = self._get_bounds_dates(current_datetime)
+            current_entry: Optional[Dict] = self.data[current_date] if current_date in self.data else None
+            next_entry: Optional[Dict] = self.data[next_date] if next_date in self.data else None
+            return WeatherState(current_date=current_date, next_date=next_date, current_entry=current_entry, next_entry=next_entry)
 
     def __init__(self) -> None:
         self.last_req_time = 0
