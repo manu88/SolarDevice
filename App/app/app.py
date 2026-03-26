@@ -6,22 +6,26 @@ from app.osc_server import OSCServer
 
 class App:
     def __init__(self, conf_file_path: str, ip="127.0.0.1", port=5005):
+        pygame.init()
+        res = (1024, 640)
+        self.disp = Display(res)
+
+        if len(conf_file_path) > 0:
+            self.disp.load_mapping(conf_file_path)
+
+        self.win = pygame.display.set_mode(res, pygame.RESIZABLE)
+        self.surface = pygame.Surface(self.win.get_size())
+
+        self.disp.load_mire("mire.png")
         self.dispatcher = Dispatcher()
         self.dispatcher.map("/mapping", self._on_mapping_msg)
         self.osc_server = OSCServer(self.dispatcher, ip=ip, port=port)
-        res = (1024, 640)
-
-        pygame.init()
-        self.disp = Display(res)
-        self.win = pygame.display.set_mode(res, pygame.RESIZABLE)
-        self.surface = pygame.Surface(self.win.get_size())
 
     def run(self):
         clock = pygame.time.Clock()
 
         loop = True
-        self.disp.load_mapping("panels_conf.json")
-        self.disp.load_mire("mire.png")
+
         while loop:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
