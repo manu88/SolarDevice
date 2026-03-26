@@ -2,6 +2,7 @@ from infoclimat.api import API
 from display.display import Display
 from display.mire import gen_mire
 import pygame
+from app.app import App
 
 
 def test_api():
@@ -15,26 +16,8 @@ def test_api():
 
 
 def test_display():
-    res = (1024, 640)
-    pygame.init()
-    clock = pygame.time.Clock()
-    win = pygame.display.set_mode(res, pygame.RESIZABLE)
-    background = pygame.Surface(win.get_size())
-
-    disp = Display(res)
-    loop = True
-    disp.load_mapping("panels_conf.json")
-    disp.load_mire("mire.png")
-    while loop:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                loop = False
-
-        disp.update(background)
-        win.blit(background, (0, 0))
-
-        pygame.display.flip()
-        clock.tick(10)
+    app = App()
+    app.run()
 
 
 if __name__ == "__main__":
