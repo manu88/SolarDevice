@@ -28,19 +28,19 @@ class App:
         clock = pygame.time.Clock()
 
         loop = True
+        try:
+            while loop:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        loop = False
 
-        while loop:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    loop = False
+                self.update()
+                self.win.blit(self.surface, (0, 0))
 
-            self.update()
-            self.win.blit(self.surface, (0, 0))
-
-            pygame.display.flip()
-            clock.tick(10)
-
-        self.osc_server.stop()
+                pygame.display.flip()
+                clock.tick(10)
+        finally:
+            self.osc_server.stop()
 
     def _on_mire_msg(self, unused_addr, show: int):
         print(f"Show mire {show}")
