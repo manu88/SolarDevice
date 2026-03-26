@@ -50,7 +50,13 @@ class App:
     def update(self):
         self.renderer.update()
         if self.show_source:
-            self.surface.blit(self.renderer.surface, dest=(0, 0))
+            ratio = (self.renderer.surface.get_size(
+            )[0]//self.surface.get_size()[0]) + 1
+            new_w = self.renderer.surface.get_size()[0]/ratio
+            new_h = self.renderer.surface.get_size()[1]/ratio
+            scaled = pygame.transform.scale(
+                self.renderer.surface, (new_w, new_h))
+            self.surface.blit(scaled, dest=(10, 0))
         else:
             self.disp.update(from_surface=self.renderer.surface,
                              to_surface=self.surface)
