@@ -1,7 +1,7 @@
-from display.display import Display
 import pygame
 from pythonosc.dispatcher import Dispatcher
 from app.osc_server import OSCServer
+from display.display import Display
 
 
 class App:
@@ -42,3 +42,4 @@ class App:
     def _on_mapping_msg(self, unused_addr, screen_idx: int, source_idx: int):
         print(
             f"on_mapping_msg screen_idx={screen_idx} source_idx={source_idx}")
+        self.disp.mapping[screen_idx].source_index = source_idx
