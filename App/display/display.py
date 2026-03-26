@@ -8,6 +8,7 @@ HEIGHT_PANEL = 160
 class Mapping:
     def __init__(self, screen_coords: Tuple[int, int]):
         self.screen_coords = screen_coords
+        self.flip_y = False
 
 
 class Display:
@@ -42,16 +43,19 @@ class Display:
             self.mapping = {}
             data = json.load(f)
             for index, mapping in data["mapping"].items():
-                print(mapping)
                 self.mapping[int(index)] = Mapping(
                     screen_coords=(mapping["x"], mapping["y"]))
+                if "flip_y" in mapping:
+                    self.mapping[int(index)].flip_y = bool(mapping["flip_y"])
 
     def load_mire(self, file_path: str):
         self.mire_surf = pygame.image.load(file_path)
 
-    def _render_part(self, surface: pygame.Surface, screen_pos: Tuple[int, int], source_x: int):
+    def _render_part(self, surface: pygame.Surface, mapping: Mapping, screen_pos: Tuple[int, int], source_x: int):
         if self.mire_surf:
-            surface.blit(self.mire_surf, dest=screen_pos,
+            surf = pygame.transform.flip(
+                self.mire_surf, flip_x=0, flip_y=mapping.flip_y)
+            surface.blit(surf, dest=screen_pos,
                          area=(source_x, 0, WIDTH_PANEL, HEIGHT_PANEL))
 
     def update(self, surface: pygame.Surface, start_coords=(0, 0)):
@@ -61,5 +65,5 @@ class Display:
             pygame.draw.rect(surface, (0, 200, 255),
                              (x, y, WIDTH_PANEL, HEIGHT_PANEL), 1)
 
-            self._render_part(surface, screen_pos=(
+            self._render_part(surface, mapping=mapping, screen_pos=(
                 x, y), source_x=index*WIDTH_PANEL)

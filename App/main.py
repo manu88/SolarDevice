@@ -18,7 +18,7 @@ def test_display():
     res = (1024, 640)
     pygame.init()
     clock = pygame.time.Clock()
-    win = pygame.display.set_mode(res)
+    win = pygame.display.set_mode(res, pygame.RESIZABLE)
     background = pygame.Surface(win.get_size())
 
     disp = Display(res)
