@@ -6,7 +6,6 @@ def _draw_grid(surf: pygame.Surface, pos, res_panel, step=20):
                      (pos[0], pos[1], res_panel[0], res_panel[1]), 1)
     num_cols = res_panel[0]//step
     num_rows = res_panel[1]//step
-    print(num_cols, num_rows)
     alternate = False
 
     for j in range(num_rows):

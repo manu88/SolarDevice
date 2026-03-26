@@ -1,8 +1,11 @@
 from infoclimat.api import API
-from display.display import Display
 from display.mire import gen_mire
-import pygame
 from app.app import App
+import argparse
+
+parser = argparse.ArgumentParser(prog='SolarDevice')
+parser.add_argument('-m', '--mire',
+                    action='store_true')
 
 
 def test_api():
@@ -15,11 +18,14 @@ def test_api():
         f"nebu: {weatherEntry.current_nebulosite()} -> {weatherEntry.next_nebulosite()}")
 
 
-def test_display():
+def run_app():
     app = App()
     app.run()
 
 
 if __name__ == "__main__":
-    # gen_mire()
-    test_display()
+    args = parser.parse_args()
+    if args.mire:
+        gen_mire()
+        exit(0)
+    run_app()
