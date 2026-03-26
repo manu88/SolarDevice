@@ -6,9 +6,18 @@ HEIGHT_PANEL = 160
 
 
 class Mapping:
-    def __init__(self, screen_coords: Tuple[int, int]):
+    def __init__(self, screen_coords: Tuple[int, int], source_index: int):
         self.screen_coords = screen_coords
         self.flip_y = False
+        self.source_index = source_index
+
+    @staticmethod
+    def from_data(data: Dict) -> 'Mapping':
+        m = Mapping(screen_coords=(
+            data["x"], data["y"]), source_index=data["source_index"])
+        if "flip_y" in data:
+            m.flip_y = bool(data["flip_y"])
+        return m
 
 
 class Display:
@@ -30,7 +39,7 @@ class Display:
                 x = i * WIDTH_PANEL
                 y = j * HEIGHT_PANEL
                 self.mapping[index] = Mapping(
-                    screen_coords=(x, y))
+                    screen_coords=(x, y), source_index=index)
                 index += 1
         print(
             f"num_rows={self.num_rows} num_cols={self.num_cols} total panels={self.num_rows*self.num_cols}")
@@ -42,11 +51,9 @@ class Display:
         with open(file_path, "r", encoding="utf-8") as f:
             self.mapping = {}
             data = json.load(f)
-            for index, mapping in data["mapping"].items():
-                self.mapping[int(index)] = Mapping(
-                    screen_coords=(mapping["x"], mapping["y"]))
-                if "flip_y" in mapping:
-                    self.mapping[int(index)].flip_y = bool(mapping["flip_y"])
+            for idx, mapping_data in data["mapping"].items():
+                index = int(idx)
+                self.mapping[index] = Mapping.from_data(mapping_data)
 
     def load_mire(self, file_path: str):
         self.mire_surf = pygame.image.load(file_path)
@@ -59,11 +66,10 @@ class Display:
                          area=(source_x, 0, WIDTH_PANEL, HEIGHT_PANEL))
 
     def update(self, surface: pygame.Surface, start_coords=(0, 0)):
-        for index, mapping in self.mapping.items():
+        for mapping in self.mapping.values():
             x = start_coords[0] + mapping.screen_coords[0]
             y = start_coords[1] + mapping.screen_coords[1]
             pygame.draw.rect(surface, (0, 200, 255),
                              (x, y, WIDTH_PANEL, HEIGHT_PANEL), 1)
-
             self._render_part(surface, mapping=mapping, screen_pos=(
-                x, y), source_x=index*WIDTH_PANEL)
+                x, y), source_x=mapping.source_index*WIDTH_PANEL)
