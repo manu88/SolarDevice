@@ -26,7 +26,6 @@ class Display:
         self.num_panels = 12
         self.num_rows: int = -1
         self.num_cols: int = -1
-        self.mire_surf: Optional[pygame.Surface] = None
         self.mapping: Dict[int, Mapping] = {}
         self._setup()
 
@@ -55,21 +54,17 @@ class Display:
                 index = int(idx)
                 self.mapping[index] = Mapping.from_data(mapping_data)
 
-    def load_mire(self, file_path: str):
-        self.mire_surf = pygame.image.load(file_path)
+    def _render_part(self, from_surface: pygame.Surface, to_surface: pygame.Surface, mapping: Mapping, screen_pos: Tuple[int, int], source_x: int):
+        surf = pygame.transform.flip(
+            from_surface, flip_x=0, flip_y=mapping.flip_y)
+        to_surface.blit(surf, dest=screen_pos,
+                        area=(source_x, 0, WIDTH_PANEL, HEIGHT_PANEL))
 
-    def _render_part(self, surface: pygame.Surface, mapping: Mapping, screen_pos: Tuple[int, int], source_x: int):
-        if self.mire_surf:
-            surf = pygame.transform.flip(
-                self.mire_surf, flip_x=0, flip_y=mapping.flip_y)
-            surface.blit(surf, dest=screen_pos,
-                         area=(source_x, 0, WIDTH_PANEL, HEIGHT_PANEL))
-
-    def update(self, surface: pygame.Surface, start_coords=(0, 0)):
+    def update(self, from_surface: pygame.Surface, to_surface: pygame.Surface, start_coords=(0, 0)):
         for mapping in self.mapping.values():
             x = start_coords[0] + mapping.screen_coords[0]
             y = start_coords[1] + mapping.screen_coords[1]
-            pygame.draw.rect(surface, (0, 200, 255),
+            pygame.draw.rect(to_surface, (0, 200, 255),
                              (x, y, WIDTH_PANEL, HEIGHT_PANEL), 1)
-            self._render_part(surface, mapping=mapping, screen_pos=(
+            self._render_part(from_surface=from_surface, to_surface=to_surface, mapping=mapping, screen_pos=(
                 x, y), source_x=mapping.source_index*WIDTH_PANEL)
