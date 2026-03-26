@@ -19,9 +19,9 @@ class App:
         self.win = pygame.display.set_mode(res, pygame.RESIZABLE)
         self.surface = pygame.Surface(self.win.get_size())
 
-        self.renderer.load_mire("mire.png")
         self.dispatcher = Dispatcher()
         self.dispatcher.map("/mapping", self._on_mapping_msg)
+        self.dispatcher.map("/mire", self._on_mire_msg)
         self.osc_server = OSCServer(self.dispatcher, ip=ip, port=port)
 
     def run(self):
@@ -41,6 +41,13 @@ class App:
             clock.tick(10)
 
         self.osc_server.stop()
+
+    def _on_mire_msg(self, unused_addr, show: int):
+        print(f"Show mire {show}")
+        if show:
+            self.disp.load_mire("mire.png")
+        else:
+            self.disp.unload_mire()
 
     def _on_mapping_msg(self, unused_addr, screen_idx: int, source_idx: int):
         print(
