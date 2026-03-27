@@ -1,4 +1,4 @@
-from typing import Tuple, Dict, Optional
+from typing import Tuple, Dict, Optional, List
 import json
 import pygame
 
@@ -21,6 +21,16 @@ class Mapping:
             m.flip_y = bool(data["flip_y"])
         return m
 
+    def serialize(self) -> Dict:
+        out = {
+            "x": self.screen_coords[0],
+            "y": self.screen_coords[1],
+            "source_index": self.source_index
+        }
+        if self.flip_y:
+            out["flip_y"] = True
+        return out
+
 
 class Display:
     def __init__(self, resolution: Tuple[int, int]) -> None:
@@ -28,7 +38,7 @@ class Display:
         self.num_panels = 12
         self.num_rows: int = -1
         self.num_cols: int = -1
-        self.mapping: Dict[int, Mapping] = {}
+        self.mapping: List[Mapping] = []
         self.mire_surface: Optional[pygame.Surface] = None
         self._setup()
 
@@ -41,8 +51,8 @@ class Display:
             for i in range(self.num_cols):
                 x = i * WIDTH_PANEL
                 y = j * HEIGHT_PANEL
-                self.mapping[index] = Mapping(
-                    screen_coords=(x, y), source_index=index)
+                self.mapping.append(Mapping(
+                    screen_coords=(x, y), source_index=index))
                 index += 1
                 if index >= self.num_panels:
                     done = True
@@ -51,9 +61,6 @@ class Display:
                 break
         print(
             f"num_rows={self.num_rows} num_cols={self.num_cols} total panels={self.num_rows*self.num_cols}")
-        for index, mapping in self.mapping.items():
-            print(
-                f"mapping i={index} sourcex={index*WIDTH_PANEL} to x={mapping.screen_coords[0]} y={mapping.screen_coords[1]}")
 
     def load_mire(self, file_path: str):
         self.mire_surface = pygame.image.load(file_path)
@@ -63,11 +70,17 @@ class Display:
 
     def load_mapping(self, file_path: str):
         with open(file_path, "r", encoding="utf-8") as f:
-            self.mapping = {}
+            self.mapping = []
             data = json.load(f)
-            for idx, mapping_data in data["mapping"].items():
-                index = int(idx)
-                self.mapping[index] = Mapping.from_data(mapping_data)
+            for mapping_data in data["mapping"]:
+                self.mapping.append(Mapping.from_data(mapping_data))
+
+    def save_mapping(self, file_path: str):
+        with open(file_path, "w", encoding="utf-8") as f:
+            obj = {
+                "mapping": [m.serialize() for m in self.mapping]
+            }
+            json.dump(obj, f)
 
     def _render_part(self, from_surface: pygame.Surface, to_surface: pygame.Surface, mapping: Mapping, screen_pos: Tuple[int, int], source_x: int):
         surf = pygame.transform.flip(
@@ -76,7 +89,7 @@ class Display:
                         area=(source_x, 0, WIDTH_PANEL, HEIGHT_PANEL))
 
     def update(self, from_surface: pygame.Surface, to_surface: pygame.Surface, start_coords=(0, 0)):
-        for mapping in self.mapping.values():
+        for mapping in self.mapping:
             x = start_coords[0] + mapping.screen_coords[0]
             y = start_coords[1] + mapping.screen_coords[1]
             pygame.draw.rect(to_surface, (0, 200, 255),

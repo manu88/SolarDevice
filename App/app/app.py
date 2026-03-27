@@ -22,6 +22,8 @@ class App:
 
         self.dispatcher = Dispatcher()
         self.dispatcher.map("/mapping", self._on_mapping_msg)
+        self.dispatcher.map("/save_mapping", self._on_save_mapping_msg)
+        self.dispatcher.map("/load_mapping", self._on_load_mapping_msg)
         self.dispatcher.map("/mire", self._on_mire_msg)
         self.osc_server = OSCServer(self.dispatcher, ip=ip, port=port)
 
@@ -49,6 +51,14 @@ class App:
             self.disp.load_mire("mire.png")
         else:
             self.disp.unload_mire()
+
+    def _on_save_mapping_msg(self, unused_addr, file_path: str):
+        print(f"save mapping to file '{file_path}'")
+        self.disp.save_mapping(file_path)
+
+    def _on_load_mapping_msg(self, unused_addr, file_path: str):
+        print(f"load mapping to file '{file_path}'")
+        self.disp.load_mapping(file_path)
 
     def _on_mapping_msg(self, unused_addr, screen_idx: int, source_idx: int):
         print(
