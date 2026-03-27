@@ -25,6 +25,7 @@ class App:
         self.dispatcher.map("/save_mapping", self._on_save_mapping_msg)
         self.dispatcher.map("/load_mapping", self._on_load_mapping_msg)
         self.dispatcher.map("/mire", self._on_mire_msg)
+        self.dispatcher.map("/pause", self._on_pause_msg)
         self.osc_server = OSCServer(self.dispatcher, ip=ip, port=port)
 
     def run(self):
@@ -64,6 +65,9 @@ class App:
         print(
             f"on_mapping_msg screen_idx={screen_idx} source_idx={source_idx}")
         self.disp.mapping[screen_idx].source_index = source_idx
+
+    def _on_pause_msg(self, unused_addr, pause: int):
+        self.renderer.paused = bool(pause)
 
     def update(self):
         self.renderer.update()
