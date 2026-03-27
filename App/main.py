@@ -8,6 +8,8 @@ from app.app import App
 parser = argparse.ArgumentParser(prog='SolarDevice')
 parser.add_argument('-m', '--mire',
                     action='store_true')
+parser.add_argument('-a', '--api',
+                    action='store_true')
 
 parser.add_argument('--show-source',
                     action='store_true')
@@ -19,10 +21,10 @@ def test_api():
     api = API()
     resp = api.get()
     assert resp
-    weatherEntry = resp.get_current()
-    print(weatherEntry)
+    weather_entry = resp.get_current()
+    print(weather_entry)
     print(
-        f"nebu: {weatherEntry.current_nebulosite()} -> {weatherEntry.next_nebulosite()}")
+        f"nebu: {weather_entry.current_nebulosite()} -> {weather_entry.next_nebulosite()}")
 
 
 def run_app(args):
@@ -33,6 +35,9 @@ def run_app(args):
 
 if __name__ == "__main__":
     args = parser.parse_args()
+    if args.api:
+        test_api()
+        sys.exit(0)
     if args.mire:
         gen_mire()
         sys.exit(0)
