@@ -11,6 +11,7 @@ class App:
         self.renderer = Renderer()
         pygame.init()
         res = (1024, 640)
+        self.fps = 20
         self.disp = Display(res)
 
         if len(conf_file_path) > 0:
@@ -38,7 +39,7 @@ class App:
                 self.win.blit(self.surface, (0, 0))
 
                 pygame.display.flip()
-                clock.tick(10)
+                clock.tick(self.fps)
         finally:
             self.osc_server.stop()
 
