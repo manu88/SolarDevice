@@ -25,12 +25,12 @@ def _draw_grid(surf: pygame.Surface, pos, res_panel, step=20):
         alternate = not alternate
 
 
-def gen_mire(res_panel=(320, 160), num_panels=12, out_file="mire.png"):
+def gen_mire(res_panel=(128, 64), num_panels=12, out_file="mire.png"):
     size = (res_panel[0]*num_panels, res_panel[1])
     pygame.init()
     pygame.font.init()
     surface = pygame.Surface(size)
-    font = pygame.font.SysFont(None, 160)
+    font = pygame.font.SysFont(None, 80)
     for i in range(num_panels):
         pos_x = i*res_panel[0]
         _draw_grid(surface, (pos_x, 0), res_panel)

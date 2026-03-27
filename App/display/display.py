@@ -3,8 +3,8 @@ import json
 import pygame
 
 
-WIDTH_PANEL = 320
-HEIGHT_PANEL = 160
+WIDTH_PANEL = 128
+HEIGHT_PANEL = 64
 
 
 class Mapping:
@@ -36,6 +36,7 @@ class Display:
         self.num_cols = self.resolution[0]//WIDTH_PANEL
         self.num_rows = self.resolution[1]//HEIGHT_PANEL
         index = 0
+        done = False
         for j in range(self.num_rows):
             for i in range(self.num_cols):
                 x = i * WIDTH_PANEL
@@ -43,6 +44,11 @@ class Display:
                 self.mapping[index] = Mapping(
                     screen_coords=(x, y), source_index=index)
                 index += 1
+                if index >= self.num_panels:
+                    done = True
+                    break
+            if done:
+                break
         print(
             f"num_rows={self.num_rows} num_cols={self.num_cols} total panels={self.num_rows*self.num_cols}")
         for index, mapping in self.mapping.items():
