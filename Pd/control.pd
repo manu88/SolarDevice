@@ -1,4 +1,4 @@
-#N canvas 626 503 564 512 12;
+#N canvas 604 139 826 622 12;
 #X obj 68 243 packOSC;
 #X obj 76 329 udpsend;
 #X msg 183 271 connect 127.0.0.1 5005;
@@ -10,6 +10,14 @@
 #X msg 294 45 send /load_mapping panels_conf.json;
 #X obj 307 154 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
 #X msg 304 178 send /pause \$1;
+#X obj 232 379 udpreceive 5006;
+#X obj 236 438 unpackOSC;
+#X msg 464 218 send /get_status;
+#X obj 215 486 route /status_paused;
+#X obj 212 558 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
+#X obj 370 527 print;
+#X text 235 561 paused;
+#X text 229 522 status;
 #X connect 0 0 1 0;
 #X connect 2 0 1 0;
 #X connect 3 0 2 0;
@@ -20,3 +28,8 @@
 #X connect 8 0 0 0;
 #X connect 9 0 10 0;
 #X connect 10 0 0 0;
+#X connect 11 0 12 0;
+#X connect 12 0 14 0;
+#X connect 13 0 0 0;
+#X connect 14 0 15 0;
+#X connect 14 1 16 0;

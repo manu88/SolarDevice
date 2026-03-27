@@ -1,4 +1,4 @@
-from pythonosc import osc_server
+from pythonosc import osc_server, udp_client
 from pythonosc.dispatcher import Dispatcher
 import threading
 
@@ -8,7 +8,7 @@ class OSCServer:
         self._thread = threading.Thread(target=self._start)
         self.osc_server = osc_server.ThreadingOSCUDPServer(
             (ip, port), dispatcher)
-
+        self.client = udp_client.SimpleUDPClient("127.0.0.1", 5006)
         self._thread.start()
 
     def stop(self):
