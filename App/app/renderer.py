@@ -1,7 +1,7 @@
 import pygame
 
 
-SOURCE_RESOLUTION = (3840, 160)
+SOURCE_RESOLUTION = (1536, 64)
 
 
 class Renderer:

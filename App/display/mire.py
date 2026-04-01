@@ -27,6 +27,7 @@ def _draw_grid(surf: pygame.Surface, pos, res_panel, step=20):
 
 def gen_mire(res_panel=(128, 64), num_panels=12, out_file="mire.png"):
     size = (res_panel[0]*num_panels, res_panel[1])
+    print(f"generated mire size={size}")
     pygame.init()
     pygame.font.init()
     surface = pygame.Surface(size)
