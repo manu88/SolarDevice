@@ -12,6 +12,8 @@ const int minPeakDiff = 20;
 int ledState = HIGH;
 
 unsigned long revStartTime = 0;
+unsigned long lastIdleCheckTime = 0;
+const unsigned long IdleInterval = 5000;
 int inputPin = A0;
 
 void setup() {
@@ -50,6 +52,7 @@ void loop() {
   unsigned long now = millis();
   int reading = val > average + minPeakDiff;
   if (reading ){
+    lastIdleCheckTime = now;
     if(inPeak == 0){
       ledState = !ledState;
       if (revStartTime > 0){
@@ -65,7 +68,11 @@ void loop() {
   }else{
     inPeak = 0;
   }
-
+  if (now - lastIdleCheckTime >IdleInterval){
+    Serial.print("speed:");
+    Serial.println(0);
+    lastIdleCheckTime = now;
+  }
   digitalWrite(LED_BUILTIN, ledState);
   delay(10);  // delay in between reads for stability
 }
