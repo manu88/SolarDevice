@@ -51,10 +51,13 @@ void loop() {
 
   unsigned long now = millis();
   int reading = val > average + minPeakDiff;
+  
   if (reading ){
     lastIdleCheckTime = now;
     if(inPeak == 0){
       ledState = !ledState;
+      Serial.print("activity:");
+      Serial.println(reading);
       if (revStartTime > 0){
         unsigned long ellapsed = now - revStartTime;
         float speed = 1000.f/ellapsed;
