@@ -1,4 +1,4 @@
-
+#include "Adafruit_WS2801.h"
 
 const int numReadings = 50;
 
@@ -14,7 +14,18 @@ int ledState = HIGH;
 unsigned long revStartTime = 0;
 unsigned long lastIdleCheckTime = 0;
 const unsigned long IdleInterval = 5000;
+
 int inputPin = A0;
+
+
+//Leds part
+
+uint8_t dataPin  = 2;    // Yellow wire on Adafruit Pixels
+uint8_t clockPin = 3;    // Green wire on Adafruit Pixels
+int nbLeds = 2;
+Adafruit_WS2801 strip = Adafruit_WS2801(nbLeds, dataPin, clockPin, WS2801_RGB);
+
+
 
 void setup() {
   
@@ -25,11 +36,31 @@ void setup() {
   for (int thisReading = 0; thisReading < numReadings; thisReading++) {
     readings[thisReading] = 0;
   }
+
+  strip.begin();
+  strip.show(); 
 }
 
 
 int inPeak = 0;
+
+
+int intensity = 100;
+
+
 void loop() {
+
+  if (Serial.available() > 0) {
+    int inByte = Serial.read();
+    intensity = inByte;
+  }
+
+  for (int i=0;i<nbLeds;i++){
+    strip.setPixelColor(i, intensity,intensity ,intensity);
+  }
+
+  strip.show();
+
   // subtract the last reading:
   total = total - readings[readIndex];
   // read from the sensor:
