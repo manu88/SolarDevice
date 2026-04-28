@@ -61,19 +61,17 @@ void loop() {
 
   strip.show();
 
-  // subtract the last reading:
+
   total = total - readings[readIndex];
-  // read from the sensor:
+
   int val = analogRead(inputPin);
   readings[readIndex] = val;
-  // add the reading to the total:
+
   total = total + readings[readIndex];
-  // advance to the next position in the array:
   readIndex = readIndex + 1;
 
-  // if we're at the end of the array...
+  
   if (readIndex >= numReadings) {
-    // ...wrap around to the beginning:
     readIndex = 0;
   }
 
@@ -92,8 +90,8 @@ void loop() {
       if (revStartTime > 0){
         unsigned long ellapsed = now - revStartTime;
         float speed = 1000.f/ellapsed;
-        Serial.print("speed:");
-        Serial.println(speed);
+        Serial.print("ellapsed:");
+        Serial.println(ellapsed);
         
       }
       revStartTime = now;
