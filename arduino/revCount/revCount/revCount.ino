@@ -47,9 +47,14 @@ int inPeak = 0;
 
 int intensity = 100;
 
+void sendStatus(float speed, int activity){
+  Serial.print(speed);
+  Serial.print(" ");
+  Serial.print(activity);
+  Serial.print(";\n");
+}
 
 void loop() {
-
   if (Serial.available() > 0) {
     int inByte = Serial.read();
     intensity = inByte;
@@ -60,7 +65,6 @@ void loop() {
   }
 
   strip.show();
-
 
   total = total - readings[readIndex];
 
@@ -85,15 +89,12 @@ void loop() {
     lastIdleCheckTime = now;
     if(inPeak == 0){
       ledState = !ledState;
-      Serial.print("activity:");
-      Serial.println(reading);
+      float speed = -1;
       if (revStartTime > 0){
         unsigned long ellapsed = now - revStartTime;
-        float speed = 1000.f/ellapsed;
-        Serial.print("ellapsed:");
-        Serial.println(ellapsed);
-        
+        speed = 1000.f/ellapsed;
       }
+      sendStatus(speed, reading);
       revStartTime = now;
     }
     inPeak = 1;
@@ -101,8 +102,7 @@ void loop() {
     inPeak = 0;
   }
   if (now - lastIdleCheckTime >IdleInterval){
-    Serial.print("speed:");
-    Serial.println(0);
+    sendStatus(0, 0);
     lastIdleCheckTime = now;
   }
   digitalWrite(LED_BUILTIN, ledState);

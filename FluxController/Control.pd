@@ -1,0 +1,14 @@
+#N canvas 599 309 958 381 12;
+#X msg 116 32 devices;
+#X obj 213 193 print status;
+#X obj 113 140 comport 2 9600;
+#X obj 424 93 vsl 19 162 0 255 0 0 empty empty empty 0 -9 0 12 #fcfcfc #000000 #000000 0 1;
+#X msg 523 50 close;
+#X floatatom 496 280 5 0 0 0 - - - 0;
+#X msg 246 69 open 3;
+#X connect 0 0 2 0;
+#X connect 2 1 1 0;
+#X connect 3 0 2 0;
+#X connect 3 0 5 0;
+#X connect 4 0 2 0;
+#X connect 6 0 2 0;
