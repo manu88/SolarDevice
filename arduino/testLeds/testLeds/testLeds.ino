@@ -12,6 +12,8 @@ struct SensorReading {
   int total = 0;                     // the running total
   int average = 0;                   // the average
   int inPeak = 0;
+  unsigned long revStartTime = 0;
+  float speed = 0;
 };
 
 SensorReading sensor0;
@@ -54,7 +56,12 @@ void processSensor(SensorReading &reading) {
     if (reading.inPeak == 0) {
       reading.inPeak = 1;
       ledState = !ledState;
-      sendStatus(1);
+      if (reading.revStartTime > 0) {
+        unsigned long elapsed = now - reading.revStartTime;
+        reading.speed = 1000.f / elapsed;
+      }
+      reading.revStartTime = now;
+      sendStatus(1, reading);
     }
 
   } else {
@@ -75,8 +82,10 @@ void setup() {
   strip.setPixelColor(1, intensity, intensity, intensity);
 }
 
-void sendStatus(int val) {
+void sendStatus(int val, const SensorReading &reading) {
   Serial.print(val);
+  Serial.print(" ");
+  Serial.print(reading.speed);
   Serial.print(";\n");
 }
 
