@@ -14,7 +14,7 @@ struct SensorReading {
   int inPeak = 0;
 };
 
-SensorReading sensorReading;
+SensorReading sensor0;
 
 // Leds part
 
@@ -26,14 +26,44 @@ Adafruit_WS2801 strip = Adafruit_WS2801(nbLeds, dataPin, clockPin, WS2801_RGB);
 int ledState = HIGH;
 int intensity = 255;
 
-void resetReadings() {
+void resetReadings(SensorReading &reading) {
+  reading.readIndex = 0;
   for (int i = 0; i < NUM_SENSOR_READINGS; i++) {
-    sensorReading.readings[i] = 0;
+    reading.readings[i] = 0;
+  }
+}
+
+void processSensor(SensorReading &reading) {
+  reading.total = reading.total - reading.readings[reading.readIndex];
+  int val = analogRead(inputPin);
+  reading.readings[reading.readIndex] = val;
+  reading.total = reading.total + reading.readings[reading.readIndex];
+  reading.readIndex += 1;
+
+  if (reading.readIndex >= NUM_SENSOR_READINGS) {
+    reading.readIndex = 0;
+  }
+
+  // calculate the average:
+  reading.average = reading.total / NUM_SENSOR_READINGS;
+
+  unsigned long now = millis();
+  int theReading = val > reading.average + minPeakDiff;
+
+  if (theReading) {
+    if (reading.inPeak == 0) {
+      reading.inPeak = 1;
+      ledState = !ledState;
+      sendStatus(1);
+    }
+
+  } else {
+    reading.inPeak = 0;
   }
 }
 
 void setup() {
-  resetReadings();
+  resetReadings(sensor0);
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, LOW);
   Serial.begin(9600);
@@ -122,35 +152,7 @@ void loop() {
   strip.show();
 
   // Sensor logic
-
-  sensorReading.total =
-      sensorReading.total - sensorReading.readings[sensorReading.readIndex];
-  int val = analogRead(inputPin);
-  sensorReading.readings[sensorReading.readIndex] = val;
-  sensorReading.total =
-      sensorReading.total + sensorReading.readings[sensorReading.readIndex];
-  sensorReading.readIndex += 1;
-
-  if (sensorReading.readIndex >= NUM_SENSOR_READINGS) {
-    sensorReading.readIndex = 0;
-  }
-
-  // calculate the average:
-  sensorReading.average = sensorReading.total / NUM_SENSOR_READINGS;
-
-  unsigned long now = millis();
-  int theReading = val > sensorReading.average + minPeakDiff;
-
-  if (theReading) {
-    if (sensorReading.inPeak == 0) {
-      sensorReading.inPeak = 1;
-      ledState = !ledState;
-      sendStatus(1);
-    }
-
-  } else {
-    sensorReading.inPeak = 0;
-  }
+  processSensor(sensor0);
 
   digitalWrite(LED_BUILTIN, ledState);
   delay(10); // delay in between reads for stability
