@@ -22,20 +22,22 @@ int inputPin = A0;
 
 uint8_t dataPin  = 2;    // Yellow wire on Adafruit Pixels
 uint8_t clockPin = 3;    // Green wire on Adafruit Pixels
-int nbLeds = 2;
+int nbLeds = 4;
 Adafruit_WS2801 strip = Adafruit_WS2801(nbLeds, dataPin, clockPin, WS2801_RGB);
 
+void resetReadings(){
+  for (int i = 0; i < i; i++) {
+    readings[i] = 0;
+  }
+}
 
 
 void setup() {
-  
+  resetReadings();
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, LOW);
   Serial.begin(9600);
-  // initialize all the readings to 0:
-  for (int thisReading = 0; thisReading < numReadings; thisReading++) {
-    readings[thisReading] = 0;
-  }
+  
 
   strip.begin();
   strip.show(); 
@@ -45,27 +47,47 @@ void setup() {
 int inPeak = 0;
 
 
-int intensity = 100;
+int intensity = 0;
+int intensity1 = 0;
+int intensity2 = 0;
+int intensity3 = 0;
 
 void sendStatus(float speed, int activity){
   Serial.print(speed);
   Serial.print(" ");
   Serial.print(activity);
+  Serial.print(" ");
+  Serial.print(intensity);
+  Serial.print(" ");
+  Serial.print(intensity1);
   Serial.print(";\n");
 }
 
 void loop() {
-  if (Serial.available() > 0) {
-    int inByte = Serial.read();
-    intensity = inByte;
+  if (Serial.available() >= 5) {
+    int start = Serial.read();
+    if(start == 23){
+      intensity = Serial.read();
+      intensity1 = Serial.read();
+      intensity2 = Serial.read();
+      intensity3 = Serial.read();
+    }
   }
 
-  for (int i=0;i<nbLeds;i++){
-    strip.setPixelColor(i, intensity,intensity ,intensity);
-  }
+  strip.setPixelColor(0, intensity, intensity, intensity);
+  strip.setPixelColor(1, intensity1, intensity1, intensity1);
+  
+  
+  strip.setPixelColor(2, intensity2, intensity2, intensity2);
+  strip.setPixelColor(3, intensity3, intensity3, intensity3);
+  //for (int i=0;i<nbLeds;i++){
+  //  strip.setPixelColor(i, intensity,intensity ,intensity);
+  //}
 
   strip.show();
-
+  delay(100);  // delay in between reads for stability
+  sendStatus(0,0);
+  return;
   total = total - readings[readIndex];
 
   int val = analogRead(inputPin);
@@ -102,6 +124,7 @@ void loop() {
     inPeak = 0;
   }
   if (now - lastIdleCheckTime >IdleInterval){
+    resetReadings();
     sendStatus(0, 0);
     lastIdleCheckTime = now;
   }
