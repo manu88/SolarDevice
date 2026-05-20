@@ -4,8 +4,8 @@
 int inputPin = A0;
 
 // sensor reading logic:
-const int numReadings = 50;
-int readings[numReadings];  // the readings from the analog input
+#define NUM_SENSOR_READINGS (int)50
+int readings[NUM_SENSOR_READINGS];  // the readings from the analog input
 int readIndex = 0;          // the index of the current reading
 int total = 0;              // the running total
 int average = 0;            // the average
@@ -25,7 +25,7 @@ int intensity = 255;
 
 
 void resetReadings(){
-  for (int i = 0; i < numReadings; i++) {
+  for (int i = 0; i < NUM_SENSOR_READINGS; i++) {
     readings[i] = 0;
   }
 }
@@ -137,12 +137,12 @@ void loop() {
   readIndex = readIndex + 1;
 
   
-  if (readIndex >= numReadings) {
+  if (readIndex >= NUM_SENSOR_READINGS) {
     readIndex = 0;
   }
 
   // calculate the average:
-  average = total / numReadings;
+  average = total / NUM_SENSOR_READINGS;
 
   unsigned long now = millis();
   int theReading = val > average + minPeakDiff;
