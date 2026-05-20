@@ -25,7 +25,6 @@ uint8_t dataPin = 2;  // Yellow wire on Adafruit Pixels
 uint8_t clockPin = 3; // Green wire on Adafruit Pixels
 Adafruit_WS2801 strip = Adafruit_WS2801(nbLeds, dataPin, clockPin, WS2801_RGB);
 
-int ledState = HIGH;
 int intensity = 255;
 
 void resetReadings(SensorReading &reading) {
@@ -55,7 +54,6 @@ void processSensor(SensorReading &reading) {
   if (theReading) {
     if (reading.inPeak == 0) {
       reading.inPeak = 1;
-      ledState = !ledState;
       if (reading.revStartTime > 0) {
         unsigned long elapsed = now - reading.revStartTime;
         reading.speed = 1000.f / elapsed;
@@ -71,8 +69,7 @@ void processSensor(SensorReading &reading) {
 
 void setup() {
   resetReadings(sensor0);
-  pinMode(LED_BUILTIN, OUTPUT);
-  digitalWrite(LED_BUILTIN, LOW);
+
   Serial.begin(9600);
 
   strip.begin();
@@ -163,6 +160,5 @@ void loop() {
   // Sensor logic
   processSensor(sensor0);
 
-  digitalWrite(LED_BUILTIN, ledState);
   delay(10); // delay in between reads for stability
 }
