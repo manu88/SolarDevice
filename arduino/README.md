@@ -8,6 +8,7 @@
 
 ## adressage leds
 
+message de 3 octets contenant:
 `[byte]0X17 [byte]led-id[0-255] [byte]intensity[[0-255]]`
 
 # Protocole arduino->pd
