@@ -20,7 +20,7 @@ SensorReading sensor0;
 
 // Leds part
 
-int nbLeds = 2;
+int nbLeds = 4;
 uint8_t dataPin = 2;  // Yellow wire on Adafruit Pixels
 uint8_t clockPin = 3; // Green wire on Adafruit Pixels
 Adafruit_WS2801 strip = Adafruit_WS2801(nbLeds, dataPin, clockPin, WS2801_RGB);
@@ -75,8 +75,7 @@ void setup() {
   strip.begin();
   strip.show();
 
-  strip.setPixelColor(0, intensity, intensity, intensity);
-  strip.setPixelColor(1, intensity, intensity, intensity);
+  setStripPixelColor(intensity);
 }
 
 void sendStatus(int val, const SensorReading &reading) {
@@ -109,10 +108,13 @@ void blinkMode(void) {
 
   startTime = currentTime;
   blinkstate = !blinkstate;
-  strip.setPixelColor(0, blinkstate * intensity, blinkstate * intensity,
-                      blinkstate * intensity);
-  strip.setPixelColor(1, blinkstate * intensity, blinkstate * intensity,
-                      blinkstate * intensity);
+  setStripPixelColor(blinkstate * intensity);
+}
+
+void setStripPixelColor(int inten){
+  for(int i=0;i<nbLeds;i++){
+    strip.setPixelColor(i, inten,inten,inten);
+  }
 }
 
 void loop() {
@@ -135,20 +137,17 @@ void loop() {
       Serial.println("Leds Blink");
       startTime = millis();
       blinkstate = 0;
-      strip.setPixelColor(0, 0, 0, 0);
-      strip.setPixelColor(1, 0, 0, 0);
+      setStripPixelColor(0);
       break;
     }
   }
 
   switch (state) {
   case 0:
-    strip.setPixelColor(0, intensity, intensity, intensity);
-    strip.setPixelColor(1, intensity, intensity, intensity);
+    setStripPixelColor(intensity);
     break;
   case 1:
-    strip.setPixelColor(0, 0, 0, 0);
-    strip.setPixelColor(1, 0, 0, 0);
+    setStripPixelColor(0);
     break;
   case 2:
     blinkMode();
@@ -158,7 +157,7 @@ void loop() {
   strip.show();
 
   // Sensor logic
-  processSensor(sensor0);
+  //processSensor(sensor0);
 
   delay(10); // delay in between reads for stability
 }
