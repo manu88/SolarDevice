@@ -36,8 +36,8 @@ bool toggle = false;
 
 void setup() {
   Serial.begin(19200);
-  sensors[0].inputPin = A0;
-  sensors[1].inputPin = A1;
+  sensors[0].inputPin = A1;
+  sensors[1].inputPin = A0;
   for (int i = 0; i < NUM_SENSORS; i++) {
     resetReadings(sensors[i]);
   }
