@@ -59,7 +59,8 @@ void sendStatus(int id, int val) {
   Serial.print(";\n");
 }
 
-void loop() {
+
+void readSerial(){
   if (Serial.available() >= 3) {
     int start = Serial.read();
     if (start == 23) {
@@ -77,6 +78,10 @@ void loop() {
       Serial.read();// let's consume a byte
     }
   }
+}
+
+void loop() {
+  readSerial();
 
   strip.show();
   delay(10); // delay in between reads for stability

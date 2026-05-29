@@ -61,8 +61,6 @@ void sendStatus(float speed, int activity){
 }
 
 void loop() {
-
-
   total = total - readings[readIndex];
 
   int val = analogRead(inputPin);
