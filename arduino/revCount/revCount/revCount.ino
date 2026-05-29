@@ -38,9 +38,6 @@ void setup() {
   digitalWrite(LED_BUILTIN, LOW);
   Serial.begin(9600);
   
-
-  strip.begin();
-  strip.show(); 
 }
 
 
@@ -64,30 +61,8 @@ void sendStatus(float speed, int activity){
 }
 
 void loop() {
-  if (Serial.available() >= 5) {
-    int start = Serial.read();
-    if(start == 23){
-      intensity = Serial.read();
-      intensity1 = Serial.read();
-      intensity2 = Serial.read();
-      intensity3 = Serial.read();
-    }
-  }
 
-  strip.setPixelColor(0, intensity, intensity, intensity);
-  strip.setPixelColor(1, intensity1, intensity1, intensity1);
-  
-  
-  strip.setPixelColor(2, intensity2, intensity2, intensity2);
-  strip.setPixelColor(3, intensity3, intensity3, intensity3);
-  //for (int i=0;i<nbLeds;i++){
-  //  strip.setPixelColor(i, intensity,intensity ,intensity);
-  //}
 
-  strip.show();
-  delay(100);  // delay in between reads for stability
-  sendStatus(0,0);
-  return;
   total = total - readings[readIndex];
 
   int val = analogRead(inputPin);

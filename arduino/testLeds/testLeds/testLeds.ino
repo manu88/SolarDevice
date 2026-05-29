@@ -1,10 +1,11 @@
 #include "Adafruit_WS2801.h"
 
-int inputPin = A0;
+#define NUM_SENSORS 2
+
 
 // sensor reading logic:
 #define NUM_SENSOR_READINGS (int)50
-const int minPeakDiff = 50;
+const int minPeakDiff = 30;
 
 struct SensorReading {
   int readings[NUM_SENSOR_READINGS]; // the readings from the analog input
@@ -14,16 +15,17 @@ struct SensorReading {
   int inPeak = 0;
   unsigned long revStartTime = 0;
   float speed = 0;
+  int inputPin;
 };
 
-SensorReading sensor0;
-
+SensorReading sensors[NUM_SENSORS];
 // Leds part
 
-int nbLeds = 4;
+#define NUM_LEDS 4
 uint8_t dataPin = 2;  // Yellow wire on Adafruit Pixels
 uint8_t clockPin = 3; // Green wire on Adafruit Pixels
-Adafruit_WS2801 strip = Adafruit_WS2801(nbLeds, dataPin, clockPin, WS2801_RGB);
+Adafruit_WS2801 strip =
+    Adafruit_WS2801(NUM_LEDS, dataPin, clockPin, WS2801_RGB);
 
 int intensity = 255;
 
@@ -34,9 +36,9 @@ void resetReadings(SensorReading &reading) {
   }
 }
 
-void processSensor(SensorReading &reading) {
+void processSensor(SensorReading &reading, int sensorId) {
   reading.total = reading.total - reading.readings[reading.readIndex];
-  int val = analogRead(inputPin);
+  int val = analogRead(reading.inputPin);
   reading.readings[reading.readIndex] = val;
   reading.total = reading.total + reading.readings[reading.readIndex];
   reading.readIndex += 1;
@@ -59,7 +61,7 @@ void processSensor(SensorReading &reading) {
         reading.speed = 1000.f / elapsed;
       }
       reading.revStartTime = now;
-      sendStatus(1, reading);
+      sendStatus(1, reading, sensorId);
     }
 
   } else {
@@ -68,7 +70,11 @@ void processSensor(SensorReading &reading) {
 }
 
 void setup() {
-  resetReadings(sensor0);
+  sensors[0].inputPin = A0;
+  sensors[1].inputPin = A1;
+  for (int i = 0; i < NUM_SENSORS; i++) {
+    resetReadings(sensors[i]);
+  }
 
   Serial.begin(9600);
 
@@ -78,8 +84,10 @@ void setup() {
   setStripPixelColor(intensity);
 }
 
-void sendStatus(int val, const SensorReading &reading) {
+void sendStatus(int val, const SensorReading &reading, int sensorId) {
   Serial.print(val);
+  Serial.print(" ");
+  Serial.print(sensorId);
   Serial.print(" ");
   Serial.print(reading.speed);
   Serial.print(";\n");
@@ -111,9 +119,9 @@ void blinkMode(void) {
   setStripPixelColor(blinkstate * intensity);
 }
 
-void setStripPixelColor(int inten){
-  for(int i=0;i<nbLeds;i++){
-    strip.setPixelColor(i, inten,inten,inten);
+void setStripPixelColor(int inten) {
+  for (int i = 0; i < NUM_LEDS; i++) {
+    strip.setPixelColor(i, inten, inten, inten);
   }
 }
 
@@ -157,7 +165,9 @@ void loop() {
   strip.show();
 
   // Sensor logic
-  //processSensor(sensor0);
+  for (int i = 0; i < NUM_SENSORS; i++) {
+    processSensor(sensors[i], i);
+  }
 
   delay(10); // delay in between reads for stability
 }

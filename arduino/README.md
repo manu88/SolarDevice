@@ -8,9 +8,21 @@
 
 ## adressage leds
 
-message de 3 octets contenant:
-`[byte]0X17 [byte]led-id[0-255] [byte]intensity[[0-255]]`
+message de 5 octets contenant:
+`[byte]0X17 [byte]led-id[0-255] [byte]intensity-Red[[0-255]] [byte]intensity-Green[[0-255]] [byte]intensity-Blue[[0-255]]`
 
 # Protocole arduino->pd
 
 Utilise le format `fudi` (fast universal digital interface), qui est simple à lire dans pd.
+
+
+# couleurs
+
+
+Midi 255 255 255
+
+Matin 224 36 0
+
+Nuit 0 36 69
+
+Soir 88 11 30
