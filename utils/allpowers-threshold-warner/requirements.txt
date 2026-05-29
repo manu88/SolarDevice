@@ -2,6 +2,5 @@ allpowers-ble
 bleak
 bleak-retry-connector
 easygui
-playsound
 datetime
 hoymiles-wifi
