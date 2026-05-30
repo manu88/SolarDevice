@@ -2,6 +2,7 @@ import asyncio
 import logging
 import datetime
 from dataclasses import dataclass
+from pythonosc import udp_client
 
 import easygui
 from bleak import BleakScanner
@@ -106,6 +107,8 @@ class DeviceManager:
 # ----------------------------
 class BatteryMonitor:
     def __init__(self, device: AllpowersBLE, config: Config, watts_usage: WattsUsage):
+        self.osc_client = udp_client.SimpleUDPClient(
+            "127.0.0.1", 8888)
         self.device = device
         self.config = config
         self.watts_usage = watts_usage
@@ -194,6 +197,9 @@ class BatteryMonitor:
             status = self.build_status()
             _LOGGER.info(status)
             self.log_power_usage()
+
+            self.osc_client.send_message(
+                "/battery", self.device.percent_remain)
 
             # await self.check_thresholds(status)
 

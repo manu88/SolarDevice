@@ -4,3 +4,4 @@ bleak-retry-connector
 easygui
 datetime
 hoymiles-wifi
+python-osc
