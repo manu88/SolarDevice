@@ -11,9 +11,9 @@ typedef struct {
 } ComHeader;
 
 typedef enum {
-  ParserState_Start,
-  ParserState_PayloadSize,
-  ParserState_Payload,
+  ParserState_Start = 0,
+  ParserState_PayloadSize = 1,
+  ParserState_Payload = 2,
 } ParserState;
 
 typedef struct {
