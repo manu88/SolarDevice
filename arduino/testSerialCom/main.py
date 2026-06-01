@@ -8,24 +8,37 @@ arduino = serial.Serial(port='/dev/cu.usbmodem1401',
 
 pack_com_str = ">BB"
 pack_recv_str = ">BBB"
+payload_size = 18  # 6*3
+
+
+def send_payload(payload):
+    data_header = struct.pack(pack_com_str, 0XAF, payload_size)
+    arduino.write(data_header)
+    arduino.write(payload)
 
 
 def main():
-    payload_size = 72  # 24*3
-    payload = list(range(payload_size))
 
-    send_payloads = set()
-    num_sent = 0
-    num_recv = 0
-    p_0 = 0
+    i = 0
+    payload = [0 for i in range(payload_size)]
+
     while True:
-        payload[0] = p_0
-        print("send payload ", p_0)
-        data_header = struct.pack(pack_com_str, 0XAF, payload_size)
-        arduino.write(data_header)
-        arduino.write(payload)
-        send_payloads.add(p_0)
-        num_sent += 1
+        payload[0] = i
+        payload[1] = i
+        payload[2] = i
+
+        payload[3] = 255-i
+        payload[4] = 255-i
+        payload[5] = 255-i
+
+        payload[12] = i
+        payload[13] = i
+        payload[14] = i
+
+        payload[15] = 255-i
+        payload[16] = 255-i
+        payload[17] = 255-i
+        send_payload(payload)
 
         while arduino.in_waiting:
             resp = arduino.readline().decode()
@@ -36,12 +49,10 @@ def main():
 #                send_payloads.remove(x)
 #                num_recv += 1
 
-        percent = num_recv / num_sent
-        print(f"sent:{num_sent} recv:{num_recv} {percent:0.2}")
-        time.sleep(0.2)
-        p_0 += 1
-        if p_0 > 256:
-            payload = 0
+        i += 5
+        if i >= 256:
+            i = 0
+        time.sleep(0.1)
 
 
 if __name__ == "__main__":
