@@ -8,7 +8,7 @@ arduino = serial.Serial(port='/dev/cu.usbmodem1401',
 
 pack_com_str = ">BB"
 pack_recv_str = ">BBB"
-payload_size = 18  # 6*3
+payload_size = 72
 
 
 def send_payload(payload):
@@ -23,31 +23,33 @@ def main():
     payload = [0 for i in range(payload_size)]
 
     while True:
-        payload[0] = i
+        payload[0] = 100
         payload[1] = i
         payload[2] = i
 
         payload[3] = 255-i
-        payload[4] = 255-i
+        payload[4] = 100
         payload[5] = 255-i
+
+        payload[6] = 255-i
+        payload[7] = 100
+        payload[8] = 100
+
+        payload[9] = 255-i
+        payload[10] = 100
+        payload[11] = i
 
         payload[12] = i
         payload[13] = i
-        payload[14] = i
+        payload[14] = 100
 
         payload[15] = 255-i
         payload[16] = 255-i
-        payload[17] = 255-i
+        payload[17] = 100
         send_payload(payload)
 
         while arduino.in_waiting:
             resp = arduino.readline().decode()
-            print(resp)
-#            _, val = resp.strip().split(":")
-#            x = int(val, 16)
-#            if x in send_payloads:
-#                send_payloads.remove(x)
-#                num_recv += 1
 
         i += 5
         if i >= 256:

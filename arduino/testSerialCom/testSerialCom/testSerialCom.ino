@@ -4,7 +4,7 @@
 
 uint8_t dataPin = 3;  // Yellow wire on Adafruit Pixels
 uint8_t clockPin = 13; // Green wire on Adafruit Pixels
-int nbLeds = 6;
+int nbLeds = 24;
 
 Adafruit_WS2801 strip = Adafruit_WS2801(nbLeds, dataPin, clockPin, WS2801_RGB);
 
@@ -33,7 +33,7 @@ static uint8_t expectedPayloadSize = 0;
 static uint8_t currentPayloadSize = 0;
 
 
-#define PAYLOAD_SIZE 18
+#define PAYLOAD_SIZE 72
 static uint8_t payload[PAYLOAD_SIZE];
 
 void resetParserState() {
