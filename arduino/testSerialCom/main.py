@@ -1,60 +1,73 @@
 import struct
 import serial
+from serial import serialutil
 import time
+from pythonosc.dispatcher import Dispatcher
+from pythonosc import osc_server
 
 
-arduino = serial.Serial(port='/dev/cu.usbmodem1401',
-                        baudrate=115200, timeout=.1)
-
-pack_com_str = ">BB"
-pack_recv_str = ">BBB"
 payload_size = 72
 
 
-def send_payload(payload):
-    data_header = struct.pack(pack_com_str, 0XAF, payload_size)
-    arduino.write(data_header)
-    arduino.write(payload)
+class Controller:
+    def __init__(self):
+        self.arduino = serial.Serial(port='/dev/cu.usbmodem1401',
+                                     baudrate=115200, timeout=.1)
+
+        self.pack_com_str = ">BB"
+
+        self.payload = [0 for i in range(payload_size)]
+
+        self.dispatcher = Dispatcher()
+        self.dispatcher.map("/pix", self.osc_set_pix)
+        self.dispatcher.map("/all", self.osc_set_all)
+        self.dispatcher.map("/update", self.osc_update)
+        self.server = osc_server.ThreadingOSCUDPServer(
+            ("127.0.0.1", 8010), self.dispatcher)
+
+    def set_pix(self,  i: int, r: int, g: int, b: int):
+        self.payload[i*3] = r
+        self.payload[(i*3)+1] = g
+        self.payload[(i*3)+2] = b
+        # self.send_payload(self.payload)
+
+    def osc_update(self, args):
+        self.send_payload(self.payload)
+
+    def osc_set_all(self, args, r: float, g: float, b: float):
+        for i in range(72//3):
+            self.payload[i*3] = int(r)
+            self.payload[(i*3)+1] = int(g)
+            self.payload[(i*3)+2] = int(b)
+        # self.send_payload(self.payload)
+
+    def osc_set_pix(self, args, i: int, r: float, g: float, b: float):
+        if i*3 >= len(self.payload):
+            return
+        self.set_pix(i, int(r), int(g), int(b))
+
+    def send_payload(self, payload: list):
+        data_header = struct.pack(self.pack_com_str, 0XAF, len(payload))
+        try:
+            self.arduino.write(data_header)
+            self.arduino.write(payload)
+        except serialutil.SerialException as e:
+            print(f"send_payload:SerialException {e}")
+            self.stop()
+
+    def start(self):
+        print("Serving on {}".format(self.server.server_address))
+        self.server.serve_forever()
+
+    def stop(self):
+        print("Stopping")
+        self.server.shutdown()
+        self.arduino.close()
 
 
 def main():
-
-    i = 0
-    payload = [0 for i in range(payload_size)]
-
-    while True:
-        payload[0] = 100
-        payload[1] = i
-        payload[2] = i
-
-        payload[3] = 255-i
-        payload[4] = 100
-        payload[5] = 255-i
-
-        payload[6] = 255-i
-        payload[7] = 100
-        payload[8] = 100
-
-        payload[9] = 255-i
-        payload[10] = 100
-        payload[11] = i
-
-        payload[12] = i
-        payload[13] = i
-        payload[14] = 100
-
-        payload[15] = 255-i
-        payload[16] = 255-i
-        payload[17] = 100
-        send_payload(payload)
-
-        while arduino.in_waiting:
-            resp = arduino.readline().decode()
-
-        i += 5
-        if i >= 256:
-            i = 0
-        time.sleep(0.1)
+    controller = Controller()
+    controller.start()
 
 
 if __name__ == "__main__":
