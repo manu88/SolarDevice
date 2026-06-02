@@ -26,6 +26,7 @@ parser = argparse.ArgumentParser(
     prog='BMSController')
 parser.add_argument(
     "-l", "--list", help="list serial ports and exit", action="store_true")
+parser.add_argument("oscaddr", nargs="?")
 
 
 @dataclass
@@ -115,9 +116,9 @@ class DeviceManager:
 # Battery Monitor
 # ----------------------------
 class BatteryMonitor:
-    def __init__(self, device: AllpowersBLE, config: Config, watts_usage: WattsUsage):
+    def __init__(self, device: AllpowersBLE, config: Config, watts_usage: WattsUsage, osc_addr: str):
         self.osc_client = udp_client.SimpleUDPClient(
-            "127.0.0.1", 8888)
+            osc_addr, 8888)
         self.device = device
         self.config = config
         self.watts_usage = watts_usage
@@ -224,7 +225,7 @@ async def list_ble_devices():
         print(dev)
 
 
-async def main():
+async def run_controller(osc_addr: str):
     watts_usage = WattsUsage()
     config = Config(default_device_mac=DEFAULT_DEVICE_MAC)
 
@@ -235,12 +236,12 @@ async def main():
     selected_device = await manager.pick_device()
 
     device = AllpowersBLE(selected_device)
-    monitor = BatteryMonitor(device, config, watts_usage)
+    monitor = BatteryMonitor(device, config, watts_usage, osc_addr=osc_addr)
 
     await monitor.run()
 
 
-if __name__ == "__main__":
+def main():
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s %(levelname)-8s %(message)s",
@@ -252,6 +253,12 @@ if __name__ == "__main__":
     args = parser.parse_args()
     if args.list:
         asyncio.run(list_ble_devices())
-        sys.exit(0)
+        return 0
+    osc_addr = args.oscaddr if args.oscaddr else "127.0.0.1"
+    print(f"using osc address '{osc_addr}'")
+    asyncio.run(run_controller(osc_addr=osc_addr))
+    return 0
 
-    asyncio.run(main())
+
+if __name__ == "__main__":
+    sys.exit(main())
