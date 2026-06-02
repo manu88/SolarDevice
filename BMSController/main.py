@@ -1,3 +1,5 @@
+import sys
+import argparse
 import asyncio
 import logging
 import datetime
@@ -17,6 +19,13 @@ from device_helper import (
 _LOGGER = logging.getLogger(__name__)
 
 WINDOW_TITLE = "All Powers Battery"
+
+DEFAULT_DEVICE_MAC = "FC24BC7D-136A-FD0C-BC1F-2B015B002FE2"
+
+parser = argparse.ArgumentParser(
+    prog='BMSController')
+parser.add_argument(
+    "-l", "--list", help="list serial ports and exit", action="store_true")
 
 
 @dataclass
@@ -207,12 +216,17 @@ class BatteryMonitor:
                 await self.wait_for_next_cycle()
 
 
-# ----------------------------
-# Application Entry Point
-# ----------------------------
+async def list_ble_devices():
+    config = Config(default_device_mac=DEFAULT_DEVICE_MAC)
+    manager = DeviceManager(config)
+    devices = await manager.discover_devices()
+    for dev in devices:
+        print(dev)
+
+
 async def main():
     watts_usage = WattsUsage()
-    config = Config(default_device_mac="FC24BC7D-136A-FD0C-BC1F-2B015B002FE2")
+    config = Config(default_device_mac=DEFAULT_DEVICE_MAC)
 
     manager = DeviceManager(config)
     devices = await manager.discover_devices()
@@ -226,9 +240,6 @@ async def main():
     await monitor.run()
 
 
-# ----------------------------
-# Bootstrap
-# ----------------------------
 if __name__ == "__main__":
     logging.basicConfig(
         level=logging.INFO,
@@ -237,5 +248,10 @@ if __name__ == "__main__":
     )
 
     logging.getLogger("allpowersdevice").setLevel(logging.DEBUG)
+
+    args = parser.parse_args()
+    if args.list:
+        asyncio.run(list_ble_devices())
+        sys.exit(0)
 
     asyncio.run(main())
