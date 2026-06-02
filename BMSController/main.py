@@ -1,10 +1,11 @@
 import sys
+import time
 import argparse
 import asyncio
 import logging
 import datetime
 from dataclasses import dataclass
-from pythonosc import udp_client
+from osc_client import OSCClient
 
 import easygui
 from bleak import BleakScanner
@@ -25,8 +26,17 @@ DEFAULT_DEVICE_MAC = "FC24BC7D-136A-FD0C-BC1F-2B015B002FE2"
 parser = argparse.ArgumentParser(
     prog='BMSController')
 parser.add_argument(
-    "-l", "--list", help="list serial ports and exit", action="store_true")
+    "-l", "--list", help="list BLE devices and exit", action="store_true")
 parser.add_argument("oscaddr", nargs="?")
+parser.add_argument(
+    "-t", "--test", help="osc test, no BLE envolved", action="store_true")
+
+
+def run_osc_tests(osc_addr: str):
+    osc_client = OSCClient(osc_addr, 8888)
+    for i in range(10):
+        time.sleep(1)
+        osc_client.send_status(i*10)
 
 
 @dataclass
@@ -117,8 +127,7 @@ class DeviceManager:
 # ----------------------------
 class BatteryMonitor:
     def __init__(self, device: AllpowersBLE, config: Config, watts_usage: WattsUsage, osc_addr: str):
-        self.osc_client = udp_client.SimpleUDPClient(
-            osc_addr, 8888)
+        self.osc_client = OSCClient(osc_addr, 8888)
         self.device = device
         self.config = config
         self.watts_usage = watts_usage
@@ -208,8 +217,7 @@ class BatteryMonitor:
             _LOGGER.info(status)
             self.log_power_usage()
 
-            self.osc_client.send_message(
-                "/battery", self.device.percent_remain)
+            self.osc_client.send_status(self.device.percent_remain)
 
             # await self.check_thresholds(status)
 
@@ -254,8 +262,12 @@ def main():
     if args.list:
         asyncio.run(list_ble_devices())
         return 0
+
     osc_addr = args.oscaddr if args.oscaddr else "127.0.0.1"
     print(f"using osc address '{osc_addr}'")
+    if args.test:
+        run_osc_tests(osc_addr=osc_addr)
+        return 0
     asyncio.run(run_controller(osc_addr=osc_addr))
     return 0
 
