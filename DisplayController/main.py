@@ -1,10 +1,20 @@
+import sys
+import glob
+import serial
+import argparse
 import struct
 import serial
 from serial import serialutil
 import time
 from pythonosc.dispatcher import Dispatcher
 from pythonosc import osc_server
+from utils import serial_ports
 
+
+def list_serial_ports():
+    ports = serial_ports()
+    for p in ports:
+        print(p)
 
 payload_size = 72
 
@@ -65,7 +75,15 @@ class Controller:
         self.arduino.close()
 
 
+parser = argparse.ArgumentParser(
+                    prog='DisplayController')
+parser.add_argument("-l", "--list", action="store_true")
+
 def main():
+    args = parser.parse_args()
+    if args.list:
+        list_serial_ports()
+        return
     controller = Controller()
     controller.start()
 
