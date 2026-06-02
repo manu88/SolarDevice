@@ -3,5 +3,5 @@ bleak
 bleak-retry-connector
 easygui
 datetime
-hoymiles-wifi
+#hoymiles-wifi
 python-osc
