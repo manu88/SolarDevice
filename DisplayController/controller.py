@@ -18,13 +18,17 @@ class Controller:
         self.payload = [0 for i in range(payload_size)]
 
         self.dispatcher = Dispatcher()
+        self.dispatcher.map("/ping", self.osc_ping)
         self.dispatcher.map("/pix", self.osc_set_pix)
         self.dispatcher.map("/all", self.osc_set_all)
         self.dispatcher.map("/update", self.osc_update)
         self.server = osc_server.ThreadingOSCUDPServer(
-            ("127.0.0.1", 8010), self.dispatcher)
+            ("", 8010), self.dispatcher)
 
-    def set_pix(self,  i: int, r: int, g: int, b: int):
+    def osc_ping(self, args):
+        print(f"ping {args}")
+
+    def set_pix(self, i: int, r: int, g: int, b: int):
         self.payload[i*3] = r
         self.payload[(i*3)+1] = g
         self.payload[(i*3)+2] = b
