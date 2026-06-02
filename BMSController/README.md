@@ -5,7 +5,7 @@ Code original: [https://github.com/jolle22/allpowers-threshold-warner]
 ## Usage
 
 ```bash
-python3 src/main.py
+python3 main.py
 ```
 
 ## Note
