@@ -9,9 +9,9 @@ payload_size = 72
 
 
 class Controller:
-    def __init__(self):
-        self.arduino = serial.Serial(port='/dev/cu.usbmodem1401',
-                                     baudrate=115200, timeout=.1)
+    def __init__(self, serial_port: str):
+        self.arduino = serial.Serial(
+            port=serial_port, baudrate=115200, timeout=.1)
 
         self.pack_com_str = ">BB"
 

@@ -11,6 +11,7 @@ def list_serial_ports():
 
 parser = argparse.ArgumentParser(
     prog='DisplayController')
+parser.add_argument("serialport", nargs="?")
 parser.add_argument(
     "-l", "--list", help="list serial ports and exit", action="store_true")
 
@@ -20,7 +21,13 @@ def main():
     if args.list:
         list_serial_ports()
         return
-    controller = Controller()
+    if args.serialport is None:
+        print("missing serialport")
+        parser.print_usage()
+        return
+    serial_port = args.serialport
+    print(f"using serial port '{serial_port}'")
+    controller = Controller(serial_port=serial_port)
     controller.start()
 
 
