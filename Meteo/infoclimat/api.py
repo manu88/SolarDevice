@@ -7,7 +7,12 @@ import datetime
 
 MAX_REQUESTS_IN_24H = 5000
 MIN_INTERVAL_IN_SEC = 10
-INFO_CLIMAT_URI = "http://www.infoclimat.fr/public-api/gfs/json?_ll=43.29695,5.38107&_auth=ABpXQFMtACICL1ZhBHIGL1gwUmcJfwEmA39VNlwyBHkHZlU4DmsHbFY8VClVegAxWHUPbF1qCDFRMlc3AHIFeQBhVzpTOQBnAmlWMgQ9Bi1YdFIvCTcBJgN%2FVTpcOQR5B2VVNg5qB3tWMVQ0VXsANlhpD25dfQgvUTNXNwBqBWIAYVc7UzMAagJlVjMEKwYtWG1SOwllATgDZlVhXDcEMQdlVWAOaQc3VjlUN1V7ADBYbg9tXWUIMFE6VzQAaAV5AHxXSlNDAH8CLVZ2BGEGdFh2UmcJaAFt&_c=5843c5d3fb19aea4ac430f5585a78c6d"
+
+AUTH = "ABpXQFMtACICL1ZhBHIGL1gwUmcJfwEmA39VNlwyBHkHZlU4DmsHbFY8VClVegAxWHUPbF1qCDFRMlc3AHIFeQBhVzpTOQBnAmlWMgQ9Bi1YdFIvCTcBJgN%2FVTpcOQR5B2VVNg5qB3tWMVQ0VXsANlhpD25dfQgvUTNXNwBqBWIAYVc7UzMAagJlVjMEKwYtWG1SOwllATgDZlVhXDcEMQdlVWAOaQc3VjlUN1V7ADBYbg9tXWUIMFE6VzQAaAV5AHxXSlNDAH8CLVZ2BGEGdFh2UmcJaAFt"
+KEY = "5843c5d3fb19aea4ac430f5585a78c6d"
+COORDS = "43.29695,5.38107"  # marseille
+# COORDS = "48,0.2"  # le snam
+INFO_CLIMAT_URI = f"http://www.infoclimat.fr/public-api/gfs/json?_ll={COORDS}&_auth={AUTH}&_c={KEY}"
 
 
 def _get_date_str(date: Optional[datetime.date] = None) -> str:
@@ -39,7 +44,6 @@ class API:
     class Response:
         def __init__(self, data: Dict[str, Any]):
             self.data = data
-            pass
 
         def __repr__(self) -> str:
             return str(self.data)
@@ -87,6 +91,7 @@ class API:
     def __init__(self) -> None:
         self.last_req_time = 0
         self._last_rep: Optional[API.Response] = None
+        print(f"using API at '{INFO_CLIMAT_URI}'")
 
     def get(self) -> Optional[Response]:
         current = time.time()
