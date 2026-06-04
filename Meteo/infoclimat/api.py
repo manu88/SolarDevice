@@ -10,9 +10,6 @@ MIN_INTERVAL_IN_SEC = 10
 
 AUTH = "ABpXQFMtACICL1ZhBHIGL1gwUmcJfwEmA39VNlwyBHkHZlU4DmsHbFY8VClVegAxWHUPbF1qCDFRMlc3AHIFeQBhVzpTOQBnAmlWMgQ9Bi1YdFIvCTcBJgN%2FVTpcOQR5B2VVNg5qB3tWMVQ0VXsANlhpD25dfQgvUTNXNwBqBWIAYVc7UzMAagJlVjMEKwYtWG1SOwllATgDZlVhXDcEMQdlVWAOaQc3VjlUN1V7ADBYbg9tXWUIMFE6VzQAaAV5AHxXSlNDAH8CLVZ2BGEGdFh2UmcJaAFt"
 KEY = "5843c5d3fb19aea4ac430f5585a78c6d"
-COORDS = "43.29695,5.38107"  # marseille
-# COORDS = "48,0.2"  # le snam
-INFO_CLIMAT_URI = f"http://www.infoclimat.fr/public-api/gfs/json?_ll={COORDS}&_auth={AUTH}&_c={KEY}"
 
 
 def _get_date_str(date: Optional[datetime.date] = None) -> str:
@@ -88,17 +85,18 @@ class API:
             next_entry: Optional[Dict] = self.data[next_date] if next_date in self.data else None
             return WeatherState(current_date=current_date, next_date=next_date, current_entry=current_entry, next_entry=next_entry)
 
-    def __init__(self) -> None:
+    def __init__(self, coords: Tuple[float, float]) -> None:
+        self.uri = f"http://www.infoclimat.fr/public-api/gfs/json?_ll={coords[0]},{coords[1]}&_auth={AUTH}&_c={KEY}"
         self.last_req_time = 0
         self._last_rep: Optional[API.Response] = None
-        print(f"using API at '{INFO_CLIMAT_URI}'")
+        print(f"using API at '{self.uri}'")
 
     def get(self) -> Optional[Response]:
         current = time.time()
         delta = current - self.last_req_time
         if delta <= MIN_INTERVAL_IN_SEC:
             return self._last_rep
-        ret = requests.get(INFO_CLIMAT_URI)
+        ret = requests.get(self.uri)
         if ret.status_code != 200:
             print(f"got bad response code: {ret.status_code}")
             return self._last_rep

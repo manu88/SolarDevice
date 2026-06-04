@@ -1,13 +1,14 @@
 import time
+from typing import Tuple
 from pythonosc import udp_client
 from infoclimat.api import API
 
 
 class Controller:
-    def __init__(self, osc_addr: str) -> None:
+    def __init__(self, osc_addr: str, coords: Tuple[float, float]) -> None:
         self.osc_client = udp_client.SimpleUDPClient(
             osc_addr, 8011, allow_broadcast=True)
-        self.api = API()
+        self.api = API(coords=coords)
         self.running = False
 
     def run(self):
