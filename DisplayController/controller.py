@@ -1,4 +1,6 @@
 import struct
+import time
+from threading import Thread
 import serial
 from serial import serialutil
 from pythonosc.dispatcher import Dispatcher
@@ -13,6 +15,8 @@ class Controller:
         self.arduino = serial.Serial(
             port=serial_port, baudrate=115200, timeout=.1)
 
+        self._should_stop = False
+        self.read_thread = Thread(target=self._run_thread)
         self.pack_com_str = ">BB"
 
         self.payload = [0 for i in range(payload_size)]
@@ -41,7 +45,8 @@ class Controller:
 
     def osc_dump(self, args):
         for i in range(72//3):
-            print(f"{i}: r={self.payload[i*3]} g={self.payload[(i*3)+1]} b={self.payload[(i*3)+2]}")
+            print(
+                f"{i}: r={self.payload[i*3]} g={self.payload[(i*3)+1]} b={self.payload[(i*3)+2]}")
 
     def osc_clear(self, args):
         self.set_all(0, 0, 0)
@@ -80,11 +85,29 @@ class Controller:
             print(f"send_payload:SerialException {e}")
             self.stop()
 
+    def _process_arduino_msg(self, l: str):
+        print(l)
+
+    def read_arduino_msg(self):
+        lines = self.arduino.readlines()
+        if len(lines):
+            for l in lines:
+                self._process_arduino_msg(l.decode())
+
     def start(self):
         print("Serving on {}".format(self.server.server_address))
+        self.read_thread.start()
         self.server.serve_forever()
 
     def stop(self):
         print("Stopping")
+        self._should_stop = True
         self.server.shutdown()
+        self.read_thread.join()
         self.arduino.close()
+
+    def _run_thread(self):
+        while self._should_stop is False:
+            self.read_arduino_msg()
+            time.sleep(1)
+        print("Read thread returned")

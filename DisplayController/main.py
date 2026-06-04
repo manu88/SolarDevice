@@ -28,7 +28,10 @@ def main():
     serial_port = args.serialport
     print(f"using serial port '{serial_port}'")
     controller = Controller(serial_port=serial_port)
-    controller.start()
+    try:
+        controller.start()
+    except KeyboardInterrupt:
+        controller.stop()
 
 
 if __name__ == "__main__":
