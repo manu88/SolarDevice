@@ -1,19 +1,20 @@
-#include "Adafruit_WS2801.h"
+#include <FastLED.h>
 #include "proto.hpp"
 
-uint8_t dataPin = 3;   // Yellow wire on Adafruit Pixels
-uint8_t clockPin = 13; // Green wire on Adafruit Pixels
-int nbLeds = 18;
 
-Adafruit_WS2801 strip = Adafruit_WS2801(nbLeds, dataPin, clockPin, WS2801_RGB);
+#define NUM_LEDS 18
+#define DATA_PIN 3 // Change this to match your LED strip's data pin
+#define CLOCK_PIN 13
+#define BRIGHTNESS 255
 
-void setAll(uint8_t red, uint8_t green, uint8_t blue) {
-  for (uint8_t b = 0; b < 255; b++) {
-    for (uint8_t i = 0; i < nbLeds; i++) {
-      strip.setPixelColor(i, red * b / 255, green * b / 255, blue * b / 255);
-    }
+
+CRGB leds[NUM_LEDS];
+
+void setAll(int r,int g,int b) {
+  for (int x = 0; x < NUM_LEDS; x++) {
+    leds[x] = CRGB(r, g, b);
   }
-  strip.show();
+  FastLED.show();
 }
 
 void setup() {
@@ -21,10 +22,10 @@ void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, LOW);
 
-  strip.begin();
-  strip.show();
+  FastLED.addLeds<WS2801, DATA_PIN, CLOCK_PIN, RGB>(leds, NUM_LEDS);
+  FastLED.setBrightness(BRIGHTNESS);
 
-  // setAll(100,100,100);
+  setAll(0,0,0);
 }
 
 static ParserState parserState = ParserState_Start;
@@ -115,15 +116,15 @@ void loop() {
       if (checkSumOk(payload,expectedPayloadSize)) {
 
         for (int i = 0; i < expectedPayloadSize; i++) {
-          if (i >= nbLeds) {
+          if (i >= NUM_LEDS) {
             continue;
           }
           int r = payload[i * 3];
           int g = payload[(i * 3) + 1];
           int b = payload[(i * 3) + 2];
-          strip.setPixelColor(i, r, g, b);
+          leds[i] = CRGB(r, g, b);
         }
-        strip.show();
+        FastLED.show();
       }
       resetParserState();
     }
