@@ -45,15 +45,17 @@ void resetParserState() {
   memset(payload, 0, PAYLOAD_SIZE);
 }
 
-uint8_t checkSumOk(const uint8_t *data, size_t dataLength)
+uint16_t checksum(const byte *data, size_t dataLength)
 {
-  return 1;
-  uint8_t value = 0;
+  uint16_t value = 0;
   for (size_t i = 0; i < dataLength; i++)
   {
-    value ^= (uint8_t)data[i];
+    value += data[i];
+    //value ^= data[2*i] + (data[2*i+1] << 8);
   }
-  return ~value;
+  return value;
+  //if(dataLength%2) value ^= data[dataLength - 1];
+  //return ~value;
 }
 
 
@@ -115,19 +117,22 @@ int parseInput() {
 void loop() {
   while (Serial.available() > 0) {
     if (parseInput()) {
-      if (checkSumOk(payload,expectedPayloadSize)) {
-
-        for (int i = 0; i < expectedPayloadSize; i++) {
-          if (i >= NUM_LEDS) {
-            continue;
-          }
-          int r = payload[i * 3];
-          int g = payload[(i * 3) + 1];
-          int b = payload[(i * 3) + 2];
-          leds[i] = CRGB(r, g, b);
+      uint16_t checksum = checksum(payload,expectedPayloadSize);
+      Serial.print("expectedPayloadSize:");
+      Serial.println(expectedPayloadSize, HEX);
+      Serial.print("Checksum:");
+      Serial.println(checksum, HEX);
+      for (int i = 0; i < expectedPayloadSize; i++) {
+        if (i >= NUM_LEDS) {
+          continue;
         }
-        FastLED.show();
+        int r = payload[i * 3];
+        int g = payload[(i * 3) + 1];
+        int b = payload[(i * 3) + 2];
+        leds[i] = CRGB(r, g, b);
       }
+      FastLED.show();
+
       resetParserState();
     }
   }

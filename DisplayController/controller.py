@@ -10,6 +10,15 @@ from pythonosc import osc_server
 payload_size = 72
 
 
+def checksum(data):
+    ret = 0
+    for d in data:
+        ret += d
+        if ret >= 0XFFFF:
+            ret = 0
+    return ret
+
+
 class Controller:
     def __init__(self, serial_port: str):
         self.arduino = serial.Serial(
@@ -77,6 +86,7 @@ class Controller:
         self.set_pix(i, int(r), int(g), int(b))
 
     def update_display(self, payload: list):
+        crc = checksum(payload)
         data_header = struct.pack(self.pack_com_str, 0XAF, len(payload))
         try:
             self.arduino.write(data_header)
