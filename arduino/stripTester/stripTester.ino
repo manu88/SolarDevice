@@ -1,7 +1,7 @@
 #include <FastLED.h>
 
 
-#define NUM_LEDS 18
+#define NUM_LEDS 24
 #define DATA_PIN 3 // Change this to match your LED strip's data pin
 #define CLOCK_PIN 13
 #define BRIGHTNESS 255
