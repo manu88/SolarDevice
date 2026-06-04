@@ -1,4 +1,4 @@
-#N canvas 523 39 1218 1047 12;
+#N canvas 523 254 1218 1047 12;
 #X obj 409 424 mod 12;
 #X obj 409 467 * 2;
 #X obj 410 498 + 1;
@@ -25,13 +25,13 @@
 #X obj 92 396 * 2;
 #X obj 48 442 - 1;
 #X obj 80 559 mod 24;
-#X msg 68 723 \$1 246 233 186;
+#X msg 68 723 \$1 150 150 150;
 #X obj 131 458 - 2;
 #X obj 303 164 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
 #X obj 263 167 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
 #X obj 88 432 + 2;
 #X obj 172 466 + 3;
-#X msg 602 688 \$1 243 224 125;
+#X msg 602 688 \$1 100 100 100;
 #X obj 627 409 * 2;
 #X obj 615 572 mod 24;
 #X obj 377 166 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
