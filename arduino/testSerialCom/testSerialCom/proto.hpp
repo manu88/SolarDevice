@@ -7,13 +7,15 @@ extern "C" {
 typedef struct {
   uint8_t start;
   uint8_t payloadSize;
-
+  //uint8_t payload[payloadSize];
+  uint8_t crc;
 } ComHeader;
 
 typedef enum {
   ParserState_Start = 0,
   ParserState_PayloadSize = 1,
   ParserState_Payload = 2,
+  ParserState_CRC = 3,
 } ParserState;
 
 typedef struct {

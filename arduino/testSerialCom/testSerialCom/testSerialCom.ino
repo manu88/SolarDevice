@@ -1,16 +1,14 @@
-#include <FastLED.h>
 #include "proto.hpp"
-
+#include <FastLED.h>
 
 #define NUM_LEDS 24
 #define DATA_PIN 3 // Change this to match your LED strip's data pin
 #define CLOCK_PIN 13
 #define BRIGHTNESS 255
 
-
 CRGB leds[NUM_LEDS];
 
-void setAll(int r,int g,int b) {
+void setAll(int r, int g, int b) {
   for (int x = 0; x < NUM_LEDS; x++) {
     leds[x] = CRGB(r, g, b);
   }
@@ -25,7 +23,7 @@ void setup() {
   FastLED.addLeds<WS2801, DATA_PIN, CLOCK_PIN, RGB>(leds, NUM_LEDS);
   FastLED.setBrightness(BRIGHTNESS);
 
-  setAll(255,255,255);
+  setAll(255, 255, 255);
 
   Serial.println("Connected");
 }
@@ -45,19 +43,13 @@ void resetParserState() {
   memset(payload, 0, PAYLOAD_SIZE);
 }
 
-uint16_t checksum(const byte *data, size_t dataLength)
-{
-  uint16_t value = 0;
-  for (size_t i = 0; i < dataLength; i++)
-  {
+uint8_t checksum(const byte *data, size_t dataLength) {
+  uint8_t value = 0;
+  for (size_t i = 0; i < dataLength; i++) {
     value += data[i];
-    //value ^= data[2*i] + (data[2*i+1] << 8);
   }
   return value;
-  //if(dataLength%2) value ^= data[dataLength - 1];
-  //return ~value;
 }
-
 
 int parseInput() {
   // Serial.print("Parser state:");
@@ -102,10 +94,28 @@ int parseInput() {
     }
     currentPayloadSize += read;
     if (currentPayloadSize == expectedPayloadSize) {
-      // Serial.println("Got all payload");
-      return 1;
+      parserState = ParserState_CRC;
     }
     return 0;
+  }
+  case ParserState_CRC: {
+    if (Serial.available() == 0) {
+      return 0;
+    }
+    uint8_t expectedCrc = 0;
+    if (Serial.readBytes(&expectedCrc, 1) != 1) {
+      return 0;
+    }
+    uint8_t crc = checksum(payload, expectedPayloadSize);
+    if (crc != expectedCrc) {
+      Serial.print("Mismatch : Expected crc: ");
+      Serial.print(expectedCrc);
+      Serial.print(" Calc crc: ");
+      Serial.println(crc);
+      resetParserState();
+      return 0;
+    }
+    return 1;
   }
   default:
     Serial.print("UNHANDLED Parser state:");
@@ -117,11 +127,6 @@ int parseInput() {
 void loop() {
   while (Serial.available() > 0) {
     if (parseInput()) {
-      uint16_t checksum = checksum(payload,expectedPayloadSize);
-      Serial.print("expectedPayloadSize:");
-      Serial.println(expectedPayloadSize, HEX);
-      Serial.print("Checksum:");
-      Serial.println(checksum, HEX);
       for (int i = 0; i < expectedPayloadSize; i++) {
         if (i >= NUM_LEDS) {
           continue;

@@ -10,12 +10,11 @@ from pythonosc import osc_server
 payload_size = 72
 
 
-def checksum(data):
-    ret = 0
+def checksum(data) -> int:
+    ret: int = 0
     for d in data:
-        ret += d
-        if ret >= 0XFFFF:
-            ret = 0
+        ret = (ret+d) % 256
+
     return ret
 
 
@@ -86,11 +85,13 @@ class Controller:
         self.set_pix(i, int(r), int(g), int(b))
 
     def update_display(self, payload: list):
-        crc = checksum(payload)
+        crc: int = checksum(payload)
+        assert 0 <= crc < 256
         data_header = struct.pack(self.pack_com_str, 0XAF, len(payload))
         try:
             self.arduino.write(data_header)
             self.arduino.write(payload)
+            self.arduino.write(bytes([crc]))
         except serialutil.SerialException as e:
             print(f"send_payload:SerialException {e}")
             self.stop()
@@ -99,10 +100,11 @@ class Controller:
         print(l)
 
     def read_arduino_msg(self):
-        lines = self.arduino.readlines()
-        if len(lines):
-            for l in lines:
-                self._process_arduino_msg(l.decode())
+        while self.arduino.in_waiting:
+            lines = self.arduino.readlines()
+            if len(lines):
+                for l in lines:
+                    self._process_arduino_msg(l.decode())
 
     def start(self):
         print("Serving on {}".format(self.server.server_address))
