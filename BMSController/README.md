@@ -2,11 +2,21 @@
 
 Code original: [https://github.com/jolle22/allpowers-threshold-warner]
 
+## installation
+
+```bash
+python3 -m pip install -r requirements.txt --break-system-packages
+```
+
 ## Usage
 
 ```bash
 python3 main.py
 ```
+
+## Ble sur raspberrypi
+
+executer le script init.sh pour activer le bluetooth
 
 ## Note
 

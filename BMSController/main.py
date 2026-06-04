@@ -21,7 +21,7 @@ _LOGGER = logging.getLogger(__name__)
 
 WINDOW_TITLE = "All Powers Battery"
 
-DEFAULT_DEVICE_MAC = "FC24BC7D-136A-FD0C-BC1F-2B015B002FE2"
+DEFAULT_DEVICE_MAC = "88:56:A6:F4:DD:E6"
 
 parser = argparse.ArgumentParser(
     prog='BMSController')
