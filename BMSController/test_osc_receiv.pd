@@ -1,6 +1,0 @@
-#N canvas 642 173 503 420 12;
-#X obj 66 108 osc/unpackOSC;
-#X obj 68 146 print;
-#X obj 66 77 iemnet/udpreceive 8011;
-#X connect 0 0 1 0;
-#X connect 2 0 0 0;

@@ -1,8 +1,8 @@
-#N canvas 733 329 1034 758 12;
+#N canvas 712 116 1034 758 12;
 #X obj 246 76 config;
 #X obj 235 51 bng 19 250 50 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000;
 #X text 264 47 reload config;
-#N canvas 92 131 1105 643 led-control 1;
+#N canvas 92 131 1105 643 led-control 0;
 #X obj 28 370 display;
 #X msg 29 325 clear;
 #X msg 244 333 update;
@@ -60,6 +60,13 @@
 #X obj 802 203 vsl 19 162 0 1 0 0 empty empty coeff\ étalement\ tache 0 -9 0 12 #fcfcfc #000000 #000000 0 1;
 #X obj 462 225 loadbang;
 #X msg 471 271 9;
+#N canvas 566 196 450 300 recv-inputs 1;
+#X obj 66 108 osc/unpackOSC;
+#X obj 66 77 iemnet/udpreceive 8888;
+#X obj 68 146 print BMS;
+#X connect 0 0 2 0;
+#X connect 1 0 0 0;
+#X restore 138 204 pd recv-inputs;
 #X connect 1 0 0 0;
 #X connect 5 0 7 0;
 #X connect 5 1 8 0;
