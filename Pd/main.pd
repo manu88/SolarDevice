@@ -2,7 +2,7 @@
 #X obj 246 76 config;
 #X obj 235 51 bng 19 250 50 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000;
 #X text 264 47 reload config;
-#N canvas 92 131 1105 643 led-control 0;
+#N canvas 92 131 1105 643 led-control 1;
 #X obj 28 370 display;
 #X msg 29 325 clear;
 #X msg 244 333 update;
