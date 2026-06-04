@@ -16,5 +16,5 @@ python3 main.py -l
 
 Démarrer
 ```bash
-python3 main.py /dev/ttyACM0``
+python3 main.py /dev/ttyACM0
 ```
