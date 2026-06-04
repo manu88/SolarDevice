@@ -2,10 +2,22 @@
 
 Contenu du repo:
 
-## App
+## DisplayController
 
-L'application raspberry-pi qui génére l'image des paneaux led
+Programme d'interface entre Pd (via OSC) et les Leds (via arduino). Voir le [README](DisplayController/README.md)
+
+## BMSController
+
+Programme d'interface entre le BMS (via BLE) et Pd (via OSC). Voir le [README](BMSController/README.md)
 
 ## Pd
 
-patche pure-data de controle.
+patches pure-data de controle.
+
+## Météo
+
+Programme d'interface à l'API infoclimat et Pd (via OSC)
+
+## Arduino
+
+Contient les firmwares
