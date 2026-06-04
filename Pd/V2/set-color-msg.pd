@@ -1,0 +1,14 @@
+#N canvas 544 -674 450 300 12;
+#X obj 68 56 t l b b;
+#X msg 113 84 adddollar 1;
+#X msg 54 94 set;
+#X obj 72 22 inlet;
+#X obj 58 201 outlet;
+#X msg 118 111 add2 \$1 \$2 \$3;
+#X connect 0 0 5 0;
+#X connect 0 1 1 0;
+#X connect 0 2 2 0;
+#X connect 1 0 4 0;
+#X connect 2 0 4 0;
+#X connect 3 0 0 0;
+#X connect 5 0 4 0;
