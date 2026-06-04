@@ -2,7 +2,7 @@
 
 /////////////////////////////////////////
 // Sensor reading part
-#define NUM_SENSORS 2
+#define NUM_SENSORS 1
 
 // sensor reading logic:
 #define NUM_SENSOR_READINGS (int)40
@@ -25,7 +25,7 @@ int state = 0;
 
 /////////////////////////////////////////
 // Leds part
-#define NUM_LEDS 4
+#define NUM_LEDS 2
 #define DATA_PIN 3 // Change this to match your LED strip's data pin
 #define CLOCK_PIN 13
 #define BRIGHTNESS 255
@@ -36,8 +36,8 @@ bool toggle = false;
 
 void setup() {
   Serial.begin(19200);
-  sensors[0].inputPin = A1;
-  sensors[1].inputPin = A0;
+  sensors[0].inputPin = A0;
+  // sensors[1].inputPin = A0;
   for (int i = 0; i < NUM_SENSORS; i++) {
     resetReadings(sensors[i]);
   }
