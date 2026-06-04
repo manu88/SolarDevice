@@ -2,7 +2,7 @@
 #include "proto.hpp"
 
 
-#define NUM_LEDS 18
+#define NUM_LEDS 24
 #define DATA_PIN 3 // Change this to match your LED strip's data pin
 #define CLOCK_PIN 13
 #define BRIGHTNESS 255
@@ -25,7 +25,9 @@ void setup() {
   FastLED.addLeds<WS2801, DATA_PIN, CLOCK_PIN, RGB>(leds, NUM_LEDS);
   FastLED.setBrightness(BRIGHTNESS);
 
-  setAll(0,0,0);
+  setAll(255,255,255);
+
+  Serial.println("Connected");
 }
 
 static ParserState parserState = ParserState_Start;
