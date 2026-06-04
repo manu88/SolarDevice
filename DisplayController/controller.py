@@ -41,7 +41,7 @@ class Controller:
         self.payload[(i*3)+2] = b
 
     def osc_update(self, args):
-        self.send_payload(self.payload)
+        self.update_display(self.payload)
 
     def osc_dump(self, args):
         for i in range(72//3):
@@ -50,7 +50,7 @@ class Controller:
 
     def osc_clear(self, args):
         self.set_all(0, 0, 0)
-        self.send_payload(self.payload)
+        self.update_display(self.payload)
 
     def osc_set_all(self, args, r: float, g: float, b: float):
         self.set_all(int(r), int(g), int(b))
@@ -69,14 +69,14 @@ class Controller:
         if i*3 >= len(self.payload):
             return
         self.set_pix(i, int(r), int(g), int(b))
-        self.send_payload(self.payload)
+        self.update_display(self.payload)
 
     def osc_set_pix(self, args, i: int, r: float, g: float, b: float):
         if i*3 >= len(self.payload):
             return
         self.set_pix(i, int(r), int(g), int(b))
 
-    def send_payload(self, payload: list):
+    def update_display(self, payload: list):
         data_header = struct.pack(self.pack_com_str, 0XAF, len(payload))
         try:
             self.arduino.write(data_header)
