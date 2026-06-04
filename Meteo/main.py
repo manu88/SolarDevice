@@ -1,7 +1,6 @@
 import argparse
 import sys
 from typing import Tuple
-from infoclimat.api import API
 from controller import Controller
 
 parser = argparse.ArgumentParser(prog='Meteo')

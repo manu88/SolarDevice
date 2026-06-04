@@ -1,13 +1,21 @@
-from dateutil import parser
+import time
 import datetime
 from typing import Optional, Tuple
+from dateutil import parser
 import requests
 
 
+def datetime_from_utc_to_local(utc_datetime):
+    now_timestamp = time.time()
+    offset = datetime.datetime.fromtimestamp(
+        now_timestamp) - datetime.datetime.utcfromtimestamp(now_timestamp)
+    return utc_datetime + offset
+
+
 class Result:
-    def __init__(self, sunset: datetime.time, sunrise: datetime.time) -> None:
-        self.sunset = sunset
-        self.sunrise = sunrise
+    def __init__(self, sunset: datetime.datetime, sunrise: datetime.datetime) -> None:
+        self.sunset: datetime.datetime = datetime_from_utc_to_local(sunset)
+        self.sunrise: datetime.datetime = datetime_from_utc_to_local(sunrise)
 
     def __repr__(self) -> str:
         return f"sunrise:{self.sunrise} sunset:{self.sunset}"
@@ -22,8 +30,8 @@ def _process(data: dict) -> Optional[Result]:
     sunrise_str = entries["sunrise"]
     sunset_str = entries["sunset"]
 
-    sunrise = parser.parse(sunrise_str).time()
-    sunset = parser.parse(sunset_str).time()
+    sunrise = parser.parse(sunrise_str)
+    sunset = parser.parse(sunset_str)
     return Result(sunset=sunset, sunrise=sunrise)
 
 

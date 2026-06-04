@@ -95,7 +95,7 @@ class API:
         delta = current - self.last_req_time
         if delta <= MIN_INTERVAL_IN_SEC:
             return self._last_rep
-        ret = requests.get(self.uri)
+        ret = requests.get(self.uri, timeout=10)
         if ret.status_code != 200:
             print(f"got bad response code: {ret.status_code}")
             return self._last_rep
