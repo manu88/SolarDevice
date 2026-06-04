@@ -13,15 +13,6 @@ class Result:
         return f"sunrise:{self.sunrise} sunset:{self.sunset}"
 
 
-def _get(base_uri: str, day: datetime.date) -> Optional[dict]:
-    uri = base_uri + f"&date={day}"
-    ret = requests.get(uri, timeout=10)
-    if ret.status_code != 200:
-        print(f"got bad response code: {ret.status_code}")
-        return None
-    return ret.json()
-
-
 def _process(data: dict) -> Optional[Result]:
     if data["status"] != "OK":
         return None
@@ -39,24 +30,39 @@ def _process(data: dict) -> Optional[Result]:
 class SolarAPI:
     def __init__(self, coords: Tuple[float, float]):
         self.uri = f"https://api.sunrise-sunset.org/json?lat={coords[0]}&lng={coords[1]}"
-        print(f"Using URL '{self.uri}'")
+        print(f"Using URL '{self.uri}' for sunrise-sunset.org")
+        self.cache: dict[datetime.date, dict] = dict()
 
     def get(self) -> Optional[Tuple[Result, Result]]:
         today = datetime.datetime.now()
-        tomorrow = today + datetime.timedelta(days=1)
-        print("Tomorrow=", tomorrow.date())
+        return self._get(today)
 
-        today_resp = _get(self.uri, today.date())
+    def _get(self, date: datetime.datetime) -> Optional[Tuple[Result, Result]]:
+        day_after = date + datetime.timedelta(days=1)
+
+        today_resp = self._do_get(self.uri, date.date())
         if today_resp is None:
             return None
-        tomorrow_resp = _get(self.uri, tomorrow.date())
+        tomorrow_resp = self._do_get(self.uri, day_after.date())
         if tomorrow_resp is None:
             return None
         e0 = _process(today_resp)
         e1 = _process(tomorrow_resp)
         if e0 is not None and e1 is not None:
             return e0, e1
-        return
+        return None
+
+    def _do_get(self, base_uri: str, day: datetime.date) -> Optional[dict]:
+        if day in self.cache:
+            return self.cache[day]
+        uri = base_uri + f"&date={day}"
+        ret = requests.get(uri, timeout=10)
+        if ret.status_code != 200:
+            print(f"got bad response code: {ret.status_code}")
+            return None
+        resp = ret.json()
+        self.cache[day] = resp
+        return resp
 
 
 if __name__ == "__main__":
