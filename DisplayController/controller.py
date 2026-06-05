@@ -4,6 +4,7 @@ from threading import Thread
 import serial
 from serial import serialutil
 from pythonosc.dispatcher import Dispatcher
+from pythonosc import udp_client
 from pythonosc import osc_server
 
 
@@ -19,7 +20,7 @@ def checksum(data) -> int:
 
 
 class Controller:
-    def __init__(self, serial_port: str):
+    def __init__(self, serial_port: str, osc_addr: str):
         self.arduino = serial.Serial(
             port=serial_port, baudrate=115200, timeout=.1)
 
@@ -39,6 +40,9 @@ class Controller:
         self.dispatcher.map("/update", self.osc_update)
         self.server = osc_server.ThreadingOSCUDPServer(
             ("", 8010), self.dispatcher)
+
+        self.osc_client = udp_client.SimpleUDPClient(
+            osc_addr, 8012, allow_broadcast=True)
 
     def osc_ping(self, args):
         print(f"ping {args}")
@@ -97,7 +101,20 @@ class Controller:
             self.stop()
 
     def _process_arduino_msg(self, l: str):
-        print(l)
+        line = l.strip()
+        if line.startswith("S") and len(line) > 2 and line[0].isdigit:
+            toks = line.split(" ")
+            if len(toks) < 3:
+                print(f"malformed sensor str: '{line}'")
+                return
+            sensor_id = int(toks[0][1:])
+            speed = float(toks[1])
+            if speed < 3:
+                print(f"Got sensor id={sensor_id} speed={speed}")
+                self.osc_client.send_message("/sensor", [sensor_id, speed])
+
+        else:
+            print(line)
 
     def read_arduino_msg(self):
         while self.arduino.in_waiting:

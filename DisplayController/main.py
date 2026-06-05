@@ -27,7 +27,7 @@ def main():
         return
     serial_port = args.serialport
     print(f"using serial port '{serial_port}'")
-    controller = Controller(serial_port=serial_port)
+    controller = Controller(serial_port=serial_port, osc_addr="127.0.0.1")
     try:
         controller.start()
     except KeyboardInterrupt:
