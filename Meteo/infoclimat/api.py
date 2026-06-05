@@ -47,6 +47,16 @@ class API:
         def is_valid(self) -> bool:
             return self.data["request_state"] == 200
 
+        def get_time_entries(self, date: datetime.date) -> Dict[str, Any]:
+            date_str = _get_date_str(date) + " "
+            times = {}
+
+            for entry in self.data.keys():
+                if entry.startswith(date_str):
+                    hour = int(entry[len(date_str):][0:2])
+                    times[hour] = entry
+            return times
+
         def _get_bounds_dates(self, current_datetime: datetime.datetime, just_check_current: bool = False) -> Tuple[str, str]:
             date = _get_date_str(current_datetime.date()) + " "
             times = {}
