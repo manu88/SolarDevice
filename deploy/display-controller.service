@@ -1,0 +1,17 @@
+[Unit]
+Description=DisplayController
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=python3 main.py /dev/ttyACM0
+Restart=on-failure
+RestartSec=5
+User=solar
+WorkingDirectory=/home/solar/dev/SolarDevice/DisplayController
+StandardOutput=journal
+StandardError=journal
+
+
+[Install]
+WantedBy=multi-user.target
