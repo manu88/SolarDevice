@@ -1,6 +1,7 @@
 import struct
 import time
 from threading import Thread
+from typing import Optional
 import serial
 from serial import serialutil
 from pythonosc.dispatcher import Dispatcher
@@ -20,12 +21,16 @@ def checksum(data) -> int:
 
 
 class Controller:
-    def __init__(self, serial_port: str, osc_addr: str):
-        self.arduino = serial.Serial(
-            port=serial_port, baudrate=115200, timeout=.1)
+    def __init__(self, serial_port: Optional[str], osc_addr: str):
+        self.arduino = None
+        if serial_port:
+            self.arduino = serial.Serial(
+                port=serial_port, baudrate=115200, timeout=.1)
 
         self._should_stop = False
-        self.read_thread = Thread(target=self._run_thread)
+        self.read_thread = None
+        if serial_port:
+            self.read_thread = Thread(target=self._run_thread)
         self.pack_com_str = ">BB"
 
         self.payload = [0 for i in range(payload_size)]
@@ -89,6 +94,8 @@ class Controller:
         self.set_pix(i, int(r), int(g), int(b))
 
     def update_display(self, payload: list):
+        if self.arduino is None:
+            return
         crc: int = checksum(payload)
         assert 0 <= crc < 256
         data_header = struct.pack(self.pack_com_str, 0XAF, len(payload))
@@ -125,15 +132,18 @@ class Controller:
 
     def start(self):
         print("Serving on {}".format(self.server.server_address))
-        self.read_thread.start()
+        if self.read_thread:
+            self.read_thread.start()
         self.server.serve_forever()
 
     def stop(self):
         print("Stopping")
         self._should_stop = True
         self.server.shutdown()
-        self.read_thread.join()
-        self.arduino.close()
+        if self.read_thread:
+            self.read_thread.join()
+        if self.arduino:
+            self.arduino.close()
 
     def _run_thread(self):
         while self._should_stop is False:

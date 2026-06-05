@@ -14,6 +14,8 @@ parser = argparse.ArgumentParser(
 parser.add_argument("serialport", nargs="?")
 parser.add_argument(
     "-l", "--list", help="list serial ports and exit", action="store_true")
+parser.add_argument(
+    "-s", "--stub", help="no serial", action="store_true")
 
 
 def main():
@@ -21,13 +23,17 @@ def main():
     if args.list:
         list_serial_ports()
         return
-    if args.serialport is None:
+
+    no_serial = bool(args.stub)
+    if args.serialport is None and no_serial is False:
         print("missing serialport")
         parser.print_usage()
         return
-    serial_port = args.serialport
-    print(f"using serial port '{serial_port}'")
-    controller = Controller(serial_port=serial_port, osc_addr="192.168.1.255")
+    print(no_serial)
+    if no_serial is False:
+        print(f"using serial port '{args.serialport}'")
+    controller = Controller(serial_port=args.serialport,
+                            osc_addr="192.168.1.255")
     try:
         controller.start()
     except KeyboardInterrupt:
