@@ -216,6 +216,10 @@ void resetReadings(){
 }
 
 void sendStatus(float speed, int activity){
+  int sensorId = 1;
+  Serial.print("S");
+  Serial.print(sensorId);
+  Serial.print(" ");
   Serial.print(speed);
   Serial.print(" ");
   Serial.print(activity);
