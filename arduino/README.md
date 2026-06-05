@@ -1,5 +1,7 @@
 # détails des fichiers
 
+**Important:** Le firmware principal et définif est dans `firmware`
+
 - 'comLeds' : contrôle des LEDS depuis le patch pd control2.pd
 - 'testLeds' : contrôle des LEDS automatique (mode ON/OFF/Blink),sans pd et depuis la console d'arduino. Contient le code refactoré du compte-tours
 - 'revCount' : précédement code du compte tour
@@ -15,9 +17,7 @@ message de 5 octets contenant:
 
 Utilise le format `fudi` (fast universal digital interface), qui est simple à lire dans pd.
 
-
 # couleurs
-
 
 Midi 255 255 255
 
