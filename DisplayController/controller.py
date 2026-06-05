@@ -7,7 +7,7 @@ from serial import serialutil
 from pythonosc.dispatcher import Dispatcher
 from pythonosc import udp_client
 from pythonosc import osc_server
-
+from ui import UILeds
 
 payload_size = 72
 
@@ -21,7 +21,8 @@ def checksum(data) -> int:
 
 
 class Controller:
-    def __init__(self, serial_port: Optional[str], osc_addr: str):
+    def __init__(self, serial_port: Optional[str], osc_addr: str, ui: Optional[UILeds] = None):
+        self.ui = ui
         self.arduino = None
         if serial_port:
             self.arduino = serial.Serial(
@@ -94,6 +95,8 @@ class Controller:
         self.set_pix(i, int(r), int(g), int(b))
 
     def update_display(self, payload: list):
+        if self.ui:
+            self.ui.update_buff(payload)
         if self.arduino is None:
             return
         crc: int = checksum(payload)
