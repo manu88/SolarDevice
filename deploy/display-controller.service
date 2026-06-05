@@ -4,9 +4,10 @@ After=network.target
 
 [Service]
 Type=simple
+ExecStartPre=/bin/sh -c 'until host example.com; do sleep 1; done'
 ExecStart=python3 main.py /dev/ttyACM0
 Restart=on-failure
-RestartSec=5
+RestartSec=10s
 User=solar
 WorkingDirectory=/home/solar/dev/SolarDevice/DisplayController
 StandardOutput=journal
