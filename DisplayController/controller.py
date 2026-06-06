@@ -39,7 +39,6 @@ class Controller:
         self.dispatcher = Dispatcher()
         self.dispatcher.map("/ping", self.osc_ping)
         self.dispatcher.map("/pix", self.osc_set_pix)
-        self.dispatcher.map("/pix2", self.osc_set_pix2)
         self.dispatcher.map("/all", self.osc_set_all)
         self.dispatcher.map("/clear", self.osc_clear)
         self.dispatcher.map("/dump", self.osc_dump)
@@ -82,12 +81,6 @@ class Controller:
             self.payload[i*3] = r
             self.payload[(i*3)+1] = g
             self.payload[(i*3)+2] = b
-
-    def osc_set_pix2(self, args, i: int, r: float, g: float, b: float):
-        if i*3 >= len(self.payload):
-            return
-        self.set_pix(i, int(r), int(g), int(b))
-        self.update_display(self.payload)
 
     def osc_set_pix(self, args, i: int, r: float, g: float, b: float):
         if i*3 >= len(self.payload):
