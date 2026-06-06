@@ -39,10 +39,11 @@ class Controller:
 
         self.dispatcher = Dispatcher()
         self.dispatcher.map("/ping", self.osc_ping)
-        self.dispatcher.map("/pix", self.osc_set_pix)
+        self.dispatcher.map("/pix1", self.osc_set_pix1)
         self.dispatcher.map("/pix2", self.osc_set_pix2)
         self.dispatcher.map("/all", self.osc_set_all)
-        self.dispatcher.map("/clear", self.osc_clear)
+        self.dispatcher.map("/clear1", self.osc_clear1)
+        self.dispatcher.map("/clear2", self.osc_clear2)
         self.dispatcher.map("/dump", self.osc_dump)
         self.dispatcher.map("/update", self.osc_update)
         self.server = osc_server.ThreadingOSCUDPServer(
@@ -72,10 +73,11 @@ class Controller:
             print(
                 f"{i}: r={self.buffer1[i*3]} g={self.buffer1[(i*3)+1]} b={self.buffer1[(i*3)+2]}")
 
-    def osc_clear(self, args):
+    def osc_clear1(self, args):
         self.buffer1 = [0 for i in range(payload_size)]
+
+    def osc_clear2(self, args):
         self.buffer2 = [0 for i in range(payload_size)]
-        self.update_display()
 
     def osc_set_all(self, args, r: float, g: float, b: float):
         self.set_all(int(r), int(g), int(b))
@@ -95,7 +97,7 @@ class Controller:
             return
         self.set_pix2(i, int(r), int(g), int(b))
 
-    def osc_set_pix(self, args, i: int, r: float, g: float, b: float):
+    def osc_set_pix1(self, args, i: int, r: float, g: float, b: float):
         if i*3 >= len(self.buffer1):
             return
         self.set_pix1(i, int(r), int(g), int(b))

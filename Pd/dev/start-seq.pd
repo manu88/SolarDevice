@@ -59,7 +59,7 @@
 #X obj 169 336 line 0 100;
 #X msg 356 203 set \$1 1000;
 #X obj 382 152 r max-bright-start-seq;
-#X msg 231 597 \$1 \$2 \$3 \$4;
+#X msg 231 597 pix1 \$1 \$2 \$3 \$4;
 #X connect 0 0 3 0;
 #X connect 1 0 4 0;
 #X connect 2 0 7 0;
