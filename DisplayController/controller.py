@@ -58,7 +58,7 @@ class Controller:
         self.buffer1[(i*3)+2] = b
 
     def osc_update(self, args):
-        self.update_display(self.buffer1)
+        self.update_display()
 
     def osc_dump(self, args):
         for i in range(72//3):
@@ -66,8 +66,8 @@ class Controller:
                 f"{i}: r={self.buffer1[i*3]} g={self.buffer1[(i*3)+1]} b={self.buffer1[(i*3)+2]}")
 
     def osc_clear(self, args):
-        self.set_all(0, 0, 0)
-        self.update_display(self.buffer1)
+        self.buffer1 = [0 for i in range(payload_size)]
+        self.update_display()
 
     def osc_set_all(self, args, r: float, g: float, b: float):
         self.set_all(int(r), int(g), int(b))
@@ -87,17 +87,17 @@ class Controller:
             return
         self.set_pix(i, int(r), int(g), int(b))
 
-    def update_display(self, payload: list):
+    def update_display(self):
         if self.ui:
-            self.ui.update_buff(payload)
+            self.ui.update_buff(self.buffer1)
         if self.arduino is None:
             return
-        crc: int = checksum(payload)
+        crc: int = checksum(self.buffer1)
         assert 0 <= crc < 256
-        data_header = struct.pack(self.pack_com_str, 0XAF, len(payload))
+        data_header = struct.pack(self.pack_com_str, 0XAF, len(self.buffer1))
         try:
             self.arduino.write(data_header)
-            self.arduino.write(payload)
+            self.arduino.write(self.buffer1)
             self.arduino.write(bytes([crc]))
         except serialutil.SerialException as e:
             print(f"send_payload:SerialException {e}")
