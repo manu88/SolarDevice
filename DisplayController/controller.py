@@ -34,7 +34,7 @@ class Controller:
             self.read_thread = Thread(target=self._run_thread)
         self.pack_com_str = ">BB"
 
-        self.payload = [0 for i in range(payload_size)]
+        self.buffer1 = [0 for i in range(payload_size)]
 
         self.dispatcher = Dispatcher()
         self.dispatcher.map("/ping", self.osc_ping)
@@ -53,37 +53,37 @@ class Controller:
         print(f"ping {args}")
 
     def set_pix(self, i: int, r: int, g: int, b: int):
-        self.payload[i*3] = r
-        self.payload[(i*3)+1] = g
-        self.payload[(i*3)+2] = b
+        self.buffer1[i*3] = r
+        self.buffer1[(i*3)+1] = g
+        self.buffer1[(i*3)+2] = b
 
     def osc_update(self, args):
-        self.update_display(self.payload)
+        self.update_display(self.buffer1)
 
     def osc_dump(self, args):
         for i in range(72//3):
             print(
-                f"{i}: r={self.payload[i*3]} g={self.payload[(i*3)+1]} b={self.payload[(i*3)+2]}")
+                f"{i}: r={self.buffer1[i*3]} g={self.buffer1[(i*3)+1]} b={self.buffer1[(i*3)+2]}")
 
     def osc_clear(self, args):
         self.set_all(0, 0, 0)
-        self.update_display(self.payload)
+        self.update_display(self.buffer1)
 
     def osc_set_all(self, args, r: float, g: float, b: float):
         self.set_all(int(r), int(g), int(b))
         for i in range(72//3):
-            self.payload[i*3] = int(r)
-            self.payload[(i*3)+1] = int(g)
-            self.payload[(i*3)+2] = int(b)
+            self.buffer1[i*3] = int(r)
+            self.buffer1[(i*3)+1] = int(g)
+            self.buffer1[(i*3)+2] = int(b)
 
     def set_all(self, r: int, g: int, b: int):
         for i in range(72//3):
-            self.payload[i*3] = r
-            self.payload[(i*3)+1] = g
-            self.payload[(i*3)+2] = b
+            self.buffer1[i*3] = r
+            self.buffer1[(i*3)+1] = g
+            self.buffer1[(i*3)+2] = b
 
     def osc_set_pix(self, args, i: int, r: float, g: float, b: float):
-        if i*3 >= len(self.payload):
+        if i*3 >= len(self.buffer1):
             return
         self.set_pix(i, int(r), int(g), int(b))
 
