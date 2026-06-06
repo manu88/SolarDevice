@@ -35,6 +35,7 @@ class Controller:
         self.pack_com_str = ">BB"
 
         self.buffer1 = [0 for i in range(payload_size)]
+        self.buffer2 = [0 for i in range(payload_size)]
 
         self.dispatcher = Dispatcher()
         self.dispatcher.map("/ping", self.osc_ping)
@@ -67,6 +68,7 @@ class Controller:
 
     def osc_clear(self, args):
         self.buffer1 = [0 for i in range(payload_size)]
+        self.buffer2 = [0 for i in range(payload_size)]
         self.update_display()
 
     def osc_set_all(self, args, r: float, g: float, b: float):
@@ -88,16 +90,18 @@ class Controller:
         self.set_pix(i, int(r), int(g), int(b))
 
     def update_display(self):
+        buffer = [min((x + y), 255)
+                  for x, y in zip(self.buffer1, self.buffer2)]
         if self.ui:
-            self.ui.update_buff(self.buffer1)
+            self.ui.update_buff(buffer)
         if self.arduino is None:
             return
-        crc: int = checksum(self.buffer1)
+        crc: int = checksum(buffer)
         assert 0 <= crc < 256
-        data_header = struct.pack(self.pack_com_str, 0XAF, len(self.buffer1))
+        data_header = struct.pack(self.pack_com_str, 0XAF, len(buffer))
         try:
             self.arduino.write(data_header)
-            self.arduino.write(self.buffer1)
+            self.arduino.write(buffer)
             self.arduino.write(bytes([crc]))
         except serialutil.SerialException as e:
             print(f"send_payload:SerialException {e}")
