@@ -1,0 +1,11 @@
+#N canvas 1137 191 624 549 12;
+#X obj 95 371 s max-bright-start-seq;
+#X msg 99 320 255;
+#X text 177 316 valeur max de lumière lors de la séquence de démarrage des mendocinos, f 34;
+#X msg 139 323 80;
+#X obj 122 201 config-query max-bright-start-seq;
+#X obj 94 157 loadbang;
+#X connect 1 0 0 0;
+#X connect 3 0 0 0;
+#X connect 4 0 0 0;
+#X connect 5 0 4 0;
