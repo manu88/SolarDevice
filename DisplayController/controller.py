@@ -40,6 +40,7 @@ class Controller:
         self.dispatcher = Dispatcher()
         self.dispatcher.map("/ping", self.osc_ping)
         self.dispatcher.map("/pix", self.osc_set_pix)
+        self.dispatcher.map("/pix2", self.osc_set_pix2)
         self.dispatcher.map("/all", self.osc_set_all)
         self.dispatcher.map("/clear", self.osc_clear)
         self.dispatcher.map("/dump", self.osc_dump)
@@ -53,10 +54,15 @@ class Controller:
     def osc_ping(self, args):
         print(f"ping {args}")
 
-    def set_pix(self, i: int, r: int, g: int, b: int):
+    def set_pix1(self, i: int, r: int, g: int, b: int):
         self.buffer1[i*3] = r
         self.buffer1[(i*3)+1] = g
         self.buffer1[(i*3)+2] = b
+
+    def set_pix2(self, i: int, r: int, g: int, b: int):
+        self.buffer2[i*3] = r
+        self.buffer2[(i*3)+1] = g
+        self.buffer2[(i*3)+2] = b
 
     def osc_update(self, args):
         self.update_display()
@@ -84,10 +90,15 @@ class Controller:
             self.buffer1[(i*3)+1] = g
             self.buffer1[(i*3)+2] = b
 
+    def osc_set_pix2(self, args, i: int, r: float, g: float, b: float):
+        if i*3 >= len(self.buffer1):
+            return
+        self.set_pix2(i, int(r), int(g), int(b))
+
     def osc_set_pix(self, args, i: int, r: float, g: float, b: float):
         if i*3 >= len(self.buffer1):
             return
-        self.set_pix(i, int(r), int(g), int(b))
+        self.set_pix1(i, int(r), int(g), int(b))
 
     def update_display(self):
         buffer = [min((x + y), 255)
