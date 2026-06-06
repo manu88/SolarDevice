@@ -2,7 +2,7 @@
 #X obj 193 190 bng 19 250 50 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000;
 #X obj 252 181 bng 19 250 50 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000;
 #X msg 65 594 update;
-#X msg 157 279 255 1000;
+#X msg 157 279 123 1000;
 #X msg 251 287 0 1000;
 #X obj 169 368 i;
 #X obj 169 470 t b f f f;
@@ -76,7 +76,6 @@
 #X connect 10 0 0 0;
 #X connect 10 1 1 0;
 #X connect 11 0 12 0;
-#X connect 11 0 14 0;
 #X connect 11 0 17 0;
 #X connect 12 0 10 0;
 #X connect 13 0 7 0;
@@ -87,6 +86,7 @@
 #X connect 15 3 16 3;
 #X connect 16 0 7 0;
 #X connect 17 0 18 0;
+#X connect 17 0 14 1;
 #X connect 18 0 19 1;
 #X connect 19 0 16 0;
 #X connect 20 0 2 0;

@@ -2,4 +2,4 @@ max-bright-start-seq 123;
 color-center 250 243 243;
 color-off1 40 40 40;
 color-off2 20 20 20 ;
-led-controller-host solar-device-main.local
+led-controller-host 127.0.0.1
