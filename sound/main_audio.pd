@@ -1,1 +1,3 @@
-#N canvas 66 102 450 300 12;
+#N canvas 997 346 450 300 12;
+#X obj 91 116 synth-controller;
+#X obj 104 198 droidparty_main;
