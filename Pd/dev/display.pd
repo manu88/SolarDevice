@@ -16,6 +16,7 @@
 #X obj 405 47 print error;
 #X obj 91 25 route update clear1 clear2 pix1 pix2;
 #X msg 193 125 send /pix1 \$1 \$2 \$3 \$4;
+#X msg 237 227 send /dump;
 #X connect 1 0 0 0;
 #X connect 2 0 0 0;
 #X connect 3 0 2 0;
@@ -37,3 +38,4 @@
 #X connect 15 4 11 0;
 #X connect 15 5 14 0;
 #X connect 16 0 2 0;
+#X connect 17 0 2 0;

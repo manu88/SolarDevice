@@ -1,4 +1,4 @@
-max-bright-start-seq 123;
+max-bright-start-seq 127;
 sun-color-center 40 255 40;
 sun-color-off1 100 40 40;
 sun-color-off2 80 20 20 ;

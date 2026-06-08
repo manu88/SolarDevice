@@ -1,0 +1,16 @@
+#N canvas 814 303 850 643 12;
+#X obj 498 330 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
+#X obj 498 352 print;
+#X obj 457 163 bng 19 250 50 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000;
+#X msg 612 211 30;
+#X msg 571 174 10;
+#X msg 624 155 set 0;
+#X msg 615 258 -20;
+#X obj 501 261 lerp 5;
+#X connect 0 0 1 0;
+#X connect 2 0 7 0;
+#X connect 3 0 7 1;
+#X connect 4 0 7 1;
+#X connect 5 0 7 1;
+#X connect 6 0 7 1;
+#X connect 7 0 0 0;
