@@ -44,7 +44,7 @@ void setup() {
 
   resetReadings();
 
-  setAll(255, 255, 255);
+  setAll(0, 0, 0);
 
   Serial.println("Connected");
 }
