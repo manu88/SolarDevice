@@ -51,6 +51,9 @@ class Controller:
 
         self.osc_client = udp_client.SimpleUDPClient(
             osc_addr, 8012, allow_broadcast=True)
+        self.last_update_time = time.time()
+        self.update_time_accum = 0
+        self.num_updates = 0
 
     def osc_ping(self, args):
         print(f"ping {args}")
@@ -69,9 +72,16 @@ class Controller:
         self.update_display()
 
     def osc_dump(self, args):
+        print("Buffer1:")
         for i in range(72//3):
             print(
                 f"{i}: r={self.buffer1[i*3]} g={self.buffer1[(i*3)+1]} b={self.buffer1[(i*3)+2]}")
+        print("Buffer2:")
+        for i in range(72//3):
+            print(
+                f"{i}: r={self.buffer2[i*3]} g={self.buffer2[(i*3)+1]} b={self.buffer2[(i*3)+2]}")
+        avg = self.update_time_accum / self.num_updates
+        print(f"{self.num_updates} updates -> {avg}")
 
     def osc_clear1(self, args):
         self.buffer1 = [0 for i in range(payload_size)]
@@ -107,6 +117,13 @@ class Controller:
                   for x, y in zip(self.buffer1, self.buffer2)]
         if self.ui:
             self.ui.update_buff(buffer)
+
+        update_time = time.time()
+        diff = update_time - self.last_update_time
+        self.last_update_time = update_time
+        self.update_time_accum += diff
+        self.num_updates += 1
+
         if self.arduino is None:
             return
         crc: int = checksum(buffer)
