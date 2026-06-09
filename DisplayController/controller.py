@@ -130,9 +130,9 @@ class Controller:
         assert 0 <= crc < 256
         data_header = struct.pack(self.pack_com_str, 0XAF, len(buffer))
         try:
-            self.arduino.write(data_header)
-            self.arduino.write(buffer)
-            self.arduino.write(bytes([crc]))
+            msg = data_header + bytes(buffer) + bytes([crc])
+            self.arduino.write(msg)
+
         except serialutil.SerialException as e:
             print(f"send_payload:SerialException {e}")
             self.stop()
