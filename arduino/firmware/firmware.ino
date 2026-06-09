@@ -1,14 +1,12 @@
 #include "proto.hpp"
 #include <FastLED.h>
 
-
-
 /////////////////////////////////
 const int numReadings = 50;
-int readings[numReadings];  // the readings from the analog input
-int readIndex = 0;          // the index of the current reading
-int total = 0;              // the running total
-int average = 0;            // the average
+int readings[numReadings]; // the readings from the analog input
+int readIndex = 0;         // the index of the current reading
+int total = 0;             // the running total
+int average = 0;           // the average
 
 const int minPeakDiff = 20;
 
@@ -109,7 +107,8 @@ int parseInput() {
 
     // Serial.print("Read payload, size:");
     // Serial.println((uint8_t)expectedPayloadSize, HEX);
-    size_t read = Serial.readBytes(payload, expectedPayloadSize);
+    size_t read =
+        Serial.readBytes(payload, expectedPayloadSize + currentPayloadSize);
     if (read == 0) {
       return 0;
     }
@@ -186,7 +185,6 @@ void loopSensor() {
   total = total + readings[readIndex];
   readIndex = readIndex + 1;
 
-  
   if (readIndex >= numReadings) {
     readIndex = 0;
   }
@@ -196,23 +194,23 @@ void loopSensor() {
 
   unsigned long now = millis();
   int reading = val > average + minPeakDiff;
-  
-  if (reading ){
+
+  if (reading) {
     lastIdleCheckTime = now;
-    if(inPeak == 0){
+    if (inPeak == 0) {
       float speed = -1;
-      if (revStartTime > 0){
+      if (revStartTime > 0) {
         unsigned long ellapsed = now - revStartTime;
-        speed = 1000.f/ellapsed;
+        speed = 1000.f / ellapsed;
       }
       sendStatus(speed, reading);
       revStartTime = now;
     }
     inPeak = 1;
-  }else{
+  } else {
     inPeak = 0;
   }
-  if (now - lastIdleCheckTime >IdleInterval){
+  if (now - lastIdleCheckTime > IdleInterval) {
     resetReadings();
     sendStatus(0, 0);
     lastIdleCheckTime = now;
@@ -220,13 +218,13 @@ void loopSensor() {
   delay(2);
 }
 
-void resetReadings(){
+void resetReadings() {
   for (int i = 0; i < i; i++) {
     readings[i] = 0;
   }
 }
 
-void sendStatus(float speed, int activity){
+void sendStatus(float speed, int activity) {
   int sensorId = 1;
   Serial.print("S");
   Serial.print(sensorId);
