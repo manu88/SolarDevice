@@ -1,6 +1,8 @@
 #include "proto.hpp"
 #include <FastLED.h>
 
+
+#define FIRMWARE_VERSION "0.0.1"
 /////////////////////////////////
 const int numReadings = 50;
 int readings[numReadings]; // the readings from the analog input
@@ -45,6 +47,8 @@ void setup() {
   setAll(0, 0, 0);
 
   Serial.println("Connected");
+  Serial.print("Version: ");
+  Serial.println(FIRMWARE_VERSION);
 }
 
 static ParserState parserState = ParserState_Start;
