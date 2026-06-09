@@ -158,7 +158,10 @@ class Controller:
             lines = self.arduino.readlines()
             if len(lines):
                 for l in lines:
-                    self._process_arduino_msg(l.decode())
+                    try:
+                        self._process_arduino_msg(l.decode())
+                    except UnicodeDecodeError as err:
+                        print(err)
 
     def start(self):
         print("Serving on {}".format(self.server.server_address))
