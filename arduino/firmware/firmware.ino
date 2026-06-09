@@ -132,7 +132,18 @@ int parseInput() {
       Serial.print("Mismatch : Expected crc: ");
       Serial.print(expectedCrc);
       Serial.print(" Calc crc: ");
-      Serial.println(crc);
+      Serial.print(crc);
+
+      Serial.println("");
+      for (int i = 0; i < expectedPayloadSize; i++) {
+        if (i % 8 == 0) {
+          Serial.println("");
+        }
+        Serial.print("0x");
+        Serial.print(payload[i], HEX);
+        Serial.print(", ");
+      }
+      Serial.println("");
       resetParserState();
       return 0;
     }
