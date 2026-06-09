@@ -158,17 +158,30 @@ int parseInput() {
 void loop() {
   while (Serial.available() > 0) {
     if (parseInput()) {
-      for (int i = 0; i < expectedPayloadSize; i++) {
-        if (i >= NUM_LEDS) {
-          continue;
-        }
-        int r = payload[i * 3];
-        int g = payload[(i * 3) + 1];
-        int b = payload[(i * 3) + 2];
-        leds[i] = CRGB(r, g, b);
-      }
-      FastLED.show();
+      if (expectedPayloadSize != 72) {
+        Serial.print("unexpected expectedPayloadSize: ");
+        Serial.println(expectedPayloadSize);
+      } else {
 
+        int upCount = 0;
+        int upIndex = -1;
+        for (int i = 0; i < NUM_LEDS; i += 1) {
+          int r = payload[i * 3];
+          int g = payload[(i * 3) + 1];
+          int b = payload[(i * 3) + 2];
+          if (r && upIndex == -1) {
+            upIndex = i;
+          }
+          upCount += (r > 0) + (g > 0) + (b > 0);
+          leds[i] = CRGB(r, g, b);
+        }
+        Serial.print("upCount: ");
+        Serial.print(upCount);
+        Serial.print(" upIndex: ");
+        Serial.println(upIndex);
+        FastLED.show();
+        // delay(2);
+      }
       resetParserState();
     }
   }
