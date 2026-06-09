@@ -2,6 +2,10 @@
 
 Contenu du repo:
 
+## Scheduler
+
+Gère la logique globale du système
+
 ## DisplayController
 
 Programme d'interface entre Pd (via OSC) et les Leds (via arduino). Voir le [README](DisplayController/README.md)
