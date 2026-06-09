@@ -169,6 +169,7 @@
 #X obj 1134 25 loadbang;
 #X msg 1225 26 2;
 #X msg 1283 36 4;
+#X obj 178 14 loadbang;
 #X connect 1 0 3 0;
 #X connect 2 0 1 0;
 #X connect 3 0 16 0;
@@ -341,6 +342,7 @@
 #X connect 87 0 89 0;
 #X connect 88 0 28 0;
 #X connect 89 0 30 0;
+#X connect 90 0 21 0;
 #X restore 62 313 pd pulses;
 #X obj 889 240 i 0;
 #X obj 970 243 + 1;
@@ -400,4 +402,3 @@
 #X connect 36 0 29 0;
 #X connect 37 0 36 0;
 #X connect 38 0 2 0;
-#X connect 39 0 37 0;
