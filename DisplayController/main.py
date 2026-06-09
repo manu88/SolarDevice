@@ -13,6 +13,7 @@ def list_serial_ports():
 
 
 def controller_loop(controller: Controller):
+    print("Start controller_loop")
     try:
         controller.start()
     except KeyboardInterrupt:
@@ -25,6 +26,7 @@ def run(serial_port: Optional[str], osc_addr: str, ui: Optional[UILeds]):
     if ui:
         thd = Thread(target=controller_loop, args=(controller,))
         thd.start()
+        print("Start UI loop")
         ui.mainloop()
         controller.stop()
         thd.join()
