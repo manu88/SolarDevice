@@ -54,6 +54,7 @@ class Controller:
         self.last_update_time = time.time()
         self.update_time_accum = 0
         self.num_updates = 0
+        self.firmware_version: str = ""
 
     def osc_ping(self, args):
         print(f"ping {args}")
@@ -82,6 +83,7 @@ class Controller:
                 f"{i}: r={self.buffer2[i*3]} g={self.buffer2[(i*3)+1]} b={self.buffer2[(i*3)+2]}")
         avg = self.update_time_accum / self.num_updates
         print(f"{self.num_updates} updates -> {avg}")
+        print(f"firmware version {self.firmware_version}")
 
     def osc_clear1(self, args):
         self.buffer1 = [0 for i in range(payload_size)]
@@ -139,6 +141,10 @@ class Controller:
 
     def _process_arduino_msg(self, l: str):
         line = l.strip()
+        if line.startswith("Version:"):
+            ver = line.split(" ")[1]
+            self.firmware_version = ver
+            print(f"Firmware version: {self.firmware_version}")
         if line.startswith("S") and len(line) > 2 and line[0].isdigit:
             toks = line.split(" ")
             if len(toks) < 3:
