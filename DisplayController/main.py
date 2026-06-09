@@ -1,9 +1,10 @@
+import time
 import argparse
+from threading import Thread
 from typing import Optional
 from utils import serial_ports
 from controller import Controller
 from ui import UILeds
-from threading import Thread
 
 
 def list_serial_ports():
@@ -26,6 +27,7 @@ def run(serial_port: Optional[str], osc_addr: str, ui: Optional[UILeds]):
     if ui:
         thd = Thread(target=controller_loop, args=(controller,))
         thd.start()
+        time.sleep(1)
         print("Start UI loop")
         ui.mainloop()
         controller.stop()
