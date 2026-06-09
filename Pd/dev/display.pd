@@ -17,6 +17,12 @@
 #X obj 91 25 route update clear1 clear2 pix1 pix2;
 #X msg 193 125 send /pix1 \$1 \$2 \$3 \$4;
 #X msg 237 227 send /dump;
+#X obj 95 378 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
+#X obj 196 458 delay 1000;
+#X obj 199 485 print retry-connection;
+#X obj 87 423 sel 0 1;
+#X obj 32 469 print connected!;
+#X connect 0 0 18 0;
 #X connect 1 0 0 0;
 #X connect 2 0 0 0;
 #X connect 3 0 2 0;
@@ -39,3 +45,8 @@
 #X connect 15 5 14 0;
 #X connect 16 0 2 0;
 #X connect 17 0 2 0;
+#X connect 18 0 21 0;
+#X connect 19 0 1 0;
+#X connect 19 0 20 0;
+#X connect 21 0 19 0;
+#X connect 21 1 22 0;
