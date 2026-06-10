@@ -1,4 +1,4 @@
-#N canvas 530 213 1201 864 12;
+#N canvas 324 140 1356 870 12;
 #X obj 61 89 inlet;
 #X obj 352 94 inlet;
 #X text 108 97 bang to output pulse params;
@@ -64,7 +64,6 @@
 #X obj 950 386 max 100;
 #X obj 879 224 config-query min-sun-luminosity;
 #X obj 877 254 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
-#X obj 906 160 r reload-config;
 #X msg 552 902 248 240 215 120 110 50 \$1 \$2;
 #X connect 0 0 11 0;
 #X connect 1 0 36 0;
@@ -92,7 +91,7 @@
 #X connect 23 0 20 0;
 #X connect 24 0 21 0;
 #X connect 25 0 44 0;
-#X connect 26 0 66 0;
+#X connect 26 0 65 0;
 #X connect 28 0 22 0;
 #X connect 28 0 23 0;
 #X connect 28 0 24 0;
@@ -130,5 +129,4 @@
 #X connect 62 0 60 0;
 #X connect 63 0 64 0;
 #X connect 64 0 62 1;
-#X connect 65 0 63 0;
-#X connect 66 0 4 0;
+#X connect 65 0 4 0;

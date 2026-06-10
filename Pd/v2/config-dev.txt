@@ -1,5 +1,5 @@
 led-controller-host 127.0.0.1;
 min-sun-luminosity 100;
-sunrise-color 244 226 225;
-noon-color 243 225 106;
-sunset-color 166 200 209;
+sunrise-color-grad 244 226 225 248 244 248;
+noon-color-grad 243 225 106 248 244 248;
+sunset-color-grad 147 169 175 184 218 218;

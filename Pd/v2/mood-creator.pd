@@ -1,0 +1,4 @@
+#N canvas 876 393 550 459 12;
+#X obj 149 109 config-query sunrise-color-grad;
+#X obj 137 236 print param;
+#X connect 0 0 1 0;
