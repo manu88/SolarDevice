@@ -1,4 +1,4 @@
-#N canvas 64 102 546 697 12;
+#N canvas 972 303 546 697 12;
 #X obj 297 279 gradient-gen -1;
 #X obj 157 279 gradient-gen 1 1;
 #X obj 351 619 outlet;

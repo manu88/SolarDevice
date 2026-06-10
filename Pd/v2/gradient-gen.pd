@@ -1,4 +1,4 @@
-#N canvas 395 93 1405 919 12;
+#N canvas 125 -908 1405 919 12;
 #X obj 585 336 expr $f2*(1-($f1))+$f3*($f1);
 #X obj 368 550 i;
 #X obj 845 349 expr $f2*(1-($f1))+$f3*($f1);
@@ -26,7 +26,7 @@
 #X obj 29 34 bng 19 250 50 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000;
 #X obj 80 -128 t b b;
 #X obj 80 -167 bng 19 250 50 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000;
-#X obj 561 -293 inlet;
+#X obj 328 -265 inlet;
 #X obj 476 716 outlet;
 #X msg 350 51 1 \$1;
 #X obj 306 -238 t b l;
@@ -47,6 +47,8 @@
 #X text 1185 -104 offset;
 #X obj 1133 -106 f \$2;
 #X obj 225 477 + 0;
+#X text 405 -247 format Inlet R0 G0 B0 R1 G1 B1 led_center_idx etalement;
+#X text 545 722 format Outlet list (size=etalement) led_idx R G B;
 #X connect 0 0 7 0;
 #X connect 1 0 17 1;
 #X connect 2 0 8 0;
