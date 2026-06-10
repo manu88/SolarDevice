@@ -4,6 +4,8 @@
 #X obj 122 201 config-query max-bright-start-seq;
 #X obj 94 157 loadbang;
 #X obj 101 81 inlet;
+#X obj 181 158 bng 19 250 50 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000;
 #X connect 2 0 0 0;
 #X connect 3 0 2 0;
 #X connect 4 0 2 0;
+#X connect 5 0 2 0;
