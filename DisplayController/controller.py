@@ -32,18 +32,16 @@ class Controller:
         self.read_thread = None
         if serial_port:
             self.read_thread = Thread(target=self._run_thread)
-        self.pack_com_str = ">BB"
+        self.pack_com_str = ">BBB"
 
         self.buffer1 = [0 for i in range(payload_size)]
-        self.buffer2 = [0 for i in range(payload_size)]
 
         self.dispatcher = Dispatcher()
         self.dispatcher.map("/ping", self.osc_ping)
         self.dispatcher.map("/pix1", self.osc_set_pix1)
-        self.dispatcher.map("/pix2", self.osc_set_pix2)
         self.dispatcher.map("/all", self.osc_set_all)
         self.dispatcher.map("/clear1", self.osc_clear1)
-        self.dispatcher.map("/clear2", self.osc_clear2)
+
         self.dispatcher.map("/dump", self.osc_dump)
         self.dispatcher.map("/update", self.osc_update)
         self.server = osc_server.ThreadingOSCUDPServer(
@@ -64,11 +62,6 @@ class Controller:
         self.buffer1[(i*3)+1] = g
         self.buffer1[(i*3)+2] = b
 
-    def set_pix2(self, i: int, r: int, g: int, b: int):
-        self.buffer2[i*3] = r
-        self.buffer2[(i*3)+1] = g
-        self.buffer2[(i*3)+2] = b
-
     def osc_update(self, args):
         self.update_display()
 
@@ -77,19 +70,13 @@ class Controller:
         for i in range(72//3):
             print(
                 f"{i}: r={self.buffer1[i*3]} g={self.buffer1[(i*3)+1]} b={self.buffer1[(i*3)+2]}")
-        print("Buffer2:")
-        for i in range(72//3):
-            print(
-                f"{i}: r={self.buffer2[i*3]} g={self.buffer2[(i*3)+1]} b={self.buffer2[(i*3)+2]}")
-        avg = self.update_time_accum / self.num_updates
+        avg = self.update_time_accum / self.num_updates if self.num_updates != 0 else 0
         print(f"{self.num_updates} updates -> {avg}")
         print(f"firmware version {self.firmware_version}")
+        self._send_arduino(cmd=0XBD, buffer=[0])
 
     def osc_clear1(self, args):
         self.buffer1 = [0 for i in range(payload_size)]
-
-    def osc_clear2(self, args):
-        self.buffer2 = [0 for i in range(payload_size)]
 
     def osc_set_all(self, args, r: float, g: float, b: float):
         self.set_all(int(r), int(g), int(b))
@@ -104,19 +91,26 @@ class Controller:
             self.buffer1[(i*3)+1] = g
             self.buffer1[(i*3)+2] = b
 
-    def osc_set_pix2(self, args, i: int, r: float, g: float, b: float):
-        if i*3 >= len(self.buffer1):
-            return
-        self.set_pix2(i, int(r), int(g), int(b))
-
     def osc_set_pix1(self, args, i: int, r: float, g: float, b: float):
         if i*3 >= len(self.buffer1):
             return
         self.set_pix1(i, int(r), int(g), int(b))
 
+    def _send_arduino(self, cmd: int, buffer):
+        crc: int = checksum(buffer)
+        assert 0 <= crc < 256
+
+        data_header = struct.pack(self.pack_com_str, 0XAF, cmd, len(buffer))
+        try:
+            msg = data_header + bytes(buffer) + bytes([crc])
+            self.arduino.write(msg)
+
+        except serialutil.SerialException as e:
+            print(f"send_payload:SerialException {e}")
+            self.stop()
+
     def update_display(self):
-        buffer = [min((x + y), 255)
-                  for x, y in zip(self.buffer1, self.buffer2)]
+        buffer = self.buffer1
         if self.ui:
             self.ui.update_buff(buffer)
 
@@ -128,16 +122,7 @@ class Controller:
 
         if self.arduino is None:
             return
-        crc: int = checksum(buffer)
-        assert 0 <= crc < 256
-        data_header = struct.pack(self.pack_com_str, 0XAF, len(buffer))
-        try:
-            msg = data_header + bytes(buffer) + bytes([crc])
-            self.arduino.write(msg)
-
-        except serialutil.SerialException as e:
-            print(f"send_payload:SerialException {e}")
-            self.stop()
+        self._send_arduino(cmd=0XBC, buffer=buffer)
 
     def _process_arduino_msg(self, l: str):
         line = l.strip()
@@ -193,19 +178,11 @@ class Controller:
 
 if __name__ == "__main__":
     data = [
-        0xC8, 0xC8, 0xC8, 0x0, 0x0, 0x0, 0x0, 0x0,
-        0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
-        0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
-        0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
-        0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
-        0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
-        0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
-        0x0, 0x0, 0x0, 0x0, 0x0, 0xAF, 0x48, 0x0,
-        0x0, 0x0, 0xC8, 0xC8, 0xC8, 0x0, 0x0, 0x0,]
+        0x0,]
 
-    c = Controller("/dev/cu.usbmodem11401", "")
-    while True:
-        c.arduino.write(data)
-        time.sleep(2)
-    assert (len(data) == 72)
+    # c = Controller("/dev/cu.usbmodem11401", "")
+    # while True:
+    #    c.arduino.write(data)
+    #    time.sleep(2)
+
     print("crc:", checksum(data))

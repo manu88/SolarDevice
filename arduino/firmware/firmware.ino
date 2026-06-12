@@ -1,7 +1,6 @@
 #include "proto.hpp"
 #include <FastLED.h>
 
-
 #define FIRMWARE_VERSION "0.0.1"
 /////////////////////////////////
 const int numReadings = 50;
@@ -52,6 +51,7 @@ void setup() {
 }
 
 static ParserState parserState = ParserState_Start;
+static CmdId currentCmd = CmdId_Invalid;
 static uint8_t expectedPayloadSize = 0;
 static uint8_t currentPayloadSize = 0;
 
@@ -63,6 +63,7 @@ void resetParserState() {
   parserState = ParserState_Start;
   expectedPayloadSize = 0;
   currentPayloadSize = 0;
+  currentCmd = CmdId_Invalid;
   memset(payload, 0, PAYLOAD_SIZE);
 }
 
@@ -84,10 +85,18 @@ int parseInput() {
       return 0;
     }
     if (input == BYTE_START) {
-      parserState = ParserState_PayloadSize;
+      parserState = ParserState_Cmd;
       // Serial.println("Got START");
     }
     break;
+  }
+  case ParserState_Cmd: {
+    uint8_t input = 0;
+    if (Serial.readBytes(&input, 1) != 1) {
+      return 0;
+    }
+    currentCmd = (CmdId)input;
+    parserState = ParserState_PayloadSize;
   }
   case ParserState_PayloadSize: {
     if (Serial.available() == 0) {
@@ -98,8 +107,6 @@ int parseInput() {
       return 0;
     }
 
-    // Serial.print("Got SIZE:");
-    // Serial.println((uint8_t)size, HEX);
     expectedPayloadSize = size;
     parserState = ParserState_Payload;
     return 0;
@@ -159,23 +166,54 @@ int parseInput() {
   return 0;
 }
 
+void processCmd() {
+  switch (currentCmd) {
+  case CmdId_Invalid:
+    Serial.println("Invalid cmdID: CmdId_Invalid");
+    break;
+  case CmdId_Leds:
+    processCmdLed();
+    break;
+  case CmdId_Dump:
+    Serial.println("arduino DUMP\n");
+    for (int i = 0; i < NUM_LEDS; i++) {
+      Serial.print(i);
+      Serial.print(" :");
+      Serial.print(leds[i].raw[0], HEX);
+      Serial.print(" ");
+      Serial.print(leds[i].raw[1], HEX);
+      Serial.print(" ");
+      Serial.print(leds[i].raw[2], HEX);
+      Serial.println("");
+    }
+    break;
+  default:
+    Serial.print("Invalid cmdID: ");
+    Serial.println(currentCmd, HEX);
+  }
+}
+
+void processCmdLed() {
+  if (expectedPayloadSize != 72) {
+    Serial.print("unexpected expectedPayloadSize: ");
+    Serial.println(expectedPayloadSize);
+  } else {
+    for (int i = 0; i < NUM_LEDS; i += 1) {
+      int r = payload[i * 3];
+      int g = payload[(i * 3) + 1];
+      int b = payload[(i * 3) + 2];
+      leds[i] = CRGB(r, g, b);
+    }
+    FastLED.show();
+    // delay(2);
+  }
+  resetParserState();
+}
+
 void loop() {
   while (Serial.available() > 0) {
     if (parseInput()) {
-      if (expectedPayloadSize != 72) {
-        Serial.print("unexpected expectedPayloadSize: ");
-        Serial.println(expectedPayloadSize);
-      } else {
-        for (int i = 0; i < NUM_LEDS; i += 1) {
-          int r = payload[i * 3];
-          int g = payload[(i * 3) + 1];
-          int b = payload[(i * 3) + 2];
-          leds[i] = CRGB(r, g, b);
-        }
-        FastLED.show();
-        // delay(2);
-      }
-      resetParserState();
+      processCmd();
     }
   }
   loopSensor();
