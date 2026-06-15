@@ -1,4 +1,4 @@
-#N canvas -180 -1024 1279 930 12;
+#N canvas -168 -997 1279 930 12;
 #N canvas 1009 134 603 417 volume 0;
 #X obj 121 161 / 127;
 #X obj 121 188 pack 0 50;
@@ -76,19 +76,19 @@
 #X coords 0 -1 1 1 140 40 1 100 100;
 #X restore 610 581 pd volume square;
 #X obj 0 0 cnv 15 550 280 empty ViewPort empty 20 12 0 14 #7c7c7c #fcfcfc 0;
-#X obj 187 41 nbx 5 20 -1e+37 1e+37 0 1 Beat_Frequency_final Beat_Frequency_knob empty 0 -8 0 10 #c4fcc4 #000000 #000000 48.4848 256;
+#X obj 187 41 nbx 5 20 -1e+37 1e+37 0 1 Beat_Frequency_final Beat_Frequency_knob empty 0 -8 0 10 #c4fcc4 #000000 #000000 3.91775 256;
 #X text 254 41 Hz;
 #X text 106 42 Hz;
-#X obj 37 42 nbx 5 20 -1e+37 1e+37 0 1 Main_Frequency Main_Frequency_knob empty 0 -8 0 10 #fcfcc4 #000000 #000000 360 256;
+#X obj 37 42 nbx 5 20 -1e+37 1e+37 0 1 Main_Frequency Main_Frequency_knob empty 0 -8 0 10 #fcfcc4 #000000 #000000 328.889 256;
 #X text 14 14 Carrier Frequency;
 #X text 166 14 Beat Frequency;
-#X obj 347 89 hsl 100 20 0 100 0 1 sine_volume_slider sine_volume_knob empty -2 -8 0 10 #dcdcdc #000000 #000000 7100 1;
+#X obj 353 89 hsl 100 20 0 100 0 1 sine_volume_slider sine_volume_knob empty -2 -8 0 10 #dcdcdc #000000 #000000 6700 1;
 #X obj 347 188 hsl 100 20 0 100 0 1 FM_volume_knob FM_volume_knob empty -2 -8 0 10 #dcdcdc #000000 #000000 0 1;
 #X text 350 176 FM Volume;
 #X obj 507 242 bng 30 250 50 0 \$0-nextview1 empty next 4 15 0 10 #c4fcfc #202020 #000000;
-#X obj 762 306 nbx 4 20 -1e+37 1e+37 0 1 empty sine_volume_knob empty 0 -8 0 10 #a0e0d8 #000000 #000000 44 256;
+#X obj 762 306 nbx 4 20 -1e+37 1e+37 0 1 empty sine_volume_knob empty 0 -8 0 10 #a0e0d8 #000000 #000000 67.6768 256;
 #X obj 765 366 nbx 4 20 -1e+37 1e+37 0 1 empty FM_volume_knob empty 0 -8 0 10 #a0e0d8 #000000 #000000 0 256;
-#X obj 498 98 nbx 4 20 -1e+37 1e+37 0 1 empty master_volume_knob empty 0 -8 0 10 #a0e0d8 #000000 #000000 83.5443 256;
+#X obj 498 98 nbx 4 20 -1e+37 1e+37 0 1 empty master_volume_knob empty 0 -8 0 10 #a0e0d8 #000000 #000000 93.2911 256;
 #X obj -1 280 cnv 16 550 280 empty empty empty 20 12 0 14 #fcf8a0 #404040 0;
 #X obj 507 522 bng 30 250 50 0 \$0-nextview2 empty next 4 15 0 10 #ecd48c #000000 #000000;
 #X obj -1 560 cnv 16 550 280 empty empty empty 20 12 0 14 #fcf8a0 #404040 0;
@@ -109,7 +109,7 @@
 #X obj 350 664 bng 40 250 50 0 key-As empty A^ 15 20 0 14 #b8b8b8 #000000 #000000;
 #X obj 23 599 bng 40 250 50 0 key-octave-0 empty oct-0 3 20 0 12 #fcfcc4 #000000 #000000;
 #X obj 472 522 bng 30 250 50 0 \$0-nextview0 empty prev 4 15 0 10 #ecd48c #000000 #000000;
-#X obj 25 312 hsl 100 20 0 100 0 1 phasor_volume_knob phasor_volume_knob empty -2 -8 0 10 #dcdcdc #000000 #000000 0 1;
+#X obj 25 312 hsl 100 20 0 100 0 1 phasor_volume_knob phasor_volume_knob empty -2 -8 0 10 #dcdcdc #000000 #000000 800 1;
 #X obj 139 325 nbx 4 20 -1e+37 1e+37 0 0 empty phasor_volume_knob empty 0 -8 0 10 #a0e0d8 #000000 #000000 0 256;
 #X obj 25 372 hsl 100 20 0 100 0 1 square_volume_knob square_volume_knob empty -2 -8 0 10 #dcdcdc #000000 #000000 0 1;
 #X obj 139 385 nbx 4 20 -1e+37 1e+37 0 0 empty square_volume_knob empty 0 -8 0 10 #a0e0d8 #000000 #000000 0 256;
@@ -165,7 +165,7 @@
 #X connect 9 0 8 0;
 #X coords 0 -1 1 1 250 180 1 82 64;
 #X restore 685 648 pd Visu;
-#X obj 210 346 vsl 20 100 0 150 0 1 phase_cutoff_knob phase_cutoff_knob empty 0 -9 0 10 #acbcf8 #000000 #000000 6700 1;
+#X obj 210 346 vsl 20 100 0 150 0 1 phase_cutoff_knob phase_cutoff_knob empty 0 -9 0 10 #acbcf8 #000000 #000000 5800 1;
 #X obj 281 346 vsl 20 100 0 120 0 1 phase_resonance_knob empty empty 0 -9 0 10 #acbcf8 #000000 #000000 3400 1;
 #X obj 278 323 nbx 4 20 -1e+37 1e+37 0 0 phase_resonance phase_resonance_knob empty 0 -8 0 10 #a0e0d8 #000000 #000000 0 256;
 #X obj 207 323 nbx 4 20 -1e+37 1e+37 0 0 phase_cutoff phase_cutoff_knob empty 0 -8 0 10 #a0e0d8 #000000 #000000 0 256;
@@ -196,8 +196,8 @@
 #X text 374 1034 Reset to sine wav only;
 #X obj 31 1026 bng 20 250 50 0 preset_throat01 empty Throat 35 10 0 10 #d0900c #000000 #000000;
 #X obj 33 523 bng 30 250 50 0 \$0-nextview0 empty main 36 15 0 10 #ecd48c #000000 #000000;
-#X obj 206 70 vsl 20 100 0 64 0 1 Beat_Frequency_knob green-vsl empty 0 -9 0 10 #c4fcc4 #000000 #000000 7500 1;
-#X obj 60 79 vsl 20 100 0 440 0 1 Main_Frequency_knob yellow-vsl empty 0 -9 0 10 #fcfc84 #000000 #000000 8100 1;
+#X obj 206 70 vsl 20 100 0 64 0 1 Beat_Frequency_knob green-vsl empty 0 -9 0 10 #c4fcc4 #000000 #000000 4406 1;
+#X obj 60 79 vsl 20 100 0 440 0 1 Main_Frequency_knob yellow-vsl empty 0 -9 0 10 #fcfc84 #000000 #000000 7400 1;
 #X text 343 259 by Garvalf;
 #X text 350 77 Sine Volume;
 #X obj 174 801 bng 30 250 50 0 \$0-nextview2 empty keyboard 36 15 0 10 #ecd48c #000000 #000000;
@@ -268,7 +268,7 @@
 #X obj 119 136 hsl 35 20 0 1 0 0 main_stereo empty to_mono -5 -8 0 10 #fcfcfc #000000 #000000 0 1;
 #X obj 29 905 bng 20 250 50 0 preset_sleep empty Sleep 35 10 0 10 #3c248c #000000 #000000;
 #X obj 390 621 nbx 4 20 -1e+37 1e+37 0 1 empty tuning empty 0 -8 0 10 #fcfcc4 #000000 #000000 432 256;
-#X obj 131 170 nbx 4 20 -1e+37 1e+37 0 1 empty main_stereo empty 0 -8 0 10 #a0e0d8 #000000 #000000 0 256;
+#X obj 131 170 nbx 4 20 -1e+37 1e+37 0 1 empty main_stereo empty 0 -8 0 10 #a0e0d8 #000000 #000000 24 256;
 #X obj 468 603 nbx 4 20 -1e+37 1e+37 0 1 empty tempo empty 0 -8 0 10 #fcfcc4 #000000 #000000 99.4595 256;
 #X text 460 740 tempo;
 #X obj 552 1 cnv 16 550 280 empty empty empty 20 12 0 18 #b8dcd8 #404040 0;
@@ -507,7 +507,7 @@
 #X obj 38 135 random 10;
 #X obj 309 110 + 400;
 #X obj 393 49 vsl 20 100 100 800 0 1 empty empty empty 0 -9 0 10 #c4fcc4 #000000 #000000 2800 1;
-#X obj 153 153 vsl 20 100 1 20 0 1 empty rand_beat_freq empty 0 -9 0 10 #c4fcc4 #000000 #000000 900 1;
+#X obj 153 153 vsl 20 100 1 20 0 1 empty rand_beat_freq empty 0 -9 0 10 #c4fcc4 #000000 #000000 1200 1;
 #X obj 535 322 vsl 20 100 1 30 0 1 empty rand_fm_freq empty 0 -9 0 10 #c4fcc4 #000000 #000000 8800 1;
 #X obj 647 140 vsl 20 100 1 100 0 1 empty rand_noise_cutoff empty 0 -9 0 10 #c4fcc4 #000000 #000000 7300 1;
 #N canvas 144 144 450 616 randomize 0;
@@ -638,7 +638,7 @@
 #X text 267 1135 Random;
 #X obj 166 1195 vsl 20 100 1 30 0 1 rand_fm_freq empty empty 0 -9 0 10 #5498a0 #000000 #000000 8800 1;
 #X obj 164 1160 tgl 24 0 random_FM empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
-#X obj 244 1193 vsl 20 100 1 20 0 1 rand_beat_freq empty empty 0 -9 0 10 #c4fcc4 #000000 #000000 900 1;
+#X obj 244 1193 vsl 20 100 1 20 0 1 rand_beat_freq rand_beat_slider empty 0 -9 0 10 #c4fcc4 #000000 #000000 1200 1;
 #X obj 334 1193 vsl 20 100 1 100 0 1 rand_noise_cutoff empty empty 0 -9 0 10 #ac74d0 #000000 #000000 7300 1;
 #X text 296 1304 Noise Cutoff;
 #X text 219 1304 Beat Freq;
@@ -647,7 +647,7 @@
 #X obj 496 1191 vsl 20 100 1 100 0 1 rand_noise_panning empty empty 0 -9 0 10 #ac74d0 #000000 #000000 7250 1;
 #X text 481 1303 panning;
 #X text 390 1304 Noise Reson.;
-#X obj 242 1160 tgl 24 0 random_beat empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
+#X obj 242 1160 tgl 24 1 random_beat empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
 #X obj 414 1157 tgl 24 0 random_noise empty empty 17 7 0 10 #fcfcfc #000000 #000000 0 1;
 #X obj 312 1362 bng 30 250 50 0 \$0-nextview3 empty presets 36 15 0 10 #ecd48c #000000 #000000;
 #X obj 174 1362 bng 30 250 50 0 \$0-nextview2 empty keyboard 36 15 0 10 #ecd48c #000000 #000000;
@@ -674,8 +674,8 @@
 #X obj 316 516 hsl 100 20 0 125 0 0 noise_brown_volume_slider noise_brown_volume_knob empty -2 -8 0 10 #fce0c4 #000000 #000000 0 1;
 #X text 308 544 Brown Noise Volume;
 #X text 406 287 White Noise;
-#X obj 347 132 hsl 100 20 0 100 0 1 sine_subbass_volume_knob sine_subbass_volume_knob empty -2 -8 0 10 #dcdcdc #000000 #000000 3960 1;
-#X obj 1042 310 nbx 4 20 -1e+37 1e+37 0 1 empty sine_subbass_volume_knob empty 0 -8 0 10 #a0e0d8 #000000 #000000 40 256;
+#X obj 368 137 hsl 100 20 0 100 0 1 sine_subbass_volume_knob sine_subbass_volume_knob empty -2 -8 0 10 #dcdcdc #000000 #000000 7565 1;
+#X obj 1042 310 nbx 4 20 -1e+37 1e+37 0 1 empty sine_subbass_volume_knob empty 0 -8 0 10 #a0e0d8 #000000 #000000 76.4141 256;
 #N canvas 1009 134 603 417 volume 0;
 #X obj 137 231 line;
 #X obj 121 13 loadbang;
@@ -697,7 +697,7 @@
 #X text 349 120 Sine Subbass Vol;
 #X obj 767 475 nbx 4 20 -1e+37 1e+37 0 0 noise_brown_volume_slider noise_brown_volume_slider empty 0 -8 0 10 #a0e0d8 #000000 #000000 0 256;
 #X text 463 478 Noise Vol;
-#X obj 496 122 vsl 20 80 0 110 0 1 master_volume_knob master_volume-vsl empty 0 -9 0 10 #e0c4fc #000000 #000000 6077 1;
+#X obj 498 126 vsl 20 80 0 110 0 1 master_volume_knob master_volume-vsl empty 0 -9 0 10 #e0c4fc #000000 #000000 6700 1;
 #X text 483 211 Main Vol;
 #X obj 552 0 cnv 15 100 36 empty empty BIN-8 24 20 1 24 #68c0bc #404040 0;
 #X obj 1 470 cnv 15 332 30 empty empty empty 24 15 0 18 #9cd0d8 #404040 0;
