@@ -1,5 +1,5 @@
 import json
-
+from numbers import Number
 
 GENERAL_KEY = "General"
 SEUILS_KEY = "Seuils"
@@ -41,11 +41,17 @@ def vet_seuil_value(data: dict, typ, name: str) -> bool:
         print(
             f"Wrong value type for '{name}', expected {typ} got {type(data["value"])}")
         ok = False
-    return ok
+    return vet_percent_0_1(data["value"], name)
+
+
+def vet_percent_0_1(value, name) -> bool:
+    if 0 <= value <= 1:
+        return True
+    print(f"Value '{name}' not in [0,1]: {value}")
+    return False
 
 
 def check_general(data: dict) -> bool:
-
     if not check_keys(data, [GPS_KEY, HEURES_KEY, VERNISSAGE_KEY]):
         return False
 
@@ -56,19 +62,18 @@ def check_general(data: dict) -> bool:
 
 
 def check_seuils(data: dict) -> bool:
-
     if not check_keys(data, [SA1_KEY, SA2_KEY, SB_KEY, SC_KEY]):
         return False
 
     ok = True
-    if not vet_seuil_value(data[SA1_KEY], float, SA1_KEY):
+    if not vet_seuil_value(data[SA1_KEY], Number, SA1_KEY):
         ok = False
 
-    if not vet_seuil_value(data[SA2_KEY], float, SA2_KEY):
+    if not vet_seuil_value(data[SA2_KEY], Number, SA2_KEY):
         ok = False
-    if not vet_seuil_value(data[SB_KEY], float, SB_KEY):
+    if not vet_seuil_value(data[SB_KEY], Number, SB_KEY):
         ok = False
-    if not vet_seuil_value(data[SC_KEY], float, SC_KEY):
+    if not vet_seuil_value(data[SC_KEY], Number, SC_KEY):
         ok = False
     return ok
 

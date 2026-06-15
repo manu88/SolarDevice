@@ -12,20 +12,20 @@
     },
     "Seuils": {
         "S-A-1": {
-            "value": 12.34,
-            "detail": "Seuil-Batterie-1"
+            "value": 0.5,
+            "detail": "Seuil-Batterie-1 [0,1]"
         },
         "S-A-2": {
-            "value": 23.45,
-            "detail": "Seuil-Batterie-1"
+            "value": 1,
+            "detail": "Seuil-Batterie-1 [0,1]"
         },
         "S-B": {
-            "value": 34.56,
-            "detail": "Seuil d'irradiance"
+            "value": 0,
+            "detail": "Seuil d'irradiance [0,1]"
         },
         "S-C": {
-            "value": 45.67,
-            "detail": "Seuil de consommation"
+            "value": 0.3,
+            "detail": "Seuil de consommation [0,1]"
         }
     }
 }
