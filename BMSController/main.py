@@ -6,6 +6,7 @@ import logging
 import datetime
 from dataclasses import dataclass
 from osc_client import OSCClient
+from relay import Relay
 
 import easygui
 from bleak import BleakScanner
@@ -126,13 +127,14 @@ class DeviceManager:
 # Battery Monitor
 # ----------------------------
 class BatteryMonitor:
-    def __init__(self, device: AllpowersBLE, config: Config, watts_usage: WattsUsage, osc_addr: str):
+    def __init__(self, device: AllpowersBLE, config: Config, watts_usage: WattsUsage, osc_addr: str, relay: Relay):
         self.osc_client = OSCClient(osc_addr, 8888)
         self.device = device
         self.config = config
         self.watts_usage = watts_usage
         self.running = True
         self.refresh_seconds = 10
+        self.relay = relay
 
     async def initialize(self):
         await self.device.initialise()
@@ -233,7 +235,7 @@ async def list_ble_devices():
         print(dev)
 
 
-async def run_controller(osc_addr: str):
+async def run_controller(osc_addr: str, relay: Relay):
     watts_usage = WattsUsage()
     config = Config(default_device_mac=DEFAULT_DEVICE_MAC)
 
@@ -244,7 +246,8 @@ async def run_controller(osc_addr: str):
     selected_device = await manager.pick_device()
 
     device = AllpowersBLE(selected_device)
-    monitor = BatteryMonitor(device, config, watts_usage, osc_addr=osc_addr)
+    monitor = BatteryMonitor(device, config, watts_usage,
+                             osc_addr=osc_addr, relay=relay)
 
     await monitor.run()
 
@@ -268,7 +271,9 @@ def main():
     if args.test:
         run_osc_tests(osc_addr=osc_addr)
         return 0
-    asyncio.run(run_controller(osc_addr=osc_addr))
+
+    with Relay(pin_num=17) as relay:
+        asyncio.run(run_controller(osc_addr=osc_addr, relay=relay))
     return 0
 
 

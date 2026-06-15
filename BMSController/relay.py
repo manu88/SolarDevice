@@ -9,22 +9,18 @@ class Relay:
         self.gpio_handler = None
 
     def __enter__(self):
-        print("ENTER")
         self.gpio_handler = lgpio.gpiochip_open(0)
         return self
 
     def __exit__(self, exc_type, exc, tb):
-        print("GPIO Cleanup")
         self.off()
         lgpio.gpiochip_close(self.gpio_handler)
 
     def on(self):
-        print("Set ON")
         lgpio.gpio_claim_output(self.gpio_handler, self.pin_num)
         lgpio.gpio_write(self.gpio_handler, self.pin_num, 1)
 
     def off(self):
-        print("Set OFF")
         lgpio.gpio_claim_input(self.gpio_handler, self.pin_num)
 
 
