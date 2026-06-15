@@ -205,7 +205,6 @@ void processCmdLed() {
       leds[i] = CRGB(r, g, b);
     }
     FastLED.show();
-    // delay(2);
   }
   resetParserState();
 }
@@ -217,7 +216,6 @@ void loop() {
     }
   }
   loopSensor();
-  // delay(10);
 }
 
 void loopSensor() {
