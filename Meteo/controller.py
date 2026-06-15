@@ -1,8 +1,8 @@
 import time
 from typing import Tuple
 from pythonosc import udp_client
-from infoclimat.api import API
-from ephemerides.api import SolarAPI
+from Meteo.infoclimat.api import API
+from Meteo.ephemerides.api import SolarAPI
 
 
 class Controller:

@@ -2,7 +2,7 @@ import time
 from typing import Optional, Dict, Any, Iterable, Tuple
 import datetime
 import requests
-from infoclimat.state import WeatherState
+from Meteo.infoclimat.state import WeatherState
 
 MAX_REQUESTS_IN_24H = 5000
 MIN_INTERVAL_IN_SEC = 10

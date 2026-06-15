@@ -3,6 +3,13 @@ import json
 
 GENERAL_KEY = "General"
 SEUILS_KEY = "Seuils"
+GPS_KEY = "GPS"
+HEURES_KEY = "Heures"
+VERNISSAGE_KEY = "Vernissage"
+SA1_KEY = "S-A-1"
+SA2_KEY = "S-A-2"
+SB_KEY = "S-B"
+SC_KEY = "S-C"
 
 
 def check_keys(data: dict, keys: list) -> bool:
@@ -38,9 +45,7 @@ def vet_seuil_value(data: dict, typ, name: str) -> bool:
 
 
 def check_general(data: dict) -> bool:
-    GPS_KEY = "GPS"
-    HEURES_KEY = "Heures"
-    VERNISSAGE_KEY = "Vernissage"
+
     if not check_keys(data, [GPS_KEY, HEURES_KEY, VERNISSAGE_KEY]):
         return False
 
@@ -51,10 +56,7 @@ def check_general(data: dict) -> bool:
 
 
 def check_seuils(data: dict) -> bool:
-    SA1_KEY = "S-A-1"
-    SA2_KEY = "S-A-2"
-    SB_KEY = "S-B"
-    SC_KEY = "S-C"
+
     if not check_keys(data, [SA1_KEY, SA2_KEY, SB_KEY, SC_KEY]):
         return False
 
@@ -85,6 +87,9 @@ class Config:
         self.is_checked = False
         self.vet()
         assert self.is_checked
+
+    def get_gps_coords(self) -> tuple[float, float]:
+        return self.data[GENERAL_KEY][GPS_KEY]
 
     def vet(self) -> bool:
         if self.is_checked:

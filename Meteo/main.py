@@ -2,11 +2,13 @@ import argparse
 import sys
 import datetime
 from typing import Tuple
-from controller import Controller
-from infoclimat.api import API
-from ephemerides.api import SolarAPI
+from Meteo.controller import Controller
+from Meteo.infoclimat.api import API
+from Meteo.ephemerides.api import SolarAPI
+from config.Config import Config
 
 parser = argparse.ArgumentParser(prog='Meteo')
+parser.add_argument("config", help="json-config path")
 parser.add_argument("oscaddr", nargs="?")
 parser.add_argument("-t", action="store_true")
 
@@ -44,7 +46,12 @@ if __name__ == "__main__":
     if args.t:
         test()
         sys.exit(0)
+
+    conf = Config.from_json_file(args.config)
+    if not conf.is_valid:
+        print(f"invalid config at '{args.config}'")
+        sys.exit(1)
     osc_addr = args.oscaddr if args.oscaddr else "127.0.0.1"
     print(f"using osc address '{osc_addr}'")
-    run_controller(osc_addr, coords=COORDS)
+    run_controller(osc_addr, coords=conf.get_gps_coords())
     sys.exit(0)
