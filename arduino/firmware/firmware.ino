@@ -9,6 +9,9 @@ size_t numCRCErrors = 0;
 
 /////////////////////////////////
 
+int sendSensorsEveryMs = 2000;
+unsigned long lastTimeSentSensors = 0;
+
 #define NUM_LEDS 24
 #define DATA_PIN 3 // Change this to match your LED strip's data pin
 #define CLOCK_PIN 13
@@ -225,4 +228,9 @@ void loop() {
 
   numSensorsIterations += 1;
   timeSpentReadingSensors += elapsed;
+
+  if (now - lastTimeSentSensors >= sendSensorsEveryMs) {
+    lastTimeSentSensors = now;
+    sendAllSensors();
+  }
 }

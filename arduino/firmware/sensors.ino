@@ -13,6 +13,17 @@ const unsigned long IdleInterval = 5000;
 int inputPin = A0;
 int inPeak = 0;
 
+extern "C" {
+typedef struct {
+  float speed;
+  int activity;
+} SensorState;
+} // extern "C"
+
+#define NUM_SENSOR_STATES 12
+
+static SensorState sensor_state[NUM_SENSOR_STATES];
+
 void loopSensor() {
   int sensorId = 1;
   total = total - readings[readIndex];
@@ -41,7 +52,7 @@ void loopSensor() {
         unsigned long elapsed = now - revStartTime;
         speed = 1000.f / elapsed;
       }
-      sendStatus(sensorId, speed, reading);
+      setStatus(sensorId, speed, reading);
       revStartTime = now;
     }
     inPeak = 1;
@@ -50,15 +61,33 @@ void loopSensor() {
   }
   if (now - lastIdleCheckTime > IdleInterval) {
     resetReadings();
-    sendStatus(sensorId, 0, 0);
+    setStatus(sensorId, 0, 0);
     lastIdleCheckTime = now;
   }
   delay(2);
 }
 
 void resetReadings() {
-  for (int i = 0; i < i; i++) {
+  for (int i = 0; i < NUM_SENSOR_STATES; i++) {
+    sensor_state[i] = {0.f, 0};
+  }
+  for (int i = 0; i < numReadings; i++) {
     readings[i] = 0;
+  }
+}
+
+void setStatus(int sensorId, float speed, int activity) {
+  if (sensorId >= NUM_SENSOR_STATES) {
+    Serial.print("setStatus: invalid sensorId: ");
+    Serial.println(sensorId);
+    return;
+  }
+  sensor_state[sensorId].speed = speed;
+  sensor_state[sensorId].activity = activity;
+}
+void sendAllSensors() {
+  for (int i = 0; i < NUM_SENSOR_STATES; i++) {
+    sendStatus(i, sensor_state[i].speed, sensor_state[i].activity);
   }
 }
 
