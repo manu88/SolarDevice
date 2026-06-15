@@ -19,6 +19,11 @@ int inputPin = A0;
 int inPeak = 0;
 /////////////////////////////////
 
+size_t numSensorsIterations = 0;
+size_t timeSpentReadingSensors = 0;
+
+/////////////////////////////////
+
 #define NUM_LEDS 24
 #define DATA_PIN 3 // Change this to match your LED strip's data pin
 #define CLOCK_PIN 13
@@ -186,6 +191,14 @@ void processCmd() {
       Serial.print(leds[i].raw[2], HEX);
       Serial.println("");
     }
+    int avgTimeReadingSensors =
+        numSensorsIterations > 0
+            ? timeSpentReadingSensors / numSensorsIterations
+            : 0;
+    Serial.print("avgTimeReadingSensors: ");
+    Serial.println(avgTimeReadingSensors);
+    Serial.print("numSensorsIterations: ");
+    Serial.println(numSensorsIterations);
     break;
   default:
     Serial.print("Invalid cmdID: ");
@@ -215,10 +228,16 @@ void loop() {
       processCmd();
     }
   }
+  unsigned long now = millis();
   loopSensor();
+  unsigned long elapsed = millis() - now;
+
+  numSensorsIterations += 1;
+  timeSpentReadingSensors += elapsed;
 }
 
 void loopSensor() {
+  int sensorId = 1;
   total = total - readings[readIndex];
 
   int val = analogRead(inputPin);
@@ -242,10 +261,10 @@ void loopSensor() {
     if (inPeak == 0) {
       float speed = -1;
       if (revStartTime > 0) {
-        unsigned long ellapsed = now - revStartTime;
-        speed = 1000.f / ellapsed;
+        unsigned long elapsed = now - revStartTime;
+        speed = 1000.f / elapsed;
       }
-      sendStatus(speed, reading);
+      sendStatus(sensorId, speed, reading);
       revStartTime = now;
     }
     inPeak = 1;
@@ -254,7 +273,7 @@ void loopSensor() {
   }
   if (now - lastIdleCheckTime > IdleInterval) {
     resetReadings();
-    sendStatus(0, 0);
+    sendStatus(sensorId, 0, 0);
     lastIdleCheckTime = now;
   }
   delay(2);
@@ -266,8 +285,7 @@ void resetReadings() {
   }
 }
 
-void sendStatus(float speed, int activity) {
-  int sensorId = 1;
+void sendStatus(int sensorId, float speed, int activity) {
   Serial.print("S");
   Serial.print(sensorId);
   Serial.print(" ");
