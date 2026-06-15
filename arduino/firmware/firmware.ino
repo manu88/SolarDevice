@@ -5,6 +5,7 @@
 
 size_t numSensorsIterations = 0;
 size_t timeSpentReadingSensors = 0;
+size_t numCRCErrors = 0;
 
 /////////////////////////////////
 
@@ -143,6 +144,7 @@ int parseInput() {
         Serial.print(", ");
       }
       Serial.println("");
+      numCRCErrors += 1;
       resetParserState();
       return 0;
     }
@@ -155,35 +157,40 @@ int parseInput() {
   return 0;
 }
 
+void processDump() {
+  Serial.println("arduino DUMP\n");
+  for (int i = 0; i < NUM_LEDS; i++) {
+    Serial.print(i);
+    Serial.print(" :");
+    Serial.print(leds[i].raw[0], HEX);
+    Serial.print(" ");
+    Serial.print(leds[i].raw[1], HEX);
+    Serial.print(" ");
+    Serial.print(leds[i].raw[2], HEX);
+    Serial.println("");
+  }
+  int avgTimeReadingSensors =
+      numSensorsIterations > 0 ? timeSpentReadingSensors / numSensorsIterations
+                               : 0;
+  Serial.print("avgTimeReadingSensors: ");
+  Serial.println(avgTimeReadingSensors);
+  Serial.print("numSensorsIterations: ");
+  Serial.println(numSensorsIterations);
+  Serial.print("numCRCErrors: ");
+  Serial.println(numCRCErrors);
+}
+
 void processCmd() {
   switch (currentCmd) {
   case CmdId_Invalid:
     Serial.println("Invalid cmdID: CmdId_Invalid");
-    break;
+    return;
   case CmdId_Leds:
     processCmdLed();
-    break;
+    return;
   case CmdId_Dump:
-    Serial.println("arduino DUMP\n");
-    for (int i = 0; i < NUM_LEDS; i++) {
-      Serial.print(i);
-      Serial.print(" :");
-      Serial.print(leds[i].raw[0], HEX);
-      Serial.print(" ");
-      Serial.print(leds[i].raw[1], HEX);
-      Serial.print(" ");
-      Serial.print(leds[i].raw[2], HEX);
-      Serial.println("");
-    }
-    int avgTimeReadingSensors =
-        numSensorsIterations > 0
-            ? timeSpentReadingSensors / numSensorsIterations
-            : 0;
-    Serial.print("avgTimeReadingSensors: ");
-    Serial.println(avgTimeReadingSensors);
-    Serial.print("numSensorsIterations: ");
-    Serial.println(numSensorsIterations);
-    break;
+    processDump();
+    return;
   default:
     Serial.print("Invalid cmdID: ");
     Serial.println(currentCmd, HEX);
@@ -203,13 +210,13 @@ void processCmdLed() {
     }
     FastLED.show();
   }
-  resetParserState();
 }
 
 void loop() {
   while (Serial.available() > 0) {
     if (parseInput()) {
       processCmd();
+      resetParserState();
     }
   }
   unsigned long now = millis();
