@@ -1,11 +1,27 @@
 import sys
-import json
 from config.Config import Config
 
 
-def main(config_path: str) -> bool:
+def print_conf(conf: Config):
+    print("General:")
+    print(f"\tGPS: {conf.get_gps_coords()}")
+    print(f"\tHeures: {conf.get_heures()}")
+    print(f"\tVernissage: {conf.is_vernissage()}")
+    print("Seuils:")
+    print(f"\tS-A-1: {conf.get_SA1()}")
+    print(f"\tS-A-2: {conf.get_SA2()}")
+    print(f"\tS-B: {conf.get_SB()}")
+    print(f"\tS-C: {conf.get_SC()}")
+
+
+def main(config_path: str) -> int:
     conf = Config.from_json_file(config_path)
-    return conf.is_valid
+
+    valid = "valid" if conf.is_valid else "invalid"
+    print(f"file config '{config_path}' is {valid}")
+    if conf.is_valid:
+        print_conf(conf)
+    return 0 if conf.is_valid else 1
 
 
 if __name__ == "__main__":
@@ -13,7 +29,4 @@ if __name__ == "__main__":
         print("usage python3 check-config.py filepath")
         sys.exit(1)
     config_path = sys.argv[1]
-    ret = main(config_path)
-    valid = "valid" if ret else "invalid"
-    print(f"file config '{config_path}' is {valid}")
-    sys.exit(0 if ret else 1)
+    sys.exit(main(config_path))

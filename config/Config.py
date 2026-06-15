@@ -33,14 +33,14 @@ def vet_list(data: any, expected_count: int, name: str) -> bool:
 
 
 def vet_seuil_value(data: dict, typ, name: str) -> bool:
-    ok = True
     if "value" not in data:
         print(f"Missing 'value' entry in '{name}'")
-        ok = False
-    elif isinstance(data["value"], typ) is False:
+        return False
+    if isinstance(data["value"], typ) is False:
         print(
             f"Wrong value type for '{name}', expected {typ} got {type(data["value"])}")
-        ok = False
+        return False
+
     return vet_percent_0_1(data["value"], name)
 
 
@@ -57,7 +57,10 @@ def check_general(data: dict) -> bool:
 
     vet_list(data[HEURES_KEY], 2, HEURES_KEY)
     vet_list(data[GPS_KEY], 2, GPS_KEY)
-
+    if not isinstance(data[VERNISSAGE_KEY], bool):
+        print(
+            f"expected true|false for '{VERNISSAGE_KEY}', got '{data[VERNISSAGE_KEY]}'")
+        return False
     return True
 
 
@@ -93,8 +96,26 @@ class Config:
         self.vet()
         assert self.is_checked
 
+    def get_heures(self) -> tuple[int, int]:
+        return self.data[GENERAL_KEY][HEURES_KEY]
+
+    def is_vernissage(self) -> bool:
+        return True if self.data[GENERAL_KEY][VERNISSAGE_KEY] else False
+
     def get_gps_coords(self) -> tuple[float, float]:
         return self.data[GENERAL_KEY][GPS_KEY]
+
+    def get_SA1(self) -> float:
+        return self.data[SEUILS_KEY][SA1_KEY]["value"]
+
+    def get_SA2(self) -> float:
+        return self.data[SEUILS_KEY][SA2_KEY]["value"]
+
+    def get_SB(self) -> float:
+        return self.data[SEUILS_KEY][SB_KEY]["value"]
+
+    def get_SC(self) -> float:
+        return self.data[SEUILS_KEY][SC_KEY]["value"]
 
     def vet(self) -> bool:
         if self.is_checked:
