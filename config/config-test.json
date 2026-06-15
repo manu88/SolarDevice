@@ -1,0 +1,27 @@
+{
+    "General": {
+        "GPS": [
+            1,
+            2
+        ],
+        "Heures": [
+            9,
+            23
+        ],
+        "Vernissage": false
+    },
+    "Seuils": {
+        "S-A-1": {
+            "detail": "Seuil-Batterie-1"
+        },
+        "S-A-2": {
+            "detail": "Seuil-Batterie-1"
+        },
+        "S-B": {
+            "detail": "Seuil d'irradiance"
+        },
+        "S-C": {
+            "detail": "Seuil de consommation"
+        }
+    }
+}

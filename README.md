@@ -25,3 +25,7 @@ Programme d'interface à l'API infoclimat et Pd (via OSC)
 ## Arduino
 
 Contient les firmwares
+
+## config
+
+Configuration de l'installation. Voir le [README](config/README.md)
