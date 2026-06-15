@@ -18,6 +18,9 @@ python3 main.py
 
 executer le script init.sh pour activer le bluetooth
 
+## Gpio de commande du relais
+Le programme utilise le GPIO `17` pour commuter le relai de commande. Il est aussi nécessaire de relier Ground et 5V. 
+
 ## Note
 
 Il y a un bug dans le module "allpowers-ble" qui n'est pas encore corrigé pour le moment (version 0.0.3).

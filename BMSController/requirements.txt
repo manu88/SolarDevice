@@ -5,3 +5,4 @@ easygui
 datetime
 #hoymiles-wifi
 python-osc
+python3-rpi-lgpio # this one should be installed by default
