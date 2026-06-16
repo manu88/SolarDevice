@@ -165,10 +165,10 @@
 #X connect 9 0 8 0;
 #X coords 0 -1 1 1 250 180 1 82 64;
 #X restore 685 648 pd Visu;
-#X obj 210 346 vsl 20 100 0 150 0 1 phase_cutoff_knob phase_cutoff_knob empty 0 -9 0 10 #acbcf8 #000000 #000000 8228 1;
-#X obj 281 346 vsl 20 100 0 120 0 1 phase_resonance_knob empty empty 0 -9 0 10 #acbcf8 #000000 #000000 3400 1;
-#X obj 278 323 nbx 4 20 -1e+37 1e+37 0 0 phase_resonance phase_resonance_knob empty 0 -8 0 10 #a0e0d8 #000000 #000000 0 256;
-#X obj 207 323 nbx 4 20 -1e+37 1e+37 0 0 phase_cutoff phase_cutoff_knob empty 0 -8 0 10 #a0e0d8 #000000 #000000 0 256;
+#X obj 210 346 vsl 20 100 0 150 0 1 phase_cutoff_knob phase_cutoff_knob PresetOK 0 -9 0 10 #acbcf8 #000000 #00ff04 4500 1;
+#X obj 281 346 vsl 20 100 0 120 0 1 phase_resonance_knob phase_resonance_knob PresetOK 0 -9 0 10 #acbcf8 #000000 #00ff04 8500 1;
+#X obj 278 308 nbx 4 20 -1e+37 1e+37 0 0 phase_resonance phase_resonance_knob empty 0 -8 0 10 #a0e0d8 #000000 #000000 0 256;
+#X obj 207 310 nbx 4 20 -1e+37 1e+37 0 0 phase_cutoff phase_cutoff_knob empty 0 -8 0 10 #a0e0d8 #000000 #000000 0 256;
 #X text 223 290 Phase + Sq;
 #X obj 334 281 cnv 15 215 220 empty empty empty 24 15 0 18 #b8b8b8 #404040 0;
 #X obj 359 350 vsl 20 80 0 140 0 1 noise_cutoff_knob empty empty 0 -9 0 10 #dcdcdc #000000 #000000 5500 1;
