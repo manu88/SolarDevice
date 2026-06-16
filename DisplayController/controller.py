@@ -193,7 +193,6 @@ class Controller:
                 received_nothing_count = 0
             else:
                 received_nothing_count += 1
-                print(f"received_nothing_count = {received_nothing_count}")
                 if received_nothing_count > 3:
                     print("-> Reopen arduino")
                     with self.arduino_lock:
