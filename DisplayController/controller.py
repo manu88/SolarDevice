@@ -112,15 +112,17 @@ class Controller:
 
     def update_display(self):
         buffer = self.buffer1
-        if self.ui:
-            self.ui.update_buff(buffer)
 
         update_time = time.time()
         diff = update_time - self.last_update_time
+        if diff < 0.01:
+            return
         self.last_update_time = update_time
         self.update_time_accum += diff
         self.num_updates += 1
 
+        if self.ui:
+            self.ui.update_buff(buffer)
         if self.arduino is None:
             return
         self._send_arduino(cmd=0XBC, buffer=buffer)
