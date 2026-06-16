@@ -1,4 +1,4 @@
-#N canvas -197 -868 1279 930 12;
+#N canvas 351 -958 1279 930 12;
 #N canvas 1009 134 603 417 volume 0;
 #X obj 121 161 / 127;
 #X obj 121 188 pack 0 50;
@@ -171,12 +171,12 @@
 #X obj 207 310 nbx 4 20 -1e+37 1e+37 0 0 phase_cutoff phase_cutoff_knob empty 0 -8 0 10 #a0e0d8 #000000 #000000 0 256;
 #X text 223 290 Phase + Sq;
 #X obj 334 281 cnv 15 215 220 empty empty empty 24 15 0 18 #b8b8b8 #404040 0;
-#X obj 359 350 vsl 20 80 0 140 0 1 noise_cutoff_knob noise_cutoff_knob PresetOK 0 -9 0 10 #dcdcdc #000000 #00ff04 1011 1;
-#X obj 423 354 vsl 20 80 0 120 0 1 noise_resonance_knob noise_resonance_knob PresetOK 0 -9 0 10 #dcdcdc #000000 #00ff04 1063 1;
+#X obj 359 350 vsl 20 80 0 140 0 1 noise_cutoff_knob noise_cutoff_knob PresetOK 0 -9 0 10 #dcdcdc #000000 #00ff04 0 1;
+#X obj 423 354 vsl 20 80 0 120 0 1 noise_resonance_knob noise_resonance_knob PresetOK 0 -9 0 10 #dcdcdc #000000 #00ff04 0 1;
 #X obj 417 315 nbx 4 20 -1e+37 1e+37 0 0 noise_resonance noise_resonance_knob empty 0 -8 0 10 #a0e0d8 #000000 #000000 0 256;
 #X obj 485 315 nbx 4 20 -1e+37 1e+37 0 0 noise_panning noise_panning_knob empty 0 -8 0 10 #a0e0d8 #000000 #000000 0 256;
 #X obj 346 315 nbx 4 20 -1e+37 1e+37 0 0 noise_cutoff noise_cutoff_knob empty 0 -8 0 10 #a0e0d8 #000000 #000000 0 256;
-#X obj 500 350 vsl 20 80 0 120 0 1 noise_panning_knob noise_panning_knob PresetOK 0 -9 0 10 #dcdcdc #000000 #00ff04 3100 1;
+#X obj 500 350 vsl 20 80 0 120 0 1 noise_panning_knob noise_panning_knob PresetOK 0 -9 0 10 #dcdcdc #000000 #00ff04 0 1;
 #X text 403 436 resonance;
 #X text 342 436 cut off;
 #X text 486 436 pan fx;
@@ -653,7 +653,7 @@
 #X obj 174 1362 bng 30 250 50 0 \$0-nextview2 empty keyboard 36 15 0 10 #ecd48c #000000 #000000;
 #X obj 33 1362 bng 30 250 50 0 \$0-nextview0 empty main 36 15 0 10 #ecd48c #000000 #000000;
 #X obj 21 1252 hsl 70 15 0.1 20 0 0 vibrato_right_freq vibrato_right_freq_knob freq\ PresetOK -2 -8 0 10 #fcfcfc #000000 #0400ff 0 1;
-#X obj 20 1288 hsl 70 15 0 10 0 0 vibrato_right_amount vibrato_right_amount_knob amount -2 -8 0 10 #fcfcfc #000000 #000000 0 1;
+#X obj 20 1288 hsl 70 15 0 10 0 0 vibrato_right_amount vibrato_right_amount_knob amount\ PresetOK -2 -8 0 10 #fcfcfc #000000 #0400ff 0 1;
 #X text 41 1133 Vibrato;
 #X text 108 1272 R;
 #X obj 20 1171 hsl 70 15 0.1 20 0 0 vibrato_left_freq vibrato_left_freq_knob freq\ PresetOK -2 -8 0 10 #ffffff #000000 #0400ff 0 1;
