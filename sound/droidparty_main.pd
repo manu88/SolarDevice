@@ -1,4 +1,4 @@
-#N canvas 0 -827 1279 930 12;
+#N canvas -197 -868 1279 930 12;
 #N canvas 1009 134 603 417 volume 0;
 #X obj 121 161 / 127;
 #X obj 121 188 pack 0 50;
@@ -652,7 +652,7 @@
 #X obj 312 1362 bng 30 250 50 0 \$0-nextview3 empty presets 36 15 0 10 #ecd48c #000000 #000000;
 #X obj 174 1362 bng 30 250 50 0 \$0-nextview2 empty keyboard 36 15 0 10 #ecd48c #000000 #000000;
 #X obj 33 1362 bng 30 250 50 0 \$0-nextview0 empty main 36 15 0 10 #ecd48c #000000 #000000;
-#X obj 21 1252 hsl 70 15 0.1 20 0 0 vibrato_right_freq vibrato_right_freq_knob freq -2 -8 0 10 #fcfcfc #000000 #000000 0 1;
+#X obj 21 1252 hsl 70 15 0.1 20 0 0 vibrato_right_freq vibrato_right_freq_knob freq\ PresetOK -2 -8 0 10 #fcfcfc #000000 #0400ff 0 1;
 #X obj 20 1288 hsl 70 15 0 10 0 0 vibrato_right_amount vibrato_right_amount_knob amount -2 -8 0 10 #fcfcfc #000000 #000000 0 1;
 #X text 41 1133 Vibrato;
 #X text 108 1272 R;
