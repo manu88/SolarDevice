@@ -1,8 +1,8 @@
 #define NUM_READINGS 50
 int readings[NUM_READINGS]; // the readings from the analog input
-int readIndex = 0;         // the index of the current reading
-int total = 0;             // the running total
-int average = 0;           // the average
+int readIndex = 0;          // the index of the current reading
+int total = 0;              // the running total
+int average = 0;            // the average
 
 const int minPeakDiff = 20;
 
@@ -20,7 +20,7 @@ typedef struct {
 } SensorState;
 } // extern "C"
 
-#define NUM_SENSOR_STATES 12
+#define NUM_SENSOR_STATES 2
 
 static SensorState sensor_state[NUM_SENSOR_STATES];
 
@@ -50,7 +50,7 @@ void loopSensor() {
       float speed = -1;
       if (revStartTime > 0) {
         unsigned long elapsed = now - revStartTime;
-        if(elapsed != 0){
+        if (elapsed != 0) {
           speed = 1000.f / elapsed;
         }
       }
@@ -66,7 +66,7 @@ void loopSensor() {
     setStatus(sensorId, 0, 0);
     lastIdleCheckTime = now;
   }
-  delay(2);
+  // delay(2);
 }
 
 void resetReadings() {
