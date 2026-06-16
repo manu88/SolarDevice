@@ -1,7 +1,7 @@
 #include "proto.hpp"
 #include <FastLED.h>
 
-#define FIRMWARE_VERSION "0.0.3"
+#define FIRMWARE_VERSION "0.0.4"
 
 unsigned long numSensorsIterations = 0;
 unsigned long timeSpentReadingSensors = 0;
