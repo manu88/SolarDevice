@@ -656,7 +656,7 @@
 #X obj 20 1288 hsl 70 15 0 10 0 0 vibrato_right_amount vibrato_right_amount_knob amount -2 -8 0 10 #fcfcfc #000000 #000000 0 1;
 #X text 41 1133 Vibrato;
 #X text 108 1272 R;
-#X obj 20 1171 hsl 70 15 0.1 20 0 0 vibrato_left_freq vibrato_left_freq_knob freq -2 -8 0 10 #fcfcfc #000000 #000000 0 1;
+#X obj 20 1171 hsl 70 15 0.1 20 0 0 vibrato_left_freq vibrato_left_freq_knob freq\ PresetOK -2 -8 0 10 #ffffff #000000 #0400ff 0 1;
 #X obj 19 1207 hsl 70 15 0 10 0 0 vibrato_left_amount vibrato_left_amount_knob amount -2 -8 0 10 #fcfcfc #000000 #000000 0 1;
 #X text 107 1191 L;
 #N canvas 1224 73 616 414 volume 0;
