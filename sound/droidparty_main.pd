@@ -1,4 +1,4 @@
-#N canvas 400 79 1279 930 12;
+#N canvas -157 -1015 1279 930 12;
 #N canvas 1009 134 603 417 volume 0;
 #X obj 121 161 / 127;
 #X obj 121 188 pack 0 50;
@@ -79,7 +79,7 @@
 #X obj 187 41 nbx 5 20 -1e+37 1e+37 0 1 Beat_Frequency_final Beat_Frequency_knob empty 0 -8 0 10 #c4fcc4 #000000 #000000 1 256;
 #X text 254 41 Hz;
 #X text 106 42 Hz;
-#X obj 37 42 nbx 5 20 -1e+37 1e+37 0 1 Main_Frequency Main_Frequency_knob empty 0 -8 0 10 #fcfcc4 #000000 #000000 266.667 256;
+#X obj 37 42 nbx 5 20 -1e+37 1e+37 0 1 Main_Frequency Main_Frequency_knob empty 0 -8 0 10 #fcfcc4 #000000 #000000 71.1111 256;
 #X text 14 14 Carrier Frequency;
 #X text 166 14 Beat Frequency;
 #X obj 353 83 hsl 100 20 0 100 0 1 sine_volume_slider sine_volume_knob PresetOk -2 -8 0 10 #dcdcdc #000000 #00ff04 1500 1;
@@ -165,7 +165,7 @@
 #X connect 9 0 8 0;
 #X coords 0 -1 1 1 250 180 1 82 64;
 #X restore 685 648 pd Visu;
-#X obj 210 346 vsl 20 100 0 150 0 1 phase_cutoff_knob phase_cutoff_knob empty 0 -9 0 10 #acbcf8 #000000 #000000 5800 1;
+#X obj 210 346 vsl 20 100 0 150 0 1 phase_cutoff_knob phase_cutoff_knob empty 0 -9 0 10 #acbcf8 #000000 #000000 8228 1;
 #X obj 281 346 vsl 20 100 0 120 0 1 phase_resonance_knob empty empty 0 -9 0 10 #acbcf8 #000000 #000000 3400 1;
 #X obj 278 323 nbx 4 20 -1e+37 1e+37 0 0 phase_resonance phase_resonance_knob empty 0 -8 0 10 #a0e0d8 #000000 #000000 0 256;
 #X obj 207 323 nbx 4 20 -1e+37 1e+37 0 0 phase_cutoff phase_cutoff_knob empty 0 -8 0 10 #a0e0d8 #000000 #000000 0 256;
@@ -197,7 +197,7 @@
 #X obj 31 1026 bng 20 250 50 0 preset_throat01 empty Throat 35 10 0 10 #d0900c #000000 #000000;
 #X obj 33 523 bng 30 250 50 0 \$0-nextview0 empty main 36 15 0 10 #ecd48c #000000 #000000;
 #X obj 208 79 vsl 20 100 0 64 0 1 Beat_Frequency_knob green-vsl PresetOk 0 -9 0 10 #c4fcc4 #000000 #00ff04 155 1;
-#X obj 60 79 vsl 20 100 0 440 0 1 Main_Frequency_knob yellow-vsl PresetOK 0 -9 0 10 #fcfc84 #000000 #00ff04 6000 1;
+#X obj 60 79 vsl 20 100 0 440 0 1 Main_Frequency_knob yellow-vsl PresetOK 0 -9 0 10 #fcfc84 #000000 #00ff04 1600 1;
 #X text 343 259 by Garvalf;
 #X text 352 50 Sine Volume;
 #X obj 174 801 bng 30 250 50 0 \$0-nextview2 empty keyboard 36 15 0 10 #ecd48c #000000 #000000;
