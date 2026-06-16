@@ -50,7 +50,9 @@ void loopSensor() {
       float speed = -1;
       if (revStartTime > 0) {
         unsigned long elapsed = now - revStartTime;
-        speed = 1000.f / elapsed;
+        if(elapsed != 0){
+          speed = 1000.f / elapsed;
+        }
       }
       setStatus(sensorId, speed, reading);
       revStartTime = now;
