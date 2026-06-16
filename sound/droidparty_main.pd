@@ -1,4 +1,4 @@
-#N canvas -158 -1015 1279 930 12;
+#N canvas 0 -827 1279 930 12;
 #N canvas 1009 134 603 417 volume 0;
 #X obj 121 161 / 127;
 #X obj 121 188 pack 0 50;
@@ -657,7 +657,7 @@
 #X text 41 1133 Vibrato;
 #X text 108 1272 R;
 #X obj 20 1171 hsl 70 15 0.1 20 0 0 vibrato_left_freq vibrato_left_freq_knob freq\ PresetOK -2 -8 0 10 #ffffff #000000 #0400ff 0 1;
-#X obj 19 1207 hsl 70 15 0 10 0 0 vibrato_left_amount vibrato_left_amount_knob amount -2 -8 0 10 #fcfcfc #000000 #000000 0 1;
+#X obj 19 1207 hsl 70 15 0 10 0 0 vibrato_left_amount vibrato_left_amount_knob amount\ PresetOK -2 -8 0 10 #fcfcfc #000000 #0400ff 0 1;
 #X text 107 1191 L;
 #N canvas 1224 73 616 414 volume 0;
 #X obj 121 188 pack 0 50;
