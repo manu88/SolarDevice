@@ -1,8 +1,7 @@
 #include "proto.hpp"
 #include <FastLED.h>
 
-#define FIRMWARE_VERSION "0.0.4"
-
+#define FIRMWARE_VERSION "0.0.5"
 
 unsigned long numCRCErrors = 0;
 
@@ -225,7 +224,7 @@ void loop() {
   }
 
   now = millis();
-  
+
   if (now - lastTimeSentSensors >= sendSensorsEveryMs) {
     lastTimeSentSensors = now;
     sendAllSensors();
