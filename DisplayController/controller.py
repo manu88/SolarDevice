@@ -73,7 +73,8 @@ class Controller:
         avg = self.update_time_accum / self.num_updates if self.num_updates != 0 else 0
         print(f"{self.num_updates} updates -> {avg}")
         print(f"firmware version {self.firmware_version}")
-        self._send_arduino(cmd=0XBD, buffer=[0])
+        if self.arduino:
+            self._send_arduino(cmd=0XBD, buffer=[0])
 
     def osc_clear1(self, args):
         self.buffer1 = [0 for i in range(payload_size)]
