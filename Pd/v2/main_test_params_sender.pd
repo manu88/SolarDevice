@@ -1,4 +1,4 @@
-#N canvas 531 303 1060 486 12;
+#N canvas 550 224 1100 720 12;
 #X obj 87 302 osc/packOSC;
 #X msg 219 339 connect 127.0.0.1 8012;
 #X obj 69 374 iemnet/udpsend;
