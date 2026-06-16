@@ -3,8 +3,7 @@
 
 #define FIRMWARE_VERSION "0.0.4"
 
-unsigned long numSensorsIterations = 0;
-unsigned long timeSpentReadingSensors = 0;
+
 unsigned long numCRCErrors = 0;
 
 /////////////////////////////////
@@ -37,7 +36,7 @@ void setup() {
   FastLED.addLeds<WS2801, DATA_PIN, CLOCK_PIN, RGB>(leds, NUM_LEDS);
   FastLED.setBrightness(BRIGHTNESS);
 
-  resetReadings();
+  setupSensors();
 
   setAll(0, 0, 0);
 
@@ -175,13 +174,7 @@ void processDump() {
     Serial.print(leds[i].raw[2], HEX);
     Serial.println("");
   }
-  int avgTimeReadingSensors =
-      numSensorsIterations > 0 ? timeSpentReadingSensors / numSensorsIterations
-                               : 0;
-  Serial.print("avgTimeReadingSensors: ");
-  Serial.println(avgTimeReadingSensors);
-  Serial.print("numSensorsIterations: ");
-  Serial.println(numSensorsIterations);
+
   Serial.print("numCRCErrors: ");
   Serial.println(numCRCErrors);
 }
@@ -226,16 +219,13 @@ void loop() {
     }
   }
   unsigned long now = millis();
-  if (now - lastTimeReadSensors >= readSensorsEveryMs){
-    loopSensor();
+  if (now - lastTimeReadSensors >= readSensorsEveryMs) {
+    loopSensors();
     lastTimeReadSensors = now;
   }
-  
-  unsigned long elapsed = millis() - now;
 
-  numSensorsIterations += 1;
-  timeSpentReadingSensors += elapsed;
   now = millis();
+  
   if (now - lastTimeSentSensors >= sendSensorsEveryMs) {
     lastTimeSentSensors = now;
     sendAllSensors();

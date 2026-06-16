@@ -1,104 +1,88 @@
-#define NUM_READINGS 50
-int readings[NUM_READINGS]; // the readings from the analog input
-int readIndex = 0;          // the index of the current reading
-int total = 0;              // the running total
-int average = 0;            // the average
+#define NUM_SENSORS 2
+#define NUM_SENSOR_READINGS 50
 
-const int minPeakDiff = 20;
+const int minPeakDiff = 30;
 
-unsigned long revStartTime = 0;
-unsigned long lastIdleCheckTime = 0;
-const unsigned long IdleInterval = 5000;
+struct SensorReading {
+  int readings[NUM_SENSOR_READINGS]; // the readings from the analog input
+  int readIndex = 0;                 // the index of the current reading
+  int total = 0;                     // the running total
+  int average = 0;                   // the average
+  int inPeak = 0;
+  unsigned long revStartTime = 0;
+  float speed = 0;
+  int inputPin;
+};
 
-int inputPin = A0;
-int inPeak = 0;
+SensorReading sensors[NUM_SENSORS];
 
-extern "C" {
-typedef struct {
-  float speed;
-  int activity;
-} SensorState;
-} // extern "C"
+void setupSensors() {
+  sensors[0].inputPin = A0;
+  sensors[1].inputPin = A1;
+  resetAllReadings();
+}
 
-#define NUM_SENSOR_STATES 2
+void loopSensors() {
+  for (int i = 0; i < NUM_SENSORS; i++) {
+    processSensor(i);
+  }
+}
 
-static SensorState sensor_state[NUM_SENSOR_STATES];
+void resetReadings(int sensorId) {
+  sensors[sensorId].readIndex = 0;
+  for (int i = 0; i < NUM_SENSOR_READINGS; i++) {
+    sensors[sensorId].readings[i] = 0;
+  }
+}
 
-void loopSensor() {
-  int sensorId = 1;
-  total = total - readings[readIndex];
+void resetAllReadings(void) {
+  for (int i = 0; i < NUM_SENSORS; i++) {
+    resetReadings(i);
+  }
+}
 
-  int val = analogRead(inputPin);
-  readings[readIndex] = val;
+void processSensor(int sensorId) {
+  SensorReading *reading = sensors + sensorId;
+  reading->total = reading->total - reading->readings[reading->readIndex];
+  int val = analogRead(reading->inputPin);
+  reading->readings[reading->readIndex] = val;
+  reading->total = reading->total + reading->readings[reading->readIndex];
+  reading->readIndex += 1;
 
-  total = total + readings[readIndex];
-  readIndex = readIndex + 1;
-
-  if (readIndex >= NUM_READINGS) {
-    readIndex = 0;
+  if (reading->readIndex >= NUM_SENSOR_READINGS) {
+    reading->readIndex = 0;
   }
 
   // calculate the average:
-  average = total / NUM_READINGS;
+  reading->average = reading->total / NUM_SENSOR_READINGS;
 
   unsigned long now = millis();
-  int reading = val > average + minPeakDiff;
+  int theReading = val > reading->average + minPeakDiff;
 
-  if (reading) {
-    lastIdleCheckTime = now;
-    if (inPeak == 0) {
-      float speed = -1;
-      if (revStartTime > 0) {
-        unsigned long elapsed = now - revStartTime;
-        if (elapsed != 0) {
-          speed = 1000.f / elapsed;
-        }
+  if (theReading) {
+    if (reading->inPeak == 0) {
+      reading->inPeak = 1;
+      if (reading->revStartTime > 0) {
+        unsigned long elapsed = now - reading->revStartTime;
+        reading->speed = 1000.f / elapsed;
       }
-      setStatus(sensorId, speed, reading);
-      revStartTime = now;
+      reading->revStartTime = now;
     }
-    inPeak = 1;
   } else {
-    inPeak = 0;
-  }
-  if (now - lastIdleCheckTime > IdleInterval) {
-    resetReadings();
-    setStatus(sensorId, 0, 0);
-    lastIdleCheckTime = now;
-  }
-  // delay(2);
-}
-
-void resetReadings() {
-  for (int i = 0; i < NUM_SENSOR_STATES; i++) {
-    sensor_state[i] = {0.f, 0};
-  }
-  for (int i = 0; i < NUM_READINGS; i++) {
-    readings[i] = 0;
+    reading->inPeak = 0;
   }
 }
 
-void setStatus(int sensorId, float speed, int activity) {
-  if (sensorId >= NUM_SENSOR_STATES) {
-    Serial.print("setStatus: invalid sensorId: ");
-    Serial.println(sensorId);
-    return;
-  }
-  sensor_state[sensorId].speed = speed;
-  sensor_state[sensorId].activity = activity;
-}
 void sendAllSensors() {
-  for (int i = 0; i < NUM_SENSOR_STATES; i++) {
-    sendStatus(i, sensor_state[i].speed, sensor_state[i].activity);
+  for (int i = 0; i < NUM_SENSORS; i++) {
+    sendStatus(i);
   }
 }
 
-void sendStatus(int sensorId, float speed, int activity) {
+void sendStatus(int sensorId) {
   Serial.print("S");
   Serial.print(sensorId);
   Serial.print(" ");
-  Serial.print(speed);
-  Serial.print(" ");
-  Serial.print(activity);
-  Serial.print(";\n");
+  Serial.print(sensors[sensorId].speed);
+  Serial.print("\n");
 }

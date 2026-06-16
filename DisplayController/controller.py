@@ -144,7 +144,7 @@ class Controller:
             print(f"Firmware version: {self.firmware_version}")
         if line.startswith("S") and len(line) > 2 and line[0].isdigit:
             toks = line.split(" ")
-            if len(toks) < 3:
+            if len(toks) < 2:
                 print(f"malformed sensor str: '{line}'")
                 return
             sensor_id = int(toks[0][1:])
