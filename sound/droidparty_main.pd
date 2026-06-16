@@ -181,7 +181,7 @@
 #X text 342 436 cut off;
 #X text 486 436 pan fx;
 #X obj 274 501 cnv 15 179 60 empty empty empty 24 15 0 18 #fc8000 #404040 0;
-#X obj 348 470 hsl 100 20 0 60 0 0 noise_volume_slider noise_volume_knob empty -2 -8 0 10 #dcdcdc #000000 #000000 0 1;
+#X obj 348 470 hsl 100 20 0 60 0 0 noise_volume_slider noise_volume_knob PresetOK -2 -8 0 10 #dcdcdc #000000 #00ff04 0 1;
 #X obj 761 424 nbx 4 20 -1e+37 1e+37 0 0 noise_volume_slider noise_volume_slider empty 0 -8 0 10 #a0e0d8 #000000 #000000 0 256;
 #X obj -1 1122 cnv 16 550 280 {empty} {empty} {empty} 20 12 0 14 #fcf8a0 #404040 0;
 #X obj -1 188 cnv 15 334 93 empty empty empty 24 15 0 18 #9cc8d8 #404040 0;
