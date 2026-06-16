@@ -1,6 +1,6 @@
 import struct
 import time
-from threading import Thread
+from threading import Thread, Lock
 from typing import Optional
 import serial
 from serial import serialutil
@@ -24,10 +24,13 @@ class Controller:
     def __init__(self, serial_port: Optional[str], osc_addr: str, ui: Optional[UILeds] = None):
         self.ui = ui
         self.arduino = None
+        self.serial_port = serial_port
+        self.firmware_version: str = ""
         if serial_port:
-            self.arduino = serial.Serial(
-                port=serial_port, baudrate=115200, timeout=.1)
-
+            self._open_arduino()
+            self.arduino_lock = Lock()
+        else:
+            self.firmware_version = "STUB - no arduino"
         self._should_stop = False
         self.read_thread = None
         if serial_port:
@@ -52,7 +55,11 @@ class Controller:
         self.last_update_time = time.time()
         self.update_time_accum = 0
         self.num_updates = 0
-        self.firmware_version: str = ""
+
+    def _open_arduino(self):
+        assert (self.serial_port)
+        self.arduino = serial.Serial(
+            port=self.serial_port, baudrate=115200, timeout=.1)
 
     def osc_ping(self, args):
         print(f"ping {args}")
@@ -98,17 +105,19 @@ class Controller:
         self.set_pix1(i, int(r), int(g), int(b))
 
     def _send_arduino(self, cmd: int, buffer):
-        crc: int = checksum(buffer)
-        assert 0 <= crc < 256
+        with self.arduino_lock:
+            crc: int = checksum(buffer)
+            assert 0 <= crc < 256
 
-        data_header = struct.pack(self.pack_com_str, 0XAF, cmd, len(buffer))
-        try:
-            msg = data_header + bytes(buffer) + bytes([crc])
-            self.arduino.write(msg)
+            data_header = struct.pack(
+                self.pack_com_str, 0XAF, cmd, len(buffer))
+            try:
+                msg = data_header + bytes(buffer) + bytes([crc])
+                self.arduino.write(msg)
 
-        except serialutil.SerialException as e:
-            print(f"send_payload:SerialException {e}")
-            self.stop()
+            except serialutil.SerialException as e:
+                print(f"send_payload:SerialException {e}")
+                self.stop()
 
     def update_display(self):
         buffer = self.buffer1
@@ -147,15 +156,19 @@ class Controller:
         else:
             print(line)
 
-    def read_arduino_msg(self):
+    def read_arduino_msg(self) -> bool:
+        ret = False
         while self.arduino.in_waiting:
             lines = self.arduino.readlines()
+            if len(lines) > 0:
+                ret = True
             if len(lines):
                 for l in lines:
                     try:
                         self._process_arduino_msg(l.decode())
                     except UnicodeDecodeError as err:
                         print(err)
+        return ret
 
     def start(self):
         print("Serving on {}".format(self.server.server_address))
@@ -173,8 +186,21 @@ class Controller:
             self.arduino.close()
 
     def _run_thread(self):
+        received_nothing_count = 0
         while self._should_stop is False:
-            self.read_arduino_msg()
+            received_something = self.read_arduino_msg()
+            if received_something:
+                received_nothing_count = 0
+            else:
+                received_nothing_count += 1
+                print(f"received_nothing_count = {received_nothing_count}")
+                if received_nothing_count > 3:
+                    print("-> Reopen arduino")
+                    with self.arduino_lock:
+                        self.arduino.close()
+                        self._open_arduino()
+                    print("<- Done Reopen arduino")
+
             time.sleep(1)
         print("Read thread returned")
 
