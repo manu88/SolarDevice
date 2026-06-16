@@ -3,9 +3,9 @@
 
 #define FIRMWARE_VERSION "0.0.3"
 
-size_t numSensorsIterations = 0;
-size_t timeSpentReadingSensors = 0;
-size_t numCRCErrors = 0;
+unsigned long numSensorsIterations = 0;
+unsigned long timeSpentReadingSensors = 0;
+unsigned long numCRCErrors = 0;
 
 /////////////////////////////////
 
@@ -60,9 +60,9 @@ void resetParserState() {
   memset(payload, 0, PAYLOAD_SIZE);
 }
 
-uint8_t checksum(const byte *data, size_t dataLength) {
+uint8_t checksum(const byte *data, unsigned int dataLength) {
   uint8_t value = 0;
-  for (size_t i = 0; i < dataLength; i++) {
+  for (unsigned int i = 0; i < dataLength; i++) {
     value += data[i];
   }
   return value;
