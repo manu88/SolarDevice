@@ -4,7 +4,7 @@ Contenu du repo:
 
 ## Scheduler
 
-Gère la logique globale du système
+Gère la logique globale du système. Voir le [README](Scheduler/README.md)
 
 ## DisplayController
 
