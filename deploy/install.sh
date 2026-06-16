@@ -1,3 +1,3 @@
 apt update
 apt upgrade -y
-apt install host
+apt install host -y
