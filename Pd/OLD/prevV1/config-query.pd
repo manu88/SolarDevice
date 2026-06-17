@@ -1,6 +1,6 @@
 #N canvas 1007 -885 450 300 12;
 #X obj 47 177 s config-query;
-#X msg 42 150 ;
+#X msg 42 150 color-off2;
 #X obj 256 107 r config-response;
 #X obj 37 13 inlet, f 11;
 #X obj 172 31 loadbang;
@@ -11,7 +11,6 @@
 #X obj 188 56 bng 19 250 50 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000;
 #X symbolatom 295 38 18 0 0 0 - - - 0;
 #X obj 259 183 route s;
-#X obj 149 6 r reload-config;
 #X connect 1 0 0 0;
 #X connect 2 0 11 0;
 #X connect 3 0 5 0;
@@ -23,4 +22,3 @@
 #X connect 9 0 6 0;
 #X connect 10 0 11 1;
 #X connect 11 0 8 0;
-#X connect 12 0 5 0;
