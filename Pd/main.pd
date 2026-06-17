@@ -404,6 +404,7 @@
 #X connect 12 0 7 0;
 #X restore 183 181 pd pulse-start;
 #X obj 195 141 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
+#X obj 518 359 sound/main_audio;
 #X connect 2 0 4 0;
 #X connect 3 0 5 0;
 #X connect 4 0 1 0;
@@ -421,6 +422,7 @@
 #X connect 16 0 17 0;
 #X connect 17 0 19 0;
 #X connect 18 0 19 1;
+#X connect 18 0 22 0;
 #X connect 19 0 2 1;
 #X connect 19 1 2 2;
 #X connect 20 0 9 0;

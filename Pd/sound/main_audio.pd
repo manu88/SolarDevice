@@ -1,3 +1,15 @@
-#N canvas 997 346 450 300 12;
-#X obj 91 116 synth-controller;
-#X obj 104 198 droidparty_main;
+#N canvas 996 346 450 461 12;
+#X obj 55 255 synth-controller;
+#X obj 68 337 droidparty_main;
+#X obj 22 29 inlet;
+#X obj 64 71 route /clock;
+#X msg 53 228 load \$1;
+#X obj 222 221 print set-preset;
+#X obj 62 136 unpack f f;
+#X obj 64 171 mod 12;
+#X connect 2 0 3 0;
+#X connect 3 0 6 0;
+#X connect 4 0 0 0;
+#X connect 4 0 5 0;
+#X connect 6 0 7 0;
+#X connect 7 0 4 0;
