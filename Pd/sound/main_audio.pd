@@ -1,4 +1,4 @@
-#N canvas 669 305 936 420 12;
+#N canvas 669 305 995 600 12;
 #X obj 55 255 synth-controller;
 #X obj 68 337 droidparty_main;
 #X obj 22 29 inlet;
@@ -6,13 +6,13 @@
 #X msg 53 228 load \$1;
 #X obj 62 136 unpack f f;
 #X obj 64 171 mod 12;
-#X obj 384 47 inlet;
-#X obj 399 163 s vibrato_left_freq_knob;
-#X obj 526 127 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
-#X obj 578 164 s vibrato_left_amount_knob;
-#X obj 734 142 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
-#X obj 525 98 * 10;
-#X obj 731 113 * 2;
+#X obj 389 384 inlet;
+#X obj 404 500 s vibrato_left_freq_knob;
+#X obj 531 464 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
+#X obj 583 501 s vibrato_left_amount_knob;
+#X obj 739 479 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
+#X obj 530 435 * 10;
+#X obj 736 450 * 2;
 #X connect 2 0 3 0;
 #X connect 3 0 5 0;
 #X connect 4 0 0 0;

@@ -43,7 +43,7 @@
 #X text 393 474 custom1;
 #X text 393 508 custom2;
 #X obj 120 28 inlet;
-#X obj 70 508 pattr 1000 preset.txt;
+#X obj 70 508 pattr 3000 preset.txt;
 #X connect 0 0 44 0;
 #X connect 1 0 44 0;
 #X connect 3 0 44 0;
