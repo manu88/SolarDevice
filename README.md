@@ -16,7 +16,7 @@ Programme d'interface entre le BMS (via BLE) et Pd (via OSC). Voir le [README](B
 
 ## Pd
 
-patches pure-data de controle.
+patches pure-data de controle. Voir le [README](Pd/README.md)
 
 ## Météo
 
