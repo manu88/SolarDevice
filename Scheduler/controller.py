@@ -14,6 +14,6 @@ class Controller:
     def run(self):
         self._stop_asked = False
         while self._stop_asked is False:
-            time.sleep(5)
             now = datetime.datetime.now()
             self.osc_client.send_message("/clock", [now.hour, now.minute])
+            time.sleep(5)
