@@ -27,7 +27,7 @@ void setup() {
 
 void chenillard(int x){
   setAll(0,0,0);
-  set(x, 255,255,255);
+  set(x,x %2==0?255:0 ,0,x %2==0?0:255);
 }
 
 int index = 0;
@@ -38,7 +38,7 @@ void loop(){
     index = 0;
   }
   FastLED.show();
-  delay(1000);
+  delay(100);
 }
 
 void loop2() {
