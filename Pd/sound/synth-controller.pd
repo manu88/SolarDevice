@@ -1,4 +1,4 @@
-#N canvas 214 189 682 839 12;
+#N canvas 1113 214 682 839 12;
 #X msg 85 90 save 0;
 #X msg 85 121 save 1;
 #X obj 69 564 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
@@ -44,6 +44,8 @@
 #X text 393 508 custom2;
 #X obj 120 28 inlet;
 #X obj 70 508 pattr 3000 preset.txt;
+#X msg 17 483 save 13;
+#X msg 330 558 load 13;
 #X connect 0 0 44 0;
 #X connect 1 0 44 0;
 #X connect 3 0 44 0;
@@ -75,3 +77,5 @@
 #X connect 40 0 44 0;
 #X connect 43 0 44 0;
 #X connect 44 0 2 0;
+#X connect 45 0 44 0;
+#X connect 46 0 44 0;
