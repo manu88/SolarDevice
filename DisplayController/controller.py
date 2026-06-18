@@ -9,7 +9,7 @@ from pythonosc import udp_client
 from pythonosc import osc_server
 from ui import UILeds
 
-payload_size = 72
+payload_size = 78
 
 
 def checksum(data) -> int:
@@ -76,7 +76,7 @@ class Controller:
 
     def osc_dump(self, args):
         print("Buffer1:")
-        for i in range(72//3):
+        for i in range(payload_size//3):
             print(
                 f"{i}: r={self.buffer1[i*3]} g={self.buffer1[(i*3)+1]} b={self.buffer1[(i*3)+2]}")
         avg = self.update_time_accum / self.num_updates if self.num_updates != 0 else 0
@@ -95,13 +95,13 @@ class Controller:
 
     def osc_set_all(self, args, r: float, g: float, b: float):
         self.set_all(int(r), int(g), int(b))
-        for i in range(72//3):
+        for i in range(payload_size//3):
             self.buffer1[i*3] = int(r)
             self.buffer1[(i*3)+1] = int(g)
             self.buffer1[(i*3)+2] = int(b)
 
     def set_all(self, r: int, g: int, b: int):
-        for i in range(72//3):
+        for i in range(payload_size//3):
             self.buffer1[i*3] = r
             self.buffer1[(i*3)+1] = g
             self.buffer1[(i*3)+2] = b

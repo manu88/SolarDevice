@@ -49,7 +49,7 @@ static CmdId currentCmd = CmdId_Invalid;
 static uint8_t expectedPayloadSize = 0;
 static uint8_t currentPayloadSize = 0;
 
-#define PAYLOAD_SIZE 72
+#define PAYLOAD_SIZE 78
 static uint8_t payload[PAYLOAD_SIZE];
 
 void resetParserState() {
@@ -196,7 +196,7 @@ void processCmd() {
 }
 
 void processCmdLed() {
-  if (expectedPayloadSize != 72) {
+  if (expectedPayloadSize != PAYLOAD_SIZE) {
     Serial.print("unexpected expectedPayloadSize: ");
     Serial.println(expectedPayloadSize);
   } else {
