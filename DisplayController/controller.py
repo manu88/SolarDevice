@@ -80,8 +80,12 @@ class Controller:
             print(
                 f"{i}: r={self.buffer1[i*3]} g={self.buffer1[(i*3)+1]} b={self.buffer1[(i*3)+2]}")
         avg = self.update_time_accum / self.num_updates if self.num_updates != 0 else 0
-        print(f"{self.num_updates} updates -> {avg}")
+        print(f"{self.num_updates} updates -> {avg*1000}ms")
         print(f"{self.num_dropped_updates} dropped updates | min_ms_between_updates={self.min_ms_between_updates} ms ")
+        dropped_percent = 0
+        if self.num_updates:
+            dropped_percent = self.num_dropped_updates/self.num_updates
+        print(f"dropped msg %: {dropped_percent*100:0.1f}%")
         print(f"firmware version {self.firmware_version}")
         if self.arduino:
             self._send_arduino(cmd=0XBD, buffer=[0])
