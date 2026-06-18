@@ -10,10 +10,10 @@ unsigned long numCRCErrors = 0;
 int sendSensorsEveryMs = 2000;
 unsigned long lastTimeSentSensors = 0;
 
-int readSensorsEveryMs = 100;
+int readSensorsEveryMs = 20;
 unsigned long lastTimeReadSensors = 0;
 
-#define NUM_LEDS 24
+#define NUM_LEDS 26
 #define DATA_PIN 3 // Change this to match your LED strip's data pin
 #define CLOCK_PIN 13
 #define BRIGHTNESS 255
