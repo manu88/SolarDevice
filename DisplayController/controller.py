@@ -22,6 +22,7 @@ def checksum(data) -> int:
 
 class Controller:
     def __init__(self, serial_port: Optional[str], osc_addr: str, ui: Optional[UILeds] = None):
+        self.min_ms_between_updates = 10
         self.ui = ui
         self.arduino = None
         self.serial_port = serial_port
@@ -55,6 +56,7 @@ class Controller:
         self.last_update_time = time.time()
         self.update_time_accum = 0
         self.num_updates = 0
+        self.num_dropped_updates = 0
 
     def _open_arduino(self):
         assert (self.serial_port)
@@ -79,6 +81,7 @@ class Controller:
                 f"{i}: r={self.buffer1[i*3]} g={self.buffer1[(i*3)+1]} b={self.buffer1[(i*3)+2]}")
         avg = self.update_time_accum / self.num_updates if self.num_updates != 0 else 0
         print(f"{self.num_updates} updates -> {avg}")
+        print(f"{self.num_dropped_updates} dropped updates | min_ms_between_updates={self.min_ms_between_updates} ms ")
         print(f"firmware version {self.firmware_version}")
         if self.arduino:
             self._send_arduino(cmd=0XBD, buffer=[0])
@@ -124,7 +127,8 @@ class Controller:
 
         update_time = time.time()
         diff = update_time - self.last_update_time
-        if diff < 0.01:
+        if diff < self.min_ms_between_updates/1000:
+            self.num_dropped_updates += 1
             return
         self.last_update_time = update_time
         self.update_time_accum += diff
