@@ -20,15 +20,18 @@ void loop()
   // while there is data coming in, read it
   // and send to the hardware serial port:
   //Serial.println("Data from port two:");
+
   while (portTwo.available() > 0) {
     char inByte = portTwo.read();
     Serial.write(inByte);
+    
   }
 
-  digitalWrite(LED_BUILTIN, HIGH);
-  delay(500);
-  digitalWrite(LED_BUILTIN, LOW);
-  delay(500);
+
+  //digitalWrite(LED_BUILTIN, HIGH);
+  //delay(500);
+  //digitalWrite(LED_BUILTIN, LOW);
+  //delay(500);
 
 }
 
