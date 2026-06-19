@@ -8,10 +8,11 @@ def _rgb(rgb):
 
 
 class UILeds(tk.Tk):
-    def __init__(self,  **kwargs):
+    def __init__(self, num_leds, ** kwargs):
         super().__init__(**kwargs)
+        self.num_leds = num_leds
         self.led_frames = []
-        for i in range(24):
+        for i in range(num_leds):
             led_frame = tk.Frame(self, width=30, height=30,
                                  background=_rgb((0, 0, 0)), borderwidth=3, relief="ridge")
             self.led_frames.append(led_frame)
@@ -26,14 +27,14 @@ class UILeds(tk.Tk):
         self.led_frames[i].config(bg=_rgb(rgb))
 
     def update_buff(self, buffer):
-        for i in range(24):
+        for i in range(self.num_leds):
             r = buffer[i*3]
             g = buffer[(i*3)+1]
             b = buffer[(i*3)+2]
             self.led_frames[i].config(bg=_rgb((r, g, b)))
 
     def clear(self):
-        for i in range(24):
+        for i in range(self.num_leds):
             self.update_pix(i, (0, 0, 0))
 
 

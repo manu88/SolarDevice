@@ -65,7 +65,7 @@ def main():
 
     ui = None
     if use_ui:
-        ui = UILeds()
+        ui = UILeds(num_leds=24)
     run(serial_port=args.serialport, osc_addr="192.168.1.255", ui=ui)
 
 
