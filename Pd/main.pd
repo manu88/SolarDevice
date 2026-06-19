@@ -1,4 +1,4 @@
-#N canvas 675 166 959 782 12;
+#N canvas 200 256 1036 788 12;
 #N canvas 673 225 732 365 init 0;
 #X obj 377 99 config config-dev.txt;
 #X obj 244 -17 loadbang;
@@ -309,7 +309,7 @@
 #X restore 127 571 pd debug;
 #X obj 256 340 sel 0;
 #X obj 256 376 bng 19 250 50 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000;
-#N canvas 457 129 1288 577 receive_params 1;
+#N canvas 463 264 1288 577 receive_params 0;
 #X obj 87 121 iemnet/udpreceive 8012;
 #X obj 104 198 osc/unpackOSC;
 #X text 47 365 clock -> hh mm;
@@ -403,6 +403,11 @@
 #X obj 221 146 test-anim;
 #X obj 396 109 route 0;
 #X obj 401 72 route /sensor;
+#X msg 659 128 \$1 1000;
+#X obj 659 160 line 0 100;
+#X obj 659 101 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
+#X obj 659 37 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
+#X obj 659 69 metro 1000;
 #X connect 2 0 4 0;
 #X connect 3 0 5 0;
 #X connect 4 0 1 0;
@@ -429,3 +434,8 @@
 #X connect 22 0 9 0;
 #X connect 23 0 22 0;
 #X connect 24 0 23 0;
+#X connect 25 0 26 0;
+#X connect 26 0 9 0;
+#X connect 27 0 25 0;
+#X connect 28 0 29 0;
+#X connect 29 0 27 0;

@@ -21,7 +21,7 @@ SensorReading sensors[NUM_SENSORS];
 void setupSensors() {
   sensors[0].inputPin = A0;
   sensors[1].inputPin = A1;
-  sensors[1].inputPin = A2;
+  sensors[2].inputPin = A2;
   resetAllReadings();
 }
 
@@ -96,3 +96,27 @@ void sendStatus(int sensorId) {
   Serial.print(sensors[sensorId].speed);
   Serial.print("\n");
 }
+
+void sendSensors(){
+  outSerial.print("S");
+  outSerial.print(BOARD_ID);
+  outSerial.print(" ");
+  outSerial.print(sensors[0].speed);
+  outSerial.print(" ");
+  outSerial.print(sensors[1].speed);
+  outSerial.print(" ");
+  outSerial.print(sensors[2].speed);
+  outSerial.println();
+#ifdef SERIAL_DEBUG
+  Serial.print("S");
+  Serial.print(BOARD_ID);
+  Serial.print(" ");
+  Serial.print(sensors[0].speed);
+  Serial.print(" ");
+  Serial.print(sensors[1].speed);
+  Serial.print(" ");
+  Serial.print(sensors[2].speed);
+  Serial.println();
+#endif
+}
+

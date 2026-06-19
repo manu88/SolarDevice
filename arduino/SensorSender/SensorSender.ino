@@ -1,48 +1,69 @@
 /// SENDER Code
 
-#include <SoftwareSerial.h>
-#define BOARD_ID 2
-#define SEND_DELAY 400
+#include <AltSoftSerial.h>
+#define BOARD_ID 1
 // software serial #1: RX = digital pin 7, TX = digital pin 8
-SoftwareSerial outSerial(7,8);
+AltSoftSerial outSerial(7,8);
 
 // software serial #2: RX = digital pin 9, TX = digital pin 10
-SoftwareSerial inSerial(9,10);
+AltSoftSerial inSerial(9,10);
+
+
+int readSensorsEveryMs = 20;
+int sendSensorsEveryMs = 2000;
+
+
+unsigned long lastTimeReadSensors = 0;
+unsigned long lastTimeSentSensors = 0;
+
+#define SERIAL_DEBUG
 
 void setup() {
+  setupSensors();
   pinMode(LED_BUILTIN, OUTPUT);
   outSerial.begin(9600);
   inSerial.begin(9600);
+  inSerial.listen();
+
+#ifdef SERIAL_DEBUG
+  Serial.begin(9600);
+#endif
 
 }
 
-void sendSensors(float v0, float v1, float v2){
-  outSerial.print("S");
-  outSerial.print(BOARD_ID);
-  outSerial.print(" ");
-  outSerial.print(v0);
-  outSerial.print(" ");
-  outSerial.print(v1);
-  outSerial.print(" ");
-  outSerial.print(v2);
-  outSerial.println();
-}
+
 
 void relayData(){
-  inSerial.listen();
+  
   while (inSerial.available() > 0) {
     char inByte = inSerial.read();
     outSerial.write(inByte);
+#ifdef SERIAL_DEBUG
+    Serial.write(inByte);
+#endif
   }
 }
 
-int ledState = 0;
+
 void loop() {
   relayData();
+  handleLoopSensors();
+}
 
-  sendSensors(BOARD_ID*2.2, BOARD_ID*3.3,BOARD_ID*4.4 );
-  digitalWrite(LED_BUILTIN, HIGH);
-  delay(SEND_DELAY);
-  digitalWrite(LED_BUILTIN, ledState);
-  ledState = !ledState;
+int ledState = 0;
+void handleLoopSensors(){
+  unsigned long now = millis();
+  if (now - lastTimeReadSensors >= readSensorsEveryMs) {
+    //loopSensors();
+    lastTimeReadSensors = now;
+  }
+  now = millis();
+
+  if (now - lastTimeSentSensors >= sendSensorsEveryMs) {
+    digitalWrite(LED_BUILTIN, ledState);
+    ledState = !ledState;
+    lastTimeSentSensors = now;
+    sendSensors();
+  }
+
 }

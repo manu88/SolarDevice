@@ -14,7 +14,7 @@ int readSensorsEveryMs = 20;
 unsigned long lastTimeReadSensors = 0;
 
 #define NUM_LEDS 26
-#define DATA_PIN 3 // Change this to match your LED strip's data pin
+#define DATA_PIN 11 // Change this to match your LED strip's data pin
 #define CLOCK_PIN 13
 #define BRIGHTNESS 255
 
@@ -29,10 +29,9 @@ void setAll(int r, int g, int b) {
 
 void setup() {
   Serial.begin(115200);
-  pinMode(LED_BUILTIN, OUTPUT);
-  digitalWrite(LED_BUILTIN, LOW);
+  
 
-  FastLED.addLeds<WS2801, DATA_PIN, CLOCK_PIN, RGB>(leds, NUM_LEDS);
+  FastLED.addLeds<WS2801, DATA_PIN, CLOCK_PIN, RGB>(leds, NUM_LEDS);//, DATA_RATE_MHZ(8));
   FastLED.setBrightness(BRIGHTNESS);
 
   setupSensors();
@@ -217,6 +216,7 @@ void loop() {
       resetParserState();
     }
   }
+
   unsigned long now = millis();
   if (now - lastTimeReadSensors >= readSensorsEveryMs) {
     loopSensors();
