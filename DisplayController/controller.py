@@ -158,7 +158,6 @@ class Controller:
             sensor_id = int(toks[0][1:])
             speed = float(toks[1])
             if speed < 3:
-                print(f"Got sensor id={sensor_id} speed={speed}")
                 self.osc_client.send_message("/sensor", [sensor_id, speed])
 
         else:
