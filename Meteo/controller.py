@@ -1,4 +1,5 @@
 import time
+import datetime
 from typing import Tuple
 from pythonosc import udp_client
 from Meteo.infoclimat.api import API
@@ -25,10 +26,17 @@ class Controller:
         weather_entry = weather_resp.get_current()
 
         solar_resp = self.solar_api.get()
-        print(solar_resp)
-        self.send_state(weather_entry.current_nebulosite(),
-                        weather_entry.next_nebulosite())
+        is_day = 0
+        if solar_resp is not None:
+            now = datetime.datetime.now()  # + datetime.timedelta(hours=2)
+            if solar_resp[0].sunrise < now < solar_resp[0].sunset:
+                is_day = 1
 
-    def send_state(self, current_nebulosite: float, next_nebulosite: float):
+        self.send_state(weather_entry.current_nebulosite(),
+                        weather_entry.next_nebulosite(), is_day=is_day)
+
+    def send_state(self, current_nebulosite: float, next_nebulosite: float, is_day: int):
         self.osc_client.send_message(
-            "/nebulosite", [current_nebulosite, next_nebulosite])
+            "/nebulosity", [current_nebulosite, next_nebulosite])
+        self.osc_client.send_message(
+            "/day", [is_day])
