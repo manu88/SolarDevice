@@ -8,7 +8,7 @@ from Meteo.ephemerides.api import SolarAPI
 class Controller:
     def __init__(self, osc_addr: str, coords: Tuple[float, float]) -> None:
         self.osc_client = udp_client.SimpleUDPClient(
-            osc_addr, 8011, allow_broadcast=True)
+            osc_addr, 8012, allow_broadcast=True)
         self.weather_api = API(coords=coords)
         self.solar_api = SolarAPI(coords=coords)
         self.running = False
