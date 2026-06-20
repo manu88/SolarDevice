@@ -1,6 +1,6 @@
 led-controller-host 127.0.0.1;
 min-sun-luminosity 255;
-hour-anim-cycles 4;
+hour-anim-cycles 2;
 nebulosity0-gradient 130 0 0 255 0 0;
 nebulosity1-gradient 0 130 0 0 255 0;
 nebulosity2-gradient 0 0 130 0 0 255;
