@@ -378,6 +378,9 @@
 #X obj 276 26 r init2-bang;
 #X obj 110 309 route /clock /luminosity /sensor /nebulosity /day;
 #X obj 414 497 tgl 19 0 empty empty is\ day 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
+#X obj 612 496 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
+#X obj 608 465 unpack f f;
+#X obj 695 502 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
 #X connect 0 0 1 0;
 #X connect 1 0 9 0;
 #X connect 1 0 16 0;
@@ -391,8 +394,11 @@
 #X connect 16 0 5 0;
 #X connect 16 1 11 0;
 #X connect 16 2 7 0;
+#X connect 16 3 19 0;
 #X connect 16 4 17 0;
 #X connect 16 5 4 0;
+#X connect 19 0 18 0;
+#X connect 19 1 20 0;
 #X restore 263 46 pd receive_params;
 #X obj 80 460 meteo;
 #X obj 435 182 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
@@ -409,7 +415,7 @@
 #X obj 665 246 print hour-anim-start;
 #X obj 511 258 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
 #X msg 592 283 0;
-#X text 571 556 Etats:;
+#X text 575 555 Etats:;
 #X text 574 575 0: pulse météo;
 #X text 575 591 1: Changement d'heures: hour-anim;
 #X obj 455 581 anims-state;
@@ -420,6 +426,7 @@
 #X obj 451 438 i 0;
 #X obj 479 394 loadbang;
 #X obj 281 382 t f f;
+#X obj 566 536 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
 #X connect 2 0 34 1;
 #X connect 3 0 5 0;
 #X connect 4 0 1 0;
@@ -462,6 +469,7 @@
 #X connect 38 0 41 0;
 #X connect 39 0 34 0;
 #X connect 39 0 38 0;
+#X connect 39 0 42 0;
 #X connect 40 0 39 0;
 #X connect 41 0 11 0;
 #X connect 41 1 10 0;
