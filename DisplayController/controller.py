@@ -9,6 +9,22 @@ from pythonosc import udp_client
 from pythonosc import osc_server
 from ui import UILeds
 
+MIN_VERSION = (0, 0, 6)
+
+
+def check_firmware_version(ver: str) -> bool:
+    v_maj, v_min, v_patch = ver.split(".")
+    v_maj = int(v_maj)
+    v_min = int(v_min)
+    v_patch = int(v_patch)
+    print(f"Firmware version: {v_maj}.{v_min}.{v_patch}")
+    if v_patch < MIN_VERSION[2] or v_min < MIN_VERSION[1] or v_maj < MIN_VERSION[0]:
+        print(
+            f"Warning: firmware version is too old, expected {".".join([str(v) for v in MIN_VERSION])}")
+        return False
+    return True
+
+
 payload_size = 78
 
 
@@ -174,7 +190,7 @@ class Controller:
         if line.startswith("Version:"):
             ver = line.split(" ")[1]
             self.firmware_version = ver
-            print(f"Firmware version: {self.firmware_version}")
+            check_firmware_version(ver)
         if line.startswith("S") and len(line) > 2 and line[0].isdigit:
             toks = line.split(" ")
             if len(toks) < 2:
@@ -237,12 +253,5 @@ class Controller:
 
 
 if __name__ == "__main__":
-    data = [
-        0x0,]
-
-    # c = Controller("/dev/cu.usbmodem11401", "")
-    # while True:
-    #    c.arduino.write(data)
-    #    time.sleep(2)
-
-    print("crc:", checksum(data))
+    assert check_firmware_version("0.0.5") is False
+    assert check_firmware_version("0.0.6")
