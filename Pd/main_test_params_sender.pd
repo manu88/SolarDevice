@@ -1,4 +1,4 @@
-#N canvas 442 482 1278 511 12;
+#N canvas 188 -679 1278 511 12;
 #X obj 87 302 osc/packOSC;
 #X msg 219 339 connect 127.0.0.1 8012;
 #X obj 69 374 iemnet/udpsend;
@@ -16,6 +16,7 @@
 #X msg 492 252 send /nebulosity \$1;
 #X text 871 39 0: pas de nuages;
 #X text 869 188 1: temps couvert;
+#X obj 40 21 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
 #X connect 0 0 2 0;
 #X connect 1 0 2 0;
 #X connect 3 0 6 0;
@@ -27,3 +28,4 @@
 #X connect 12 0 0 0;
 #X connect 13 0 14 0;
 #X connect 14 0 0 0;
+#X connect 17 0 4 0;

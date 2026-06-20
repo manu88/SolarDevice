@@ -1,4 +1,4 @@
-#N canvas 200 256 1036 788 12;
+#N canvas 85 244 1036 788 12;
 #N canvas 673 225 732 365 init 0;
 #X obj 377 99 config config-dev.txt;
 #X obj 244 -17 loadbang;
@@ -20,7 +20,7 @@
 #X connect 8 0 2 0;
 #X restore 52 8 pd init;
 #X obj 49 642 display;
-#N canvas 136 161 1651 1030 pulses 0;
+#N canvas 136 59 1651 1030 pulses 0;
 #X obj 2707 912 outlet;
 #X obj 2516 270 sun-grad;
 #X msg 1148 378 update;
@@ -408,6 +408,12 @@
 #X obj 659 101 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
 #X obj 659 37 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
 #X obj 659 69 metro 1000;
+#X obj 496 489 hour-anim;
+#X obj 496 379 route /clock;
+#X obj 496 434 change;
+#X msg 497 407 \$1;
+#X msg 496 462 1;
+#X obj 558 550 print hour-anim-done;
 #X connect 2 0 4 0;
 #X connect 3 0 5 0;
 #X connect 4 0 1 0;
@@ -428,6 +434,7 @@
 #X connect 18 0 19 1;
 #X connect 18 0 21 0;
 #X connect 18 0 24 0;
+#X connect 18 0 31 0;
 #X connect 19 0 2 1;
 #X connect 19 1 2 2;
 #X connect 20 0 22 1;
@@ -439,3 +446,9 @@
 #X connect 27 0 25 0;
 #X connect 28 0 29 0;
 #X connect 29 0 27 0;
+#X connect 30 0 1 0;
+#X connect 30 1 35 0;
+#X connect 31 0 33 0;
+#X connect 32 0 34 0;
+#X connect 33 0 32 0;
+#X connect 34 0 30 0;
