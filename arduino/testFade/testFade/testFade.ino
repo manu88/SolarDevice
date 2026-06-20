@@ -1,8 +1,8 @@
 #include "Adafruit_WS2801.h"
 
-uint8_t dataPin = 3;  // Yellow wire on Adafruit Pixels
+uint8_t dataPin = 11;  // Yellow wire on Adafruit Pixels
 uint8_t clockPin = 13; // Green wire on Adafruit Pixels
-int nbLeds = 6;
+int nbLeds = 26;
 
 int ledFadeTime = 20;
 Adafruit_WS2801 strip = Adafruit_WS2801(nbLeds, dataPin, clockPin, WS2801_RGB);
@@ -24,7 +24,7 @@ Soir 88 11 30
 */
 
 void loop() {
-  rgbFadeInAndOut2(255,255, 255, ledFadeTime);
+  rgbFadeInAndOut2(255,0, 0, ledFadeTime);
 }
 
 void setAll(uint8_t red, uint8_t green, uint8_t blue) {
