@@ -20,7 +20,7 @@
 #X connect 8 0 2 0;
 #X restore 52 53 pd init;
 #X obj 423 745 display;
-#N canvas 35 59 1651 1030 pulses 0;
+#N canvas 35 59 1651 1030 pulses 1;
 #X obj 1994 841 outlet;
 #X obj 1803 199 sun-grad;
 #X msg 435 307 update;
@@ -75,10 +75,10 @@
 #X msg 2860 691 pix1 23 \$1 \$2 \$3;
 #X obj 675 215 t b f b;
 #X msg 1092 409 0 0 0;
-#X obj 1809 108 t l b;
+#X obj 1809 92 t l b;
 #X obj 692 71 inlet;
 #X obj 1807 61 inlet;
-#X obj 1865 38 unpack f f f f f f f f;
+#X obj 1905 91 unpack f f f f f f f f;
 #X obj 1811 236 route;
 #X obj 1981 199 + 1;
 #X obj 1842 280 route;
