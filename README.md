@@ -2,6 +2,10 @@
 
 Contenu du repo:
 
+## Documentation
+
+Voir le [README](doc/README.md)
+
 ## Scheduler
 
 Gère la logique globale du système. Voir le [README](Scheduler/README.md)
