@@ -1,8 +1,8 @@
-#N canvas 972 303 546 697 12;
-#X obj 297 279 gradient-gen -1;
-#X obj 157 279 gradient-gen 1 1;
-#X obj 351 619 outlet;
-#X obj 97 28 inlet;
+#N canvas 972 303 343 302 12;
+#X obj 173 101 gradient-gen -1;
+#X obj 33 101 gradient-gen 1 1;
+#X obj 38 158 outlet;
+#X obj 32 20 inlet;
 #X connect 0 0 2 0;
 #X connect 1 0 2 0;
 #X connect 3 0 1 0;

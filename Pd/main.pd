@@ -20,7 +20,7 @@
 #X connect 8 0 2 0;
 #X restore 52 8 pd init;
 #X obj 423 726 display;
-#N canvas 136 59 1651 1030 pulses 0;
+#N canvas 136 59 1651 1030 pulses 1;
 #X obj 2707 912 outlet;
 #X obj 2516 270 sun-grad;
 #X msg 1148 378 update;
