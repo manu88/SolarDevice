@@ -6,7 +6,7 @@
 #error ("Invalid Fastled version, expected 3001000")
 #endif
 
-#define FIRMWARE_VERSION "0.0.5"
+#define FIRMWARE_VERSION "0.0.6"
 
 unsigned long numCRCErrors = 0;
 
