@@ -17,7 +17,10 @@ class UILeds(tk.Tk):
                                  background=_rgb((0, 0, 0)), borderwidth=3, relief="ridge")
             self.led_frames.append(led_frame)
             self.led_frames[i].grid(row=0, column=i*2)
-            pad = tk.Frame(self, width=5 if i % 2 == 0 else 20, height=30,
+            w = 5 if i % 2 == 0 else 20
+            if i == 1:
+                w = 100
+            pad = tk.Frame(self, width=w, height=30,
                            background="black")
             pad.grid(row=0, column=(i*2)+1)
 
