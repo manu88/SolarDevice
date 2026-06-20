@@ -1,4 +1,0 @@
-color-center 250 243 243;
-color-off1 40 40 40;
-color-off2 20 20 20 ;
-led-controller-host solar-device-main.local
