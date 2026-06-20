@@ -1,6 +1,11 @@
 #include "proto.hpp"
 #include <FastLED.h>
 
+// Fastled version 3.1.0
+#if (FASTLED_VERSION != 3001000)
+#error ("Invalid Fastled version, expected 3001000")
+#endif
+
 #define FIRMWARE_VERSION "0.0.5"
 
 unsigned long numCRCErrors = 0;
@@ -29,9 +34,9 @@ void setAll(int r, int g, int b) {
 
 void setup() {
   Serial.begin(115200);
-  
 
-  FastLED.addLeds<WS2801, DATA_PIN, CLOCK_PIN, RGB>(leds, NUM_LEDS);//, DATA_RATE_MHZ(8));
+  FastLED.addLeds<WS2801, DATA_PIN, CLOCK_PIN, RGB>(
+      leds, NUM_LEDS); //, DATA_RATE_MHZ(8));
   FastLED.setBrightness(BRIGHTNESS);
 
   setupSensors();
