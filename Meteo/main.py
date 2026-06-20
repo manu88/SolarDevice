@@ -1,7 +1,6 @@
 import argparse
 import sys
 import datetime
-from typing import Tuple
 from Meteo.controller import Controller
 from Meteo.infoclimat.api import API
 from Meteo.ephemerides.api import SolarAPI
@@ -11,15 +10,6 @@ parser = argparse.ArgumentParser(prog='Meteo')
 parser.add_argument("config", help="json-config path")
 parser.add_argument("oscaddr", nargs="?")
 parser.add_argument("-t", action="store_true")
-
-COORDS = (43.29695, 5.38107)  # marseille
-COORDS = (48, 0.2)  # le snam
-COORDS = (48.866669, 2.433330)  # montreuil
-
-
-def run_controller(osc_addr: str, coords: Tuple[float, float]):
-    controller = Controller(osc_addr=osc_addr, coords=coords)
-    controller.run()
 
 
 def get_mean_nebu_for(data: API.Response, ts_in: datetime.datetime, ts_out: datetime.datetime):
@@ -53,5 +43,6 @@ if __name__ == "__main__":
         sys.exit(1)
     osc_addr = args.oscaddr if args.oscaddr else "127.0.0.1"
     print(f"using osc address '{osc_addr}'")
-    run_controller(osc_addr, coords=conf.get_gps_coords())
+    controller = Controller(osc_addr=osc_addr, coords=conf.get_gps_coords())
+    controller.run()
     sys.exit(0)
