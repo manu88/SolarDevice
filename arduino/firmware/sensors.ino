@@ -1,4 +1,4 @@
-#define NUM_SENSORS 1
+#define NUM_SENSORS 3
 #define NUM_SENSOR_READINGS 50
 
 const int minPeakDiff = 15;
@@ -21,6 +21,7 @@ SensorReading sensors[NUM_SENSORS];
 void setupSensors() {
   sensors[0].inputPin = A0;
   sensors[1].inputPin = A1;
+  sensors[1].inputPin = A2;
   resetAllReadings();
 }
 
