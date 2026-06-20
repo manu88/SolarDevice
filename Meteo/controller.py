@@ -1,13 +1,14 @@
 import time
 import datetime
-from typing import Tuple
+from typing import Tuple, List
 from pythonosc import udp_client
 from Meteo.infoclimat.api import API
 from Meteo.ephemerides.api import SolarAPI
 
 
 class Controller:
-    def __init__(self, osc_addr: str, coords: Tuple[float, float]) -> None:
+    def __init__(self, osc_addr: str, coords: Tuple[float, float], verbose=False) -> None:
+        self.verbose = verbose
         self.osc_client = udp_client.SimpleUDPClient(
             osc_addr, 8012, allow_broadcast=True)
         self.weather_api = API(coords=coords)
@@ -35,8 +36,13 @@ class Controller:
         self.send_state(weather_entry.current_nebulosite(),
                         weather_entry.next_nebulosite(), is_day=is_day)
 
+    def _send_osc(self, addr: str, args: List):
+        if self.verbose:
+            print(f"[OSC-Send] '{addr}': {args}")
+        self.osc_client.send_message(addr, args)
+
     def send_state(self, current_nebulosite: float, next_nebulosite: float, is_day: int):
-        self.osc_client.send_message(
+        self._send_osc(
             "/nebulosity", [current_nebulosite, next_nebulosite])
-        self.osc_client.send_message(
+        self._send_osc(
             "/day", [is_day])

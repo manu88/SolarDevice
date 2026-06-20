@@ -10,6 +10,7 @@ parser = argparse.ArgumentParser(prog='Meteo')
 parser.add_argument("config", help="json-config path")
 parser.add_argument("oscaddr", nargs="?")
 parser.add_argument("-t", action="store_true")
+parser.add_argument("-v", "--v", action="store_true", help="verbose")
 parser.add_argument("-p", "--port", type=int, default=8012,
                     help="osc sending port, default to 8012")
 
@@ -45,6 +46,7 @@ if __name__ == "__main__":
         sys.exit(1)
     osc_addr = args.oscaddr if args.oscaddr else "127.0.0.1"
     print(f"using osc address '{osc_addr}':{args.port}")
-    controller = Controller(osc_addr=osc_addr, coords=conf.get_gps_coords())
+    controller = Controller(
+        osc_addr=osc_addr, coords=conf.get_gps_coords(), verbose=args.v)
     controller.run()
     sys.exit(0)
