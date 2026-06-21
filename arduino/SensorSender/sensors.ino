@@ -97,26 +97,36 @@ void sendStatus(int sensorId) {
   Serial.print("\n");
 }
 
-void sendSensors(){
-  outSerial.print("S");
-  outSerial.print(BOARD_ID);
-  outSerial.print(" ");
-  outSerial.print(sensors[0].speed);
-  outSerial.print(" ");
-  outSerial.print(sensors[1].speed);
-  outSerial.print(" ");
-  outSerial.print(sensors[2].speed);
-  outSerial.println();
-#ifdef SERIAL_DEBUG
+void sendMsgSensor(uint8_t boardId, const float *v){
+  static SensorMsg msg;
+  msg.start = START_VAL;
+  msg.boardId = boardId;
+  msg.end = END_VAL;
+  msg.v[0] = v[0];
+  msg.v[1] = v[1];
+  msg.v[2] = v[2];
+  outSerial.write((const uint8_t *)&msg ,sizeof(SensorMsg));
+}
+
+void sendASCIIMsgSensor(uint8_t boardId, const float *v){
   Serial.print("S");
-  Serial.print(BOARD_ID);
+  Serial.print(boardId);
   Serial.print(" ");
-  Serial.print(sensors[0].speed);
+  Serial.print(v[0]);
   Serial.print(" ");
-  Serial.print(sensors[1].speed);
+  Serial.print(v[1]);
   Serial.print(" ");
-  Serial.print(sensors[2].speed);
+  Serial.print(v[2]);
   Serial.println();
-#endif
+}
+
+void sendSensors(){
+  float v[3] = {
+    BOARD_ID*20.2,//sensors[1].speed, 
+    BOARD_ID*10.1,//sensors[0].speed, 
+    BOARD_ID*30.3//sensors[2].speed
+    };
+  sendMsgSensor(BOARD_ID, v);
+
 }
 
