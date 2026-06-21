@@ -1,7 +1,8 @@
 #include <AltSoftSerial.h>
 #include <SoftwareSerial.h>
 
-SoftwareSerial inSerial(7,8);
+// software serial #2: RX = digital pin 9, TX = digital pin 10
+SoftwareSerial inSerial(9,10);
 
 extern "C"{
   #define START_VAL  0XAB

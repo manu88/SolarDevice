@@ -2,7 +2,7 @@
 
 #include <AltSoftSerial.h>
 #include <SoftwareSerial.h>
-#define BOARD_ID 1
+#define BOARD_ID 3
 // software serial #1: RX = digital pin 7, TX = digital pin 8
 SoftwareSerial outSerial(7,8);
 
@@ -40,7 +40,8 @@ void setup() {
 
 #ifdef SERIAL_DEBUG
   Serial.begin(9600);
-  Serial.println("SensorSender");
+  Serial.print("SensorSender BoardId=");
+  Serial.println(BOARD_ID);
 #endif
 
 }
@@ -100,8 +101,6 @@ void relayData2(){
         }
       }
     }
-    
-    //Serial.write(inByte);
   }
 
 }
