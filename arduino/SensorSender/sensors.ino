@@ -70,34 +70,20 @@ void processSensor(int sensorId) {
       if (reading->revStartTime > 0) {
         unsigned long elapsed = now - reading->revStartTime;
         reading->speed = 1000.f / elapsed;
-        //delay(1);
+        // delay(1);
       }
       reading->revStartTime = now;
     }
   } else {
     reading->inPeak = 0;
   }
-  if (now - reading->lastIdleCheckTime >IdleInterval){
+  if (now - reading->lastIdleCheckTime > IdleInterval) {
     reading->speed = 0;
     reading->lastIdleCheckTime = now;
   }
 }
 
-void sendAllSensors() {
-  for (int i = 0; i < NUM_SENSORS; i++) {
-    sendStatus(i);
-  }
-}
-
-void sendStatus(int sensorId) {
-  Serial.print("S");
-  Serial.print(sensorId);
-  Serial.print(" ");
-  Serial.print(sensors[sensorId].speed);
-  Serial.print("\n");
-}
-
-void sendMsgSensor(uint8_t boardId, const float *v){
+void sendMsgSensor(uint8_t boardId, const float *v) {
   static SensorMsg msg;
   msg.start = START_VAL;
   msg.boardId = boardId;
@@ -105,10 +91,10 @@ void sendMsgSensor(uint8_t boardId, const float *v){
   msg.v[0] = v[0];
   msg.v[1] = v[1];
   msg.v[2] = v[2];
-  outSerial.write((const uint8_t *)&msg ,sizeof(SensorMsg));
+  outSerial.write((const uint8_t *)&msg, sizeof(SensorMsg));
 }
 
-void sendASCIIMsgSensor(uint8_t boardId, const float *v){
+void sendASCIIMsgSensor(uint8_t boardId, const float *v) {
   Serial.print("S");
   Serial.print(boardId);
   Serial.print(" ");
@@ -120,13 +106,7 @@ void sendASCIIMsgSensor(uint8_t boardId, const float *v){
   Serial.println();
 }
 
-void sendSensors(){
-  float v[3] = {
-    BOARD_ID*20.2,//sensors[1].speed, 
-    BOARD_ID*10.1,//sensors[0].speed, 
-    BOARD_ID*30.3//sensors[2].speed
-    };
+void sendSensors() {
+  float v[3] = {sensors[1].speed, sensors[0].speed, sensors[2].speed};
   sendMsgSensor(BOARD_ID, v);
-
 }
-

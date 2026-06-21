@@ -70,29 +70,20 @@ void processSensor(int sensorId) {
       if (reading->revStartTime > 0) {
         unsigned long elapsed = now - reading->revStartTime;
         reading->speed = 1000.f / elapsed;
-        //delay(1);
+        // delay(1);
       }
       reading->revStartTime = now;
     }
   } else {
     reading->inPeak = 0;
   }
-  if (now - reading->lastIdleCheckTime >IdleInterval){
+  if (now - reading->lastIdleCheckTime > IdleInterval) {
     reading->speed = 0;
     reading->lastIdleCheckTime = now;
   }
 }
 
 void sendAllSensors() {
-  for (int i = 0; i < NUM_SENSORS; i++) {
-    sendStatus(i);
-  }
-}
-
-void sendStatus(int sensorId) {
-  Serial.print("S");
-  Serial.print(sensorId);
-  Serial.print(" ");
-  Serial.print(sensors[sensorId].speed);
-  Serial.print("\n");
+  float v[3] = {sensors[0].speed, sensors[1].speed, sensors[2].speed};
+  sendASCIIMsgSensor(0, v);
 }

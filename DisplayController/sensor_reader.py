@@ -1,7 +1,7 @@
 import sys
-import serial
+from typing import Dict, Set, List
 import time
-from typing import Dict, List, Set
+import serial
 
 MAX_BOARD_TIMEOUT_S = 4
 
@@ -20,14 +20,21 @@ class SensorReader:
                 print(f"No response from board{d_id}")
                 self.unresponsive_boards.add(d_id)
 
-    def on_sensor_line(self, line: str):
-        # print(line)
+    def dump(self):
+        print("Sensors:")
+        print(self.sensors)
+        print("Unresponsive boards:")
+        print(self.unresponsive_boards)
+
+    def on_sensor_line(self, line: str) -> List[int]:
+        ret = []
         toks = line.split(" ")
         if len(toks) != 4:
             print(f"Skipping '{line}': {len(toks)}")
-            return
+            return []
         if toks[0][0] != "S":
             print(f"Skipping '{line}': invalid start")
+            return []
         board_id = int(toks[0][1:])
         self.board_ids[board_id] = time.time()
         if board_id in self.unresponsive_boards:
@@ -38,8 +45,11 @@ class SensorReader:
         self.sensors[idx_start] = float(v0)
         self.sensors[idx_start+1] = float(v1)
         self.sensors[idx_start+2] = float(v2)
-        print(self.sensors)
+        ret.append(idx_start)
+        ret.append(idx_start+1)
+        ret.append(idx_start+2)
         self._check_boards_ok()
+        return ret
 
 
 if __name__ == "__main__":

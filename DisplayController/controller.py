@@ -8,6 +8,7 @@ from pythonosc.dispatcher import Dispatcher
 from pythonosc import udp_client
 from pythonosc import osc_server
 from ui import UILeds
+from sensor_reader import SensorReader
 
 MIN_VERSION = (0, 0, 6)
 
@@ -42,6 +43,7 @@ def shift(key, array):
 
 class Controller:
     def __init__(self, serial_port: Optional[str], osc_addr: str, ui: Optional[UILeds] = None):
+        self.sensors = SensorReader()
         self.min_ms_between_updates = 10
         self.ui = ui
         self.arduino = None
@@ -108,6 +110,7 @@ class Controller:
             dropped_percent = self.num_dropped_updates/self.num_updates
         print(f"dropped msg %: {dropped_percent*100:0.1f}%")
         print(f"firmware version {self.firmware_version}")
+        self.sensors.dump()
         if self.arduino:
             self._send_arduino(cmd=0XBD, buffer=[0])
 
@@ -192,14 +195,11 @@ class Controller:
             self.firmware_version = ver
             check_firmware_version(ver)
         if line.startswith("S") and len(line) > 2 and line[0].isdigit:
-            toks = line.split(" ")
-            if len(toks) < 2:
-                print(f"malformed sensor str: '{line}'")
-                return
-            sensor_id = int(toks[0][1:])
-            speed = float(toks[1])
-            if speed < 3:
-                self.osc_client.send_message("/sensor", [sensor_id, speed])
+            received_idx = self.sensors.on_sensor_line(line)
+            # if speed < 3:
+            for idx in received_idx:
+                self.osc_client.send_message(
+                    "/sensor", [idx, self.sensors.sensors[idx]])
 
         else:
             print(line)
@@ -214,7 +214,7 @@ class Controller:
                 for l in lines:
                     try:
                         self._process_arduino_msg(l.decode())
-                    except UnicodeDecodeError as err:
+                    except Exception as err:
                         print(err)
         return ret
 
