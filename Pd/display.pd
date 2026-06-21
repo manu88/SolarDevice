@@ -20,6 +20,7 @@
 #X msg 236 393 send /pix1 4 255 0 0;
 #X obj 91 25 route update clear1 pix1 all;
 #X msg 371 183 send /all \$1 \$2 \$3;
+#X msg 241 252 send /dump_arduino;
 #X connect 0 0 10 0;
 #X connect 1 0 0 0;
 #X connect 2 0 1 0;
@@ -44,3 +45,4 @@
 #X connect 19 3 20 0;
 #X connect 19 4 7 0;
 #X connect 20 0 1 0;
+#X connect 21 0 1 0;

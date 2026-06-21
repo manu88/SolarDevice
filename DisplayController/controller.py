@@ -69,6 +69,7 @@ class Controller:
         self.dispatcher.map("/clear1", self.osc_clear1)
 
         self.dispatcher.map("/dump", self.osc_dump)
+        self.dispatcher.map("/dump_arduino", self.osc_dump_arduino)
         self.dispatcher.map("/update", self.osc_update)
         self.server = osc_server.ThreadingOSCUDPServer(
             ("", 8010), self.dispatcher)
@@ -97,6 +98,12 @@ class Controller:
     def osc_update(self, args):
         self.update_display()
 
+    def osc_dump_arduino(self, args):
+        if self.arduino:
+            self._send_arduino(cmd=0XBD, buffer=[0])
+        else:
+            print("No serial port set for arduino")
+
     def osc_dump(self, args):
         print("Buffer1:")
         for i in range(payload_size//3):
@@ -111,8 +118,6 @@ class Controller:
         print(f"dropped msg %: {dropped_percent*100:0.1f}%")
         print(f"firmware version {self.firmware_version}")
         self.sensors.dump()
-        if self.arduino:
-            self._send_arduino(cmd=0XBD, buffer=[0])
 
     def osc_clear1(self, args):
         self.buffer1 = [0 for i in range(payload_size)]
