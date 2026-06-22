@@ -1,4 +1,4 @@
-#N canvas 302 229 1122 815 12;
+#N canvas 312 180 1297 815 12;
 #N canvas 602 39 471 207 init 0;
 #X obj 278 132 config config-dev.txt;
 #X obj 145 16 loadbang;
@@ -438,6 +438,8 @@
 #X obj 479 394 loadbang;
 #X obj 281 382 t f f;
 #X obj 566 536 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
+#X obj 867 68 re-pulse;
+#X obj 1167 30 bng 19 250 50 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000;
 #X connect 2 0 34 1;
 #X connect 3 0 5 0;
 #X connect 4 0 1 0;
@@ -456,6 +458,7 @@
 #X connect 15 0 18 0;
 #X connect 15 0 21 0;
 #X connect 15 0 23 0;
+#X connect 15 0 43 0;
 #X connect 16 0 2 1;
 #X connect 16 1 2 2;
 #X connect 17 0 19 1;
@@ -484,3 +487,4 @@
 #X connect 40 0 39 0;
 #X connect 41 0 11 0;
 #X connect 41 1 10 0;
+#X connect 44 0 43 1;
