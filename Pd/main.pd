@@ -1,5 +1,5 @@
-#N canvas 350 183 934 815 12;
-#N canvas 602 39 471 207 init 0;
+#N canvas 349 182 934 815 12;
+#N canvas 602 39 764 256 init 0;
 #X obj 278 132 config config-dev.txt;
 #X obj 145 16 loadbang;
 #X obj 145 41 t b b b;
@@ -9,6 +9,8 @@
 #X obj 145 91 t b b;
 #X obj 279 84 bng 19 250 50 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000;
 #X obj 309 24 inlet;
+#X obj 472 141 text define -k start-seq;
+#A set 1 4000 \; 0 3000 \; 1 3000 \; 0 4000 \; 1 5000 \; 0 6000 \; 1 4000 \; 0 4000 \; 1 6000 \; 0 3000 \; 1 3000 \; 0 3000 \;;
 #X connect 1 0 2 0;
 #X connect 2 0 3 0;
 #X connect 2 1 4 0;
@@ -459,7 +461,7 @@
 #X obj 479 394 loadbang;
 #X obj 566 536 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
 #X obj 33 293 re-pulse;
-#X obj 202 263 bng 19 250 50 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000;
+#X obj 253 255 bng 19 250 50 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000;
 #X obj 40 131 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
 #N canvas 247 305 513 532 clock-source 0;
 #X obj 29 48 inlet;
@@ -477,8 +479,8 @@
 #X connect 4 1 6 0;
 #X restore 31 164 pd clock-source;
 #X obj 47 104 loadbang;
-#X obj 201 230 metro 2000;
-#X obj 201 195 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
+#X obj 252 222 metro 2000;
+#X obj 252 187 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
 #X connect 2 0 26 1;
 #X connect 3 0 5 0;
 #X connect 4 0 1 0;
@@ -512,11 +514,10 @@
 #X connect 30 0 26 0;
 #X connect 30 0 32 0;
 #X connect 31 0 30 0;
-#X connect 33 0 26 1;
-#X connect 33 1 2 3;
+#X connect 33 0 2 3;
+#X connect 33 1 26 1;
 #X connect 34 0 33 1;
 #X connect 35 0 36 0;
-#X connect 36 0 33 2;
 #X connect 36 1 8 0;
 #X connect 37 0 35 0;
 #X connect 37 0 39 0;
