@@ -113,6 +113,8 @@
 #X obj 1315 870 spigot 1;
 #X obj 1224 870 spigot 1;
 #X obj 1079 870 spigot 1;
+#X obj 2822 72 route all;
+#X msg 2883 118 \$1;
 #X connect 1 0 57 0;
 #X connect 2 0 0 0;
 #X connect 3 0 4 0;
@@ -269,7 +271,7 @@
 #X connect 74 0 69 0;
 #X connect 75 0 73 0;
 #X connect 76 0 0 0;
-#X connect 77 0 78 0;
+#X connect 77 0 90 0;
 #X connect 78 0 89 1;
 #X connect 78 1 88 1;
 #X connect 78 2 87 1;
@@ -293,6 +295,20 @@
 #X connect 87 0 0 0;
 #X connect 88 0 0 0;
 #X connect 89 0 0 0;
+#X connect 90 0 91 0;
+#X connect 90 1 78 0;
+#X connect 91 0 76 1;
+#X connect 91 0 79 1;
+#X connect 91 0 80 1;
+#X connect 91 0 81 1;
+#X connect 91 0 82 1;
+#X connect 91 0 83 1;
+#X connect 91 0 84 1;
+#X connect 91 0 85 1;
+#X connect 91 0 86 1;
+#X connect 91 0 87 1;
+#X connect 91 0 88 1;
+#X connect 91 0 89 1;
 #X restore 43 601 pd pulses;
 #X obj 474 622 loadbang;
 #X obj 424 702 spigot 1;
@@ -481,6 +497,8 @@
 #X obj 47 104 loadbang;
 #X obj 252 222 metro 2000;
 #X obj 252 187 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
+#X msg 136 541 all \$1;
+#X obj 127 507 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
 #X connect 2 0 26 1;
 #X connect 3 0 5 0;
 #X connect 4 0 1 0;
@@ -523,3 +541,5 @@
 #X connect 37 0 39 0;
 #X connect 38 0 34 0;
 #X connect 39 0 38 0;
+#X connect 40 0 2 3;
+#X connect 41 0 40 0;
