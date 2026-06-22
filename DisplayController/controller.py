@@ -1,3 +1,4 @@
+import traceback
 import struct
 import time
 from threading import Thread, Lock
@@ -221,6 +222,8 @@ class Controller:
                         self._process_arduino_msg(l.decode())
                     except Exception as err:
                         print(err)
+                        print(traceback.format_exc())
+
         return ret
 
     def start(self):
