@@ -3,14 +3,17 @@ from typing import Dict, Set, List
 import time
 import serial
 
-MAX_BOARD_TIMEOUT_S = 4
+MAX_BOARD_TIMEOUT_S = 6
+NUM_BOARDS = 4
+NUM_SENSORS = 12
 
 
 class SensorReader:
     def __init__(self) -> None:
-        self.sensors = [0.0 for i in range(12)]
-        self.board_ids: Dict[int, float] = {}
-        self.unresponsive_boards: Set[int] = set()
+        self.sensors = [0.0 for i in range(NUM_SENSORS)]
+        self.board_ids: Dict[int, float] = {
+            0: 0, 1: 0, 2: 0, 3: 0}
+        self.unresponsive_boards: Set[int] = set([0, 1, 2, 3])
 
     def _check_boards_ok(self):
         now = time.time()
@@ -36,12 +39,18 @@ class SensorReader:
             print(f"Skipping '{line}': invalid start")
             return []
         board_id = int(toks[0][1:])
+        if board_id < 0 or board_id >= NUM_BOARDS:
+            print(f"Invalid board_id {board_id}")
+            return []
         self.board_ids[board_id] = time.time()
         if board_id in self.unresponsive_boards:
             print(f"Board {board_id} is back online")
             self.unresponsive_boards.remove(board_id)
         v0, v1, v2 = toks[1:]
         idx_start = board_id * 3
+        if idx_start < 0 or idx_start >= NUM_SENSORS:
+            print(f"invalid idx_start {idx_start}")
+            return []
         self.sensors[idx_start] = float(v0)
         self.sensors[idx_start+1] = float(v1)
         self.sensors[idx_start+2] = float(v2)
