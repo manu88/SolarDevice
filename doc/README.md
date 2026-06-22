@@ -11,7 +11,7 @@
 
 Note: la nébulosité s'exprime entre 0 (pas de nuages) et 1 (temps couvert)
 
-## BMS
+### BMS
 
 | Adresse        |      Arguments     |     Notes                                  |
 |----------------|--------------------|--------------------------------------------|
@@ -19,8 +19,12 @@ Note: la nébulosité s'exprime entre 0 (pas de nuages) et 1 (temps couvert)
 | `/powerinput`  | `float`            |  puissance en entrée en Watts |
 | `/charging`  | `int`            |  en charge sur secteur |
 
-## BMS
+### DisplayController
 
 | Adresse        |      Arguments     |     Notes                                  |
 |----------------|--------------------|--------------------------------------------|
 | `/sensor`     | `[int, float]`      | capteur i: Vitesse en tour/sec   |
+
+## Câblage Arduino
+
+[![alt](cablageArduinos.png)]
