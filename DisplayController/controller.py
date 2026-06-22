@@ -81,7 +81,6 @@ class Controller:
         self.update_time_accum = 0
         self.num_updates = 0
         self.num_dropped_updates = 0
-        self.do_test_install = False
 
     def _open_arduino(self):
         assert (self.serial_port)
@@ -139,8 +138,6 @@ class Controller:
     def osc_set_pix1(self, args, i: int, r: float, g: float, b: float):
         if i*3 >= len(self.buffer1):
             return
-        if i == 24:
-            self.do_test_install = True
         self.set_pix1(i, int(r), int(g), int(b))
 
     def _send_arduino(self, cmd: int, buffer):
@@ -159,21 +156,7 @@ class Controller:
                 self.stop()
 
     def test_install(self, buffer: List) -> List:
-        if self.do_test_install is False:
-            return buffer
-
-        self.do_test_install = False
-        # Shift the buffer 2 places to make room for 2 leds that mimic the current hour' leds
-        led_idx = int(buffer[24*3])
-        if led_idx > 26*3:
-            return buffer
-
-        for i in range(6):
-            buffer[i+24*3] = buffer[i+led_idx*3]
-
-        b = shift(2*3, buffer)
-
-        return b
+        return shift(2*3, buffer)
 
     def update_display(self):
         buffer = self.buffer1

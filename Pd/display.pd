@@ -1,4 +1,4 @@
-#N canvas 530 461 1047 516 12;
+#N canvas 371 366 1184 592 12;
 #X obj 89 325 iemnet/udpsend;
 #X obj 83 243 osc/packOSC;
 #X msg 57 163 send /update;
@@ -21,6 +21,13 @@
 #X obj 91 25 route update clear1 pix1 all;
 #X msg 371 183 send /all \$1 \$2 \$3;
 #X msg 241 252 send /dump_arduino;
+#X obj 834 -7 r position-soleil-hack;
+#X obj 939 55 + 1;
+#X obj 806 86 route;
+#X msg 810 144 send /pix1 24 \$1 \$2 \$3;
+#X obj 882 99 route;
+#X msg 978 145 send /pix1 25 \$1 \$2 \$3;
+#X text 677 9 Hack pour Mirrorer les leds 'soleil' en position 0-1;
 #X connect 0 0 10 0;
 #X connect 1 0 0 0;
 #X connect 2 0 1 0;
@@ -42,7 +49,16 @@
 #X connect 19 0 2 0;
 #X connect 19 1 6 0;
 #X connect 19 2 8 0;
+#X connect 19 2 24 0;
 #X connect 19 3 20 0;
 #X connect 19 4 7 0;
 #X connect 20 0 1 0;
 #X connect 21 0 1 0;
+#X connect 22 0 23 0;
+#X connect 22 0 24 1;
+#X connect 23 0 26 1;
+#X connect 24 0 25 0;
+#X connect 24 1 26 0;
+#X connect 25 0 1 0;
+#X connect 26 0 27 0;
+#X connect 27 0 1 0;
