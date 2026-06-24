@@ -6,3 +6,5 @@ noon-gradient 255 255 0 130 130 0;
 sunset-gradient 191 221 220 105 107 105;
 night-gradient 92 108 175 0 0 0;
 moon-colors 120 120 140 92 108 174;
+base-pulse-sun-1 2000;
+base-pulse-sun-0 4000;

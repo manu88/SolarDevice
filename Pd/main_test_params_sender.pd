@@ -1,4 +1,4 @@
-#N canvas 423 479 1278 511 12;
+#N canvas 422 479 1278 511 12;
 #X obj 87 302 osc/packOSC;
 #X msg 219 339 connect 127.0.0.1 8012;
 #X obj 69 374 iemnet/udpsend;
@@ -20,7 +20,7 @@
 #X msg 725 281 send /day \$1;
 #X obj 724 254 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
 #X text 916 261 day-state 0 sunrise \, 1 noon \, 2 sunset \, 3 night;
-#X msg 916 225 send /day-state 3;
+#X msg 916 225 send /day-state 1;
 #X connect 0 0 2 0;
 #X connect 1 0 2 0;
 #X connect 3 0 6 0;
