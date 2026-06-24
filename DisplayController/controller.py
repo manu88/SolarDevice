@@ -11,7 +11,7 @@ from pythonosc import osc_server
 from ui import UILeds
 from sensor_reader import SensorReader
 
-MIN_VERSION = (0, 0, 7)
+MIN_VERSION = (0, 0, 8)
 
 
 def check_firmware_version(ver: str) -> bool:
