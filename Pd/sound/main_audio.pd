@@ -14,7 +14,7 @@
 #X text 185 246 sous-patch de presets;
 #X text 186 336 ui synth;
 #X obj 630 125 route 0;
-#X obj 506 69 route /clock /luminosity /sensor;
+#X obj 506 69 route /clock /nebulosity /sensor;
 #X obj 530 491 s yellow-vsl;
 #X obj 530 435 * 100;
 #X obj 53 484 s vibrato_left_amount_knob;

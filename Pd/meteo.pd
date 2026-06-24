@@ -172,7 +172,7 @@
 #X connect 31 0 28 0;
 #X connect 33 0 24 0;
 #X restore 316 659 pd color-selector;
-#X obj 354 132 route /luminosity /clock /nebulosity /day /day-state;
+#X obj 354 132 route /luminosity /clock /luminosity2 /day /day-state;
 #X obj 525 243 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
 #X connect 0 0 11 0;
 #X connect 1 0 33 0;

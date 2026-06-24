@@ -239,7 +239,7 @@
 #X restore 219 553 pd anim-logic ----------------------;
 #X msg 615 179 \$1;
 #X obj 619 132 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
-#X obj -496 9 route /luminosity /clock /sensor;
+#X obj -496 9 route /nebulosity /clock /sensor;
 #X text 85 593 Vers pd pulses;
 #X obj -193 241 expr if($f1>=0.0 && $f1 <=0.7 \, 1 \, -1);
 #X obj -121 75 route 0;

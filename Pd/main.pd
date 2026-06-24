@@ -1,4 +1,4 @@
-#N canvas 686 237 934 815 12;
+#N canvas 528 213 934 815 12;
 #N canvas 860 156 764 256 init 0;
 #X obj 278 132 config config-dev.txt;
 #X obj 145 16 loadbang;
@@ -469,7 +469,7 @@
 #X msg 250 84 /clock 0 0;
 #X msg 346 93 /luminosity 0.5;
 #X obj 276 26 r init2-bang;
-#X obj 110 309 route /clock /luminosity /sensor /nebulosity /day;
+#X obj 110 309 route /clock /nebulosity /sensor /luminosity /day;
 #X obj 414 497 tgl 19 0 empty empty is\ day 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
 #X obj 612 496 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
 #X obj 608 465 unpack f f;
@@ -537,7 +537,7 @@
 #X obj 376 193 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
 #X msg 99 542 all \$1;
 #X obj 102 511 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
-#X obj 178 546 route /nebulosity;
+#X obj 178 546 route /;
 #X connect 2 0 22 1;
 #X connect 3 0 5 0;
 #X connect 4 0 1 0;
