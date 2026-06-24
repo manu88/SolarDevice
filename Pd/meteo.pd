@@ -5,7 +5,7 @@
 #X obj 205 687 outlet;
 #X obj 634 692 outlet;
 #X text 703 696 sun color \, RGB;
-#N canvas 163 166 1513 889 day 1;
+#N canvas 330 123 1513 889 day 0;
 #X obj 61 89 inlet;
 #X obj 352 94 inlet;
 #X text 108 97 bang to output pulse params;
@@ -38,7 +38,7 @@
 #X msg 952 476 \$1 \$1 \$1 \$1 \$1 \$1;
 #X obj 487 421 s position-soleil-hack;
 #X obj 904 273 sel 1 0;
-#N canvas 431 236 1287 875 color-selector 1;
+#N canvas 431 214 1287 875 color-selector 0;
 #X obj 230 813 outlet;
 #X obj 49 80 inlet etalement-pos;
 #X obj 281 83 inlet index;
@@ -56,10 +56,10 @@
 #X obj 531 497 == 0;
 #X obj 737 344 loadbang;
 #X msg 738 373 2;
-#X msg 326 621 243 223 225 248 244 248 \$1 \$2;
+#X msg 282 625 243 223 225 248 244 248 \$1 \$2;
 #X msg 514 624 255 255 0 130 130 0 \$1 \$2;
 #X msg 721 631 191 221 220 105 107 105 \$1 \$2;
-#X msg 897 631 255 0 0 130 0 0 \$1 \$2;
+#X msg 985 635 92 108 175 0 0 0 \$1 \$2;
 #X obj 490 -32 bng 19 250 50 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000;
 #N canvas 63 102 413 268 set-grad-msg 0;
 #X msg 9 138 set \$1 \$2 \$3 \$4 \$5 \$6;
@@ -173,6 +173,7 @@
 #X connect 33 0 24 0;
 #X restore 316 659 pd color-selector;
 #X obj 354 132 route /luminosity /clock /nebulosity /day /day-state;
+#X obj 525 243 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
 #X connect 0 0 11 0;
 #X connect 1 0 33 0;
 #X connect 5 0 32 0;
@@ -204,6 +205,7 @@
 #X connect 33 0 12 0;
 #X connect 33 0 18 0;
 #X connect 33 1 24 0;
+#X connect 33 2 34 0;
 #X connect 33 3 27 0;
 #X connect 33 4 32 1;
 #X restore 206 323 pd day;
