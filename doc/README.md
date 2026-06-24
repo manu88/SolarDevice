@@ -25,6 +25,10 @@ Note: la nébulosité s'exprime entre 0 (pas de nuages) et 1 (temps couvert)
 |----------------|--------------------|--------------------------------------------|
 | `/sensor`     | `[int, float]`      | capteur i: Vitesse en tour/sec   |
 
+## Synopsis logiciels
+
+[![alt](synopsisLogiciel.png)]
+
 ## Câblage Arduino
 
 [![alt](cablageArduinos.png)]
