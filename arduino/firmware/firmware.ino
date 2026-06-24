@@ -16,7 +16,7 @@ unsigned long numCRCErrors = 0;
 int sendSensorsEveryMs = 2000;
 unsigned long lastTimeSentSensors = 0;
 
-int readSensorsEveryMs = 20;
+int readSensorsEveryMs = 10;
 unsigned long lastTimeReadSensors = 0;
 
 #define NUM_LEDS 26
@@ -46,6 +46,7 @@ typedef struct {
   uint8_t start;
   uint8_t boardId;
   float v[3];
+  uint8_t isRotating[3];
   uint8_t end;
 } SensorMsg;
 }
@@ -54,7 +55,7 @@ typedef struct {
 
 void setup() {
   Serial.begin(115200);
-  inSerial.begin(115200);
+  inSerial.begin(19200);
   FastLED.addLeds<WS2801, DATA_PIN, CLOCK_PIN, RGB>(
       leds, NUM_LEDS); //, DATA_RATE_MHZ(8));
   FastLED.setBrightness(BRIGHTNESS);
@@ -234,15 +235,21 @@ void processCmdLed() {
   }
 }
 
-void sendASCIIMsgSensor(uint8_t boardId, const float *v) {
+void sendASCIIMsgSensor(uint8_t boardId, const float *v, const int isRotating[3]) {
   Serial.print("S");
   Serial.print(boardId);
   Serial.print(" ");
   Serial.print(v[0]);
   Serial.print(" ");
+  Serial.print(isRotating[0]);
+  Serial.print(" ");
   Serial.print(v[1]);
   Serial.print(" ");
+  Serial.print(isRotating[1]);
+  Serial.print(" ");
   Serial.print(v[2]);
+  Serial.print(" ");
+  Serial.print(isRotating[2]);
   Serial.println();
 }
 
@@ -251,6 +258,8 @@ void relayFinalData() {
   static uint8_t boardId = -1;
   static uint8_t currentFloatReadPos = 0;
   static float v[3] = {0};
+  static int isRotating[3] = {0};
+  static uint8_t rcvIsRotatingIndex = 0;
   inSerial.listen();
   while (inSerial.available() > 0) {
     switch (readerState) {
@@ -265,7 +274,11 @@ void relayFinalData() {
     }
     case 1: // boardId
     {
-      boardId = inSerial.read();
+      int v = inSerial.read();
+      if(v == -1){
+        return;
+      }
+      boardId = v;
       readerState = 2;
       break;
     }
@@ -281,22 +294,37 @@ void relayFinalData() {
       }
       break;
     }
-    case 3: // end val;
+    case 3: // uint8_t values
+    {
+      int v = inSerial.read();
+      if (v == -1){
+        return;
+      }
+      isRotating[rcvIsRotatingIndex] = v;
+      rcvIsRotatingIndex++;
+      if (rcvIsRotatingIndex==3){
+        readerState = 4;
+      }
+      break;
+    }
+    case 4: // end val;
     {
       uint8_t inByte = inSerial.read();
       if (inByte == END_VAL) {
-        sendASCIIMsgSensor(boardId, v);
+        sendASCIIMsgSensor(boardId, v, isRotating);
         readerState = 0;
         boardId = -1;
         currentFloatReadPos = 0;
+        rcvIsRotatingIndex = 0;
         v[0] = 0;
         v[1] = 0;
         v[2] = 0;
+        isRotating[0] = 0;
+        isRotating[1] = 0;
+        isRotating[2] = 0;
       }
     }
     }
-
-    // Serial.write(inByte);
   }
 }
 
@@ -318,6 +346,6 @@ void loop() {
 
   if (now - lastTimeSentSensors >= sendSensorsEveryMs) {
     lastTimeSentSensors = now;
-    sendAllSensors();
+    sendSensors();
   }
 }

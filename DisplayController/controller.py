@@ -188,7 +188,7 @@ class Controller:
             # if speed < 3:
             for idx in received_idx:
                 self.osc_client.send_message(
-                    "/sensor", [idx, self.sensors.sensors[idx]])
+                    "/sensor", [idx, self.sensors.sensors[idx], self.sensors.is_rotating[idx]])
 
         else:
             print(line)

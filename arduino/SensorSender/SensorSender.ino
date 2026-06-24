@@ -2,7 +2,7 @@
 
 #include <AltSoftSerial.h>
 #include <SoftwareSerial.h>
-#define BOARD_ID 1
+#define BOARD_ID 3
 
 // software serial #1: RX = digital pin 7, TX = digital pin 8
 SoftwareSerial outSerial(7, 8);
@@ -25,6 +25,7 @@ typedef struct {
   uint8_t start;
   uint8_t boardId;
   float v[3];
+  uint8_t isRotating[3];
   uint8_t end;
 } SensorMsg;
 }
@@ -33,8 +34,8 @@ void setup() {
   randomSeed(analogRead(A3));
   setupSensors();
   pinMode(LED_BUILTIN, OUTPUT);
-  outSerial.begin(115200);
-  inSerial.begin(115200);
+  outSerial.begin(19200);
+  inSerial.begin(19200);
   inSerial.listen();
 
 #ifdef SERIAL_DEBUG
@@ -50,6 +51,8 @@ void relayData() {
   static uint8_t boardId = -1;
   static uint8_t currentFloatReadPos = 0;
   static float v[3] = {0};
+  static int isRotating[3] = {0};
+  static uint8_t rcvIsRotatingIndex = 0;
   inSerial.listen();
   while (inSerial.available() > 0) {
     switch (readerState) {
@@ -64,7 +67,11 @@ void relayData() {
     }
     case 1: // boardId
     {
-      boardId = inSerial.read();
+      int v = inSerial.read();
+      if(v == -1){
+        return;
+      }
+      boardId = v;
       readerState = 2;
       break;
     }
@@ -80,20 +87,37 @@ void relayData() {
       }
       break;
     }
-    case 3: // end val;
+    case 3: // uint8_t values
+    {
+      int v = inSerial.read();
+      if (v == -1){
+        return;
+      }
+      isRotating[rcvIsRotatingIndex] = v;
+      rcvIsRotatingIndex++;
+      if (rcvIsRotatingIndex==3){
+        readerState = 4;
+      }
+      break;
+    }
+    case 4: // end val;
     {
       uint8_t inByte = inSerial.read();
       if (inByte == END_VAL) {
-        sendMsgSensor(boardId, v);
+        sendMsgSensor(boardId, v, isRotating);
 #ifdef SERIAL_DEBUG
-        sendASCIIMsgSensor(boardId, v);
+        sendASCIIMsgSensor(boardId, v, isRotating);
 #endif
         readerState = 0;
         boardId = -1;
         currentFloatReadPos = 0;
+        rcvIsRotatingIndex = 0;
         v[0] = 0;
         v[1] = 0;
         v[2] = 0;
+        isRotating[0] = 0;
+        isRotating[1] = 0;
+        isRotating[2] = 0;
       }
     }
     }

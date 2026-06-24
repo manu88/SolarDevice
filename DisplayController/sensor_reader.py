@@ -11,6 +11,7 @@ NUM_SENSORS = 12
 class SensorReader:
     def __init__(self) -> None:
         self.sensors = [0.0 for i in range(NUM_SENSORS)]
+        self.is_rotating = [0 for i in range(NUM_SENSORS)]
         self.board_ids: Dict[int, float] = {
             0: 0, 1: 0, 2: 0, 3: 0}
         self.unresponsive_boards: Set[int] = set([0, 1, 2, 3])
@@ -32,7 +33,7 @@ class SensorReader:
     def on_sensor_line(self, line: str) -> List[int]:
         ret = []
         toks = line.split(" ")
-        if len(toks) != 4:
+        if len(toks) != 7:
             print(f"Skipping '{line}': {len(toks)}")
             return []
         if toks[0][0] != "S":
@@ -46,7 +47,12 @@ class SensorReader:
         if board_id in self.unresponsive_boards:
             print(f"Board {board_id} is back online")
             self.unresponsive_boards.remove(board_id)
-        v0, v1, v2 = toks[1:]
+
+        # format float byte float byte float byte
+        values = toks[1:]
+        if len(values) != 6:
+            print(f"expected 6 values, got {len(values)}")
+        v0, r0, v1, r1, v2, r2 = toks[1:]
         idx_start = board_id * 3
         if idx_start < 0 or idx_start >= NUM_SENSORS:
             print(f"invalid idx_start {idx_start}")
@@ -54,6 +60,9 @@ class SensorReader:
         self.sensors[idx_start] = float(v0)
         self.sensors[idx_start+1] = float(v1)
         self.sensors[idx_start+2] = float(v2)
+        self.is_rotating[idx_start] = int(r0)
+        self.is_rotating[idx_start+1] = int(r1)
+        self.is_rotating[idx_start+2] = int(r2)
         ret.append(idx_start)
         ret.append(idx_start+1)
         ret.append(idx_start+2)

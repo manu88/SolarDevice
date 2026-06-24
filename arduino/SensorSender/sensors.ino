@@ -1,4 +1,4 @@
-#define NUM_SENSORS 1
+#define NUM_SENSORS 3
 #define NUM_SENSOR_READINGS 50
 
 #define MIN_ROTATIONS 2
@@ -99,7 +99,6 @@ void processSensor(int sensorId) {
     reading->inPeak = 0;
   }
   if (now - reading->lastIdleCheckTime > IDLE_INTERVAL_MS) {
-    Serial.println("Timeout");
     reading->isRotating = 0;
     reading->isRotatingChanged = 0;
     reading->rotatingCount = 0;
@@ -108,7 +107,7 @@ void processSensor(int sensorId) {
   }
 }
 
-void sendMsgSensor(uint8_t boardId, const float *v) {
+void sendMsgSensor(uint8_t boardId, const float *v, const int isRotating[3]) {
   static SensorMsg msg;
   msg.start = START_VAL;
   msg.boardId = boardId;
@@ -116,37 +115,36 @@ void sendMsgSensor(uint8_t boardId, const float *v) {
   msg.v[0] = v[0];
   msg.v[1] = v[1];
   msg.v[2] = v[2];
+  msg.isRotating[0] = isRotating[0];
+  msg.isRotating[1] = isRotating[1];
+  msg.isRotating[2] = isRotating[2];
   outSerial.write((const uint8_t *)&msg, sizeof(SensorMsg));
 }
 
-void sendASCIIMsgSensor(uint8_t boardId, const float *v) {
+void sendASCIIMsgSensor(uint8_t boardId, const float *v, const int isRotating[3]) {
   Serial.print("S");
   Serial.print(boardId);
   Serial.print(" ");
   Serial.print(v[0]);
   Serial.print(" ");
+  Serial.print(isRotating[0]);
+  Serial.print(" ");
   Serial.print(v[1]);
   Serial.print(" ");
+  Serial.print(isRotating[1]);
+  Serial.print(" ");
   Serial.print(v[2]);
+  Serial.print(" ");
+  Serial.print(isRotating[2]);
   Serial.println();
 }
 
-void TestsendASCIIMsgSensor(struct SensorReading *reading) {
-  Serial.print("S");
-  Serial.print(" ");
-  Serial.print(reading->speed);
-  Serial.print(" ");
-  Serial.print(reading->isRotating);
-  Serial.println();
-}
 
 void sendSensors() {
   float v[3] = {sensors[0].speed, sensors[1].speed, sensors[2].speed};
-
-  TestsendASCIIMsgSensor(&sensors[0]);
-  sendMsgSensor(BOARD_ID, v);
-#ifdef SERIAL_DEBUG #ifdef SERIAL_DEBUG
-  // sendASCIIMsgSensor(BOARD_ID, v);
-
+  int r[3] = {sensors[0].isRotating, sensors[1].isRotating, sensors[2].isRotating};
+  sendMsgSensor(BOARD_ID, v,r);
+#ifdef SERIAL_DEBUG
+  sendASCIIMsgSensor(BOARD_ID, v, r);
 #endif
 }

@@ -21,7 +21,7 @@ void setAll(int r,int g,int b) {
 }
 
 void setup() {
-  FastLED.addLeds<WS2801, DATA_PIN, CLOCK_PIN, RGB>(leds, NUM_LEDS, DATA_RATE_MHZ(25));
+  FastLED.addLeds<WS2801, DATA_PIN, CLOCK_PIN, RGB>(leds, NUM_LEDS);
   FastLED.setBrightness(BRIGHTNESS);
 }
 
