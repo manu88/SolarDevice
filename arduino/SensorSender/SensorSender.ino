@@ -2,7 +2,7 @@
 
 #include <AltSoftSerial.h>
 #include <SoftwareSerial.h>
-#define BOARD_ID 3
+#define BOARD_ID 1
 
 // software serial #1: RX = digital pin 7, TX = digital pin 8
 SoftwareSerial outSerial(7, 8);
@@ -10,13 +10,13 @@ SoftwareSerial outSerial(7, 8);
 // software serial #2: RX = digital pin 9, TX = digital pin 10
 SoftwareSerial inSerial(9, 10);
 
-int readSensorsEveryMs = 20;
+int readSensorsEveryMs = 10;
 int sendSensorsEveryMs = 2000;
 
 unsigned long lastTimeReadSensors = 0;
 unsigned long lastTimeSentSensors = 0;
 
-// #define SERIAL_DEBUG
+#define SERIAL_DEBUG
 
 extern "C" {
 #define START_VAL 0XAB
@@ -109,7 +109,7 @@ int ledState = 0;
 void handleLoopSensors() {
   unsigned long now = millis();
   if (now - lastTimeReadSensors >= readSensorsEveryMs) {
-    // loopSensors();
+    loopSensors();
     lastTimeReadSensors = now;
   }
   now = millis();

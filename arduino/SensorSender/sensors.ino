@@ -1,8 +1,12 @@
-#define NUM_SENSORS 3
+#define NUM_SENSORS 1
 #define NUM_SENSOR_READINGS 50
 
+#define MIN_ROTATIONS 2
+#define START_MIN_SPEED (float)0.3f
+#define START_MAX_SPEED (float)3.f
+
 const int minPeakDiff = 15;
-const unsigned long IdleInterval = 5000;
+#define IDLE_INTERVAL_MS 5000
 
 struct SensorReading {
   int readings[NUM_SENSOR_READINGS]; // the readings from the analog input
@@ -14,6 +18,9 @@ struct SensorReading {
   unsigned long lastIdleCheckTime = 0;
   float speed = 0;
   int inputPin;
+  uint8_t rotatingCount;
+  uint8_t isRotating;
+  uint8_t isRotatingChanged;
 };
 
 SensorReading sensors[NUM_SENSORS];
@@ -69,15 +76,33 @@ void processSensor(int sensorId) {
       reading->inPeak = 1;
       if (reading->revStartTime > 0) {
         unsigned long elapsed = now - reading->revStartTime;
-        reading->speed = 1000.f / elapsed;
-        // delay(1);
+        float speed = 1000.f / elapsed;
+        if (speed < START_MAX_SPEED) {
+          reading->speed = speed;
+          if (reading->rotatingCount < MIN_ROTATIONS) {
+            if (reading->speed > START_MIN_SPEED &&
+                reading->speed < START_MAX_SPEED) {
+              reading->rotatingCount += 1;
+              if (reading->rotatingCount >= MIN_ROTATIONS) {
+                reading->isRotatingChanged = 1;
+                reading->isRotating = 1;
+              }
+            } else if (reading->rotatingCount) {
+              reading->rotatingCount -= 1;
+            }
+          }
+        }
       }
       reading->revStartTime = now;
     }
   } else {
     reading->inPeak = 0;
   }
-  if (now - reading->lastIdleCheckTime > IdleInterval) {
+  if (now - reading->lastIdleCheckTime > IDLE_INTERVAL_MS) {
+    Serial.println("Timeout");
+    reading->isRotating = 0;
+    reading->isRotatingChanged = 0;
+    reading->rotatingCount = 0;
     reading->speed = 0;
     reading->lastIdleCheckTime = now;
   }
@@ -106,7 +131,22 @@ void sendASCIIMsgSensor(uint8_t boardId, const float *v) {
   Serial.println();
 }
 
+void TestsendASCIIMsgSensor(struct SensorReading *reading) {
+  Serial.print("S");
+  Serial.print(" ");
+  Serial.print(reading->speed);
+  Serial.print(" ");
+  Serial.print(reading->isRotating);
+  Serial.println();
+}
+
 void sendSensors() {
-  float v[3] = {sensors[1].speed, sensors[0].speed, sensors[2].speed};
+  float v[3] = {sensors[0].speed, sensors[1].speed, sensors[2].speed};
+
+  TestsendASCIIMsgSensor(&sensors[0]);
   sendMsgSensor(BOARD_ID, v);
+#ifdef SERIAL_DEBUG #ifdef SERIAL_DEBUG
+  // sendASCIIMsgSensor(BOARD_ID, v);
+
+#endif
 }
