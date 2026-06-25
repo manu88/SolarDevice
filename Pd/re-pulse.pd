@@ -1,4 +1,4 @@
-#N canvas 272 117 1288 893 12;
+#N canvas 242 174 1288 893 12;
 #X msg -413 68 \$1;
 #X obj -413 123 mod 12;
 #X obj -496 38 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
@@ -239,10 +239,10 @@
 #X restore 219 553 pd anim-logic ----------------------;
 #X msg 615 179 \$1;
 #X obj 619 132 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
-#X obj -496 9 route /nebulosity /clock /sensor;
 #X text 85 593 Vers pd pulses;
 #X obj -107 115 route 9;
 #X obj -105 150 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
+#X obj -496 9 route etalement /clock /sensor;
 #X connect 0 0 1 0;
 #X connect 1 0 29 1;
 #X connect 2 0 18 0;
@@ -281,7 +281,7 @@
 #X connect 30 1 29 0;
 #X connect 30 2 3 0;
 #X connect 31 0 30 0;
-#X connect 32 0 80 0;
+#X connect 32 0 83 0;
 #X connect 33 0 30 0;
 #X connect 34 0 9 0;
 #X connect 35 0 34 0;
@@ -349,8 +349,8 @@
 #X connect 78 0 38 0;
 #X connect 78 0 37 0;
 #X connect 79 0 78 0;
-#X connect 80 0 2 0;
-#X connect 80 1 0 0;
-#X connect 80 2 82 0;
-#X connect 82 0 83 0;
+#X connect 81 0 82 0;
+#X connect 83 0 2 0;
+#X connect 83 1 0 0;
+#X connect 83 2 81 0;
 #X coords 0 -1 1 1 350 180 1 200 100;

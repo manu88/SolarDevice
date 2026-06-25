@@ -3,7 +3,7 @@
 # Attention: Ne pas oublier les `;` en fin de lignes -- même dans les commentaires!;
 #;
 led-controller-host 127.0.0.1;
-min-sun-luminosity 255;
+min-sun-luminosity 150;
 #Combien de pulses lors des animations à chaque heures?;
 hour-anim-cycles 2;
 sunrise-gradient 243 223 225 248 244 248;
