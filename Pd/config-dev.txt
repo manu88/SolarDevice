@@ -5,7 +5,7 @@
 led-controller-host 192.168.1.24;
 min-sun-luminosity 150;
 #Combien de pulses lors des animations à chaque heures?;
-hour-anim-cycles 4;
+hour-anim-cycles 2;
 #Les gradients sont définis du centre vers l'exterieur;
 sunrise-gradient 243 223 225 248 244 248;
 noon-gradient 255 255 120 128 128 60;

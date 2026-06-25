@@ -4,7 +4,7 @@
 #X obj 205 687 outlet;
 #X obj 634 692 outlet;
 #X text 703 696 sun color \, RGB;
-#N canvas 287 163 1513 889 day 1;
+#N canvas 220 155 1513 889 day 0;
 #X obj 61 89 inlet;
 #X obj 352 94 inlet;
 #X text 108 97 bang to output pulse params;
@@ -265,6 +265,7 @@
 #X obj 66 138 line 0 100;
 #X msg 66 108 \$1 200;
 #X obj 202 42 route /duty_cycle;
+#X obj 399 278 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
 #X connect 0 0 5 1;
 #X connect 0 0 22 0;
 #X connect 5 0 2 0;
@@ -283,3 +284,4 @@
 #X connect 20 0 7 0;
 #X connect 21 0 20 0;
 #X connect 22 0 10 1;
+#X connect 23 0 5 2;
