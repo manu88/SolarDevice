@@ -30,6 +30,7 @@
 #X obj 700 43 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
 #X msg 601 385 send /duty_cycle \$1 \$2;
 #X msg 596 348 304 5000;
+#X obj 1068 74 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
 #X connect 0 0 2 0;
 #X connect 1 0 2 0;
 #X connect 3 0 6 0;
@@ -50,3 +51,4 @@
 #X connect 28 0 3 0;
 #X connect 29 0 0 0;
 #X connect 30 0 29 0;
+#X connect 31 0 13 0;

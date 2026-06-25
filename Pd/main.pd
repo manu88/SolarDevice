@@ -399,7 +399,7 @@
 #X connect 7 0 5 0;
 #X connect 8 0 5 0;
 #X restore 428 683 pd debug;
-#N canvas 477 311 1288 577 receive_params 1;
+#N canvas 477 311 1288 577 receive_params 0;
 #X obj 87 121 iemnet/udpreceive 8012;
 #X obj 104 198 osc/unpackOSC;
 #N canvas 92 131 1254 789 sensors 0;
@@ -614,17 +614,19 @@
 #X msg 347 224 sun-luminosity \$1;
 #X msg 227 221 etalement \$1;
 #X obj 74 116 route /luminosity /nebulosity;
+#X msg 88 170 255;
 #X connect 0 0 1 0;
 #X connect 0 0 5 0;
 #X connect 2 0 1 0;
 #X connect 3 0 1 0;
 #X connect 4 0 1 0;
-#X connect 5 0 2 0;
+#X connect 5 0 6 0;
 #X connect 5 1 4 0;
 #X connect 5 1 3 0;
+#X connect 6 0 2 0;
 #X restore 265 104 pd map-anim-msgs;
 #X obj 263 416 route brightness;
-#N canvas 547 321 973 541 state-selector 0;
+#N canvas 637 292 973 541 state-selector 0;
 #X obj 48 71 inlet;
 #X obj 66 119 route /clock;
 #X obj 65 168 change;
@@ -653,7 +655,7 @@
 #X connect 11 0 8 0;
 #X connect 11 0 9 0;
 #X restore 334 602 pd state-selector;
-#N canvas 630 305 940 452 hour-anim 1;
+#N canvas 630 305 940 452 hour-anim 0;
 #X msg 355 345 reset;
 #X obj 409 389 counter 4;
 #X obj 557 86 bng 19 250 50 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000;
@@ -698,4 +700,3 @@
 #X connect 22 0 12 0;
 #X connect 22 0 24 0;
 #X connect 23 0 2 4;
-#X connect 24 0 4 0;
