@@ -2,7 +2,7 @@
 
 #include <AltSoftSerial.h>
 #include <SoftwareSerial.h>
-#define BOARD_ID 2
+#define BOARD_ID 3
 
 // software serial #1: RX = digital pin 7, TX = digital pin 8
 SoftwareSerial outSerial(7, 8);
@@ -68,7 +68,7 @@ void relayData() {
     case 1: // boardId
     {
       int v = inSerial.read();
-      if(v == -1){
+      if (v == -1) {
         return;
       }
       boardId = v;
@@ -90,12 +90,12 @@ void relayData() {
     case 3: // uint8_t values
     {
       int v = inSerial.read();
-      if (v == -1){
+      if (v == -1) {
         return;
       }
       isRotating[rcvIsRotatingIndex] = v;
       rcvIsRotatingIndex++;
-      if (rcvIsRotatingIndex==3){
+      if (rcvIsRotatingIndex == 3) {
         readerState = 4;
       }
       break;
@@ -107,11 +107,10 @@ void relayData() {
         sendMsgSensor(boardId, v, isRotating);
 #ifdef SERIAL_DEBUG
         sendASCIIMsgSensor(boardId, v, isRotating);
-        if (boardId== BOARD_ID+1)
-        {
+        if (boardId == BOARD_ID + 1) {
           sendSensors();
         }
-        
+
 #endif
         readerState = 0;
         boardId = -1;
