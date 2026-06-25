@@ -12,10 +12,5 @@ midi-gradient 255 255 120 128 128 60;
 aprem-gradient 191 221 220 105 107 105;
 soir-gradient 221 191 191 105 107 105;
 nuit-gradient 92 108 175 40 40 40;
-
-
-#Durée des pulses du soleil mininum 300ms
-base-pulse-sun-1 1000;
-base-pulse-sun-0 1000;
 log-msgs 0;
 
