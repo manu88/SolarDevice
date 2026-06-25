@@ -541,7 +541,7 @@
 #X obj 298 458 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
 #X obj 263 416 route /nebulosity;
 #X obj 149 542 meteo ---;
-#N canvas 696 218 801 573 anim-state 1;
+#N canvas 696 218 801 573 anim-state 0;
 #X obj 49 24 inlet;
 #X obj 120 388 outlet;
 #X obj 82 115 change;
