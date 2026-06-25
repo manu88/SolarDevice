@@ -13,6 +13,16 @@ Si une valeur attendue par puredata n'est pas présente dans le fichier de confi
 
 ## Messages OSC
 
+### day-state
+exemple pour lever de soleil à 6h et coucher à 22h
+| Heure        |      Index     |
+|----------------|--------------------|
+|    6h-11h            |   0 |
+|    11h-13h            |   1 |
+|    13h-21h            |   2 |
+|    21h-22h            |   3 |
+|    22h-6h            |   4 |
+
 ### Météo
 
 | Adresse        |      Arguments     |     Notes                                  |
