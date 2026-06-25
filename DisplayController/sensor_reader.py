@@ -57,15 +57,18 @@ class SensorReader:
         if idx_start < 0 or idx_start >= NUM_SENSORS:
             print(f"invalid idx_start {idx_start}")
             return []
-        self.sensors[idx_start] = float(v0)
-        self.sensors[idx_start+1] = float(v1)
-        self.sensors[idx_start+2] = float(v2)
-        self.is_rotating[idx_start] = int(r0)
-        self.is_rotating[idx_start+1] = int(r1)
-        self.is_rotating[idx_start+2] = int(r2)
-        ret.append(idx_start)
-        ret.append(idx_start+1)
-        ret.append(idx_start+2)
+        try:
+            self.sensors[idx_start] = float(v0)
+            self.sensors[idx_start+1] = float(v1)
+            self.sensors[idx_start+2] = float(v2)
+            self.is_rotating[idx_start] = int(r0)
+            self.is_rotating[idx_start+1] = int(r1)
+            self.is_rotating[idx_start+2] = int(r2)
+            ret.append(idx_start)
+            ret.append(idx_start+1)
+            ret.append(idx_start+2)
+        except ValueError as e:
+            print(f"ValueError on board {board_id}: {e}")
         self._check_boards_ok()
         return ret
 
