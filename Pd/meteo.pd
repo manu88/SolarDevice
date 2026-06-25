@@ -125,7 +125,7 @@
 #X text 745 598 2 aprem;
 #X text 1282 593 4 nuit;
 #X obj 1292 485 print SHOULD_NOT_BE -1;
-#X obj 633 115 print SET-DAY-INDEX;
+#X obj 616 141 print SET-DAY-INDEX;
 #X obj 1282 443 sel 1;
 #X obj 1014 528 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
 #X obj 962 559 spigot 0;
@@ -211,9 +211,9 @@
 #X obj 465 280 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
 #X obj 354 132 route etalement /clock /day sun-luminosity;
 #X obj 953 412 max 100;
-#X obj 851 182 print ANIM-STATE;
 #X obj 535 286 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
 #X obj 444 376 mod 24;
+#X obj 432 625 change;
 #X connect 0 0 11 0;
 #X connect 1 0 32 0;
 #X connect 5 0 28 0;
@@ -222,7 +222,7 @@
 #X connect 7 1 5 1;
 #X connect 8 0 7 0;
 #X connect 9 0 10 0;
-#X connect 10 0 36 0;
+#X connect 10 0 35 0;
 #X connect 11 0 8 0;
 #X connect 11 0 27 0;
 #X connect 12 0 13 0;
@@ -239,14 +239,14 @@
 #X connect 24 0 21 0;
 #X connect 26 0 16 0;
 #X connect 28 0 4 0;
-#X connect 29 0 28 1;
-#X connect 29 0 34 0;
+#X connect 29 0 36 0;
 #X connect 32 0 12 0;
 #X connect 32 1 23 0;
 #X connect 32 3 18 0;
 #X connect 33 0 20 0;
-#X connect 35 0 15 0;
-#X connect 36 0 11 1;
+#X connect 34 0 15 0;
+#X connect 35 0 11 1;
+#X connect 36 0 28 1;
 #X restore 206 323 pd day;
 #X text 266 686 gradient \, format R0 G0 B0 R1 G1 B1 SPREAD \, INDEX;
 #X obj 66 202 min 1;
