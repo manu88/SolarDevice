@@ -11,6 +11,7 @@
 #X obj 106 42 route reset;
 #X msg 50 53 0;
 #X obj 251 283 outlet;
+#X obj 216 25 inlet;
 #X connect 0 0 9 0;
 #X connect 1 0 2 0;
 #X connect 2 0 8 1;
@@ -25,3 +26,4 @@
 #X connect 9 0 10 0;
 #X connect 9 1 5 0;
 #X connect 10 0 5 1;
+#X connect 12 0 8 1;
