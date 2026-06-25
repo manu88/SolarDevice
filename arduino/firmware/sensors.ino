@@ -74,9 +74,9 @@ void processSensor(int sensorId) {
     reading->lastIdleCheckTime = now;
     if (reading->inPeak == 0) {
       reading->inPeak = 1;
-      if (reading->revStartTime > 0) {
+      if (reading->revStartTime > 0 && reading->revStartTime != now ) {
         unsigned long elapsed = now - reading->revStartTime;
-        float speed = 1000.f / elapsed;
+        float speed =1000.f / elapsed;
         if (speed < START_MAX_SPEED) {
           reading->speed = speed;
           if (reading->rotatingCount < MIN_ROTATIONS) {

@@ -16,7 +16,7 @@ int sendSensorsEveryMs = 2000;
 unsigned long lastTimeReadSensors = 0;
 unsigned long lastTimeSentSensors = 0;
 
-#define SERIAL_DEBUG
+//#define SERIAL_DEBUG
 
 extern "C" {
 #define START_VAL 0XAB
