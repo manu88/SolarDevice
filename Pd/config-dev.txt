@@ -7,14 +7,15 @@ min-sun-luminosity 150;
 #Combien de pulses lors des animations à chaque heures?;
 hour-anim-cycles 2;
 #Les gradients sont définis du centre vers l'exterieur;
-sunrise-gradient 243 223 225 248 244 248;
-noon-gradient 255 255 120 128 128 60;
-sunset-gradient 191 221 220 105 107 105;
-night-gradient 92 108 175 40 40 40;
-moon-colors 120 120 140 92 108 174;
+matin-gradient 243 223 225 248 244 248;
+midi-gradient 255 255 120 128 128 60;
+aprem-gradient 191 221 220 105 107 105;
+soir-gradient 221 191 191 105 107 105;
+nuit-gradient 92 108 175 40 40 40;
+
 
 #Durée des pulses du soleil mininum 300ms
 base-pulse-sun-1 1000;
 base-pulse-sun-0 1000;
-log-msgs 1;
+log-msgs 0;
 
