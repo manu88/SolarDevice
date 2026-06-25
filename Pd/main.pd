@@ -1,4 +1,4 @@
-#N canvas 340 156 1225 815 12;
+#N canvas 509 260 1225 815 12;
 #N canvas 860 156 764 256 init 0;
 #X obj 278 132 config config-dev.txt;
 #X obj 145 16 loadbang;
