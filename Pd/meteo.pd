@@ -4,7 +4,7 @@
 #X obj 205 687 outlet;
 #X obj 634 692 outlet;
 #X text 703 696 sun color \, RGB;
-#N canvas 84 163 1513 889 day 0;
+#N canvas 287 163 1513 889 day 1;
 #X obj 61 89 inlet;
 #X obj 352 94 inlet;
 #X text 108 97 bang to output pulse params;
@@ -16,7 +16,7 @@
 #X obj 391 451 nbx 5 17 -1e+37 1e+37 0 0 empty empty Position\ LED 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
 #X obj 399 334 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
 #X obj 398 360 * 2;
-#X obj 389 392 i;
+#X obj 387 407 i;
 #X obj 255 280 * 12;
 #X obj 255 312 i;
 #X obj 290 313 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
@@ -178,6 +178,9 @@
 #X obj 465 280 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
 #X obj 354 132 route etalement /clock /day sun-luminosity;
 #X obj 953 412 max 100;
+#X obj 851 182 print ANIM-STATE;
+#X obj 535 286 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
+#X obj 444 376 mod 24;
 #X connect 0 0 11 0;
 #X connect 1 0 32 0;
 #X connect 5 0 28 0;
@@ -186,7 +189,7 @@
 #X connect 7 1 5 1;
 #X connect 8 0 7 0;
 #X connect 9 0 10 0;
-#X connect 10 0 11 1;
+#X connect 10 0 36 0;
 #X connect 11 0 8 0;
 #X connect 11 0 27 0;
 #X connect 12 0 13 0;
@@ -204,10 +207,13 @@
 #X connect 26 0 16 0;
 #X connect 28 0 4 0;
 #X connect 29 0 28 1;
+#X connect 29 0 34 0;
 #X connect 32 0 12 0;
 #X connect 32 1 23 0;
 #X connect 32 3 18 0;
 #X connect 33 0 20 0;
+#X connect 35 0 15 0;
+#X connect 36 0 11 1;
 #X restore 206 323 pd day;
 #X text 266 686 gradient \, format R0 G0 B0 R1 G1 B1 SPREAD \, INDEX;
 #X obj 66 202 min 1;
@@ -227,6 +233,8 @@
 #X obj 264 27 inlet;
 #X obj 373 123 unpack f f;
 #X obj 88 298 delay 1000;
+#X obj 470 216 change;
+#X obj 325 208 change;
 #X connect 0 0 9 0;
 #X connect 1 0 3 0;
 #X connect 2 0 8 0;
@@ -238,10 +246,12 @@
 #X connect 9 0 1 0;
 #X connect 9 0 12 0;
 #X connect 10 0 11 0;
-#X connect 11 0 12 1;
-#X connect 11 1 0 1;
+#X connect 11 0 14 0;
+#X connect 11 1 13 0;
 #X connect 12 0 0 0;
 #X connect 12 0 4 0;
+#X connect 13 0 0 1;
+#X connect 14 0 12 1;
 #X restore 64 75 pd pulse-beat;
 #X obj 63 49 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
 #X obj 154 124 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;

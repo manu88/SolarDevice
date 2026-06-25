@@ -31,9 +31,9 @@
 #X obj 548 325 print;
 #X msg 110 283 disconnect;
 #X obj 471 25 route 0;
-#X obj 559 122 print;
 #X obj 544 98 spigot 0;
 #X obj 591 42 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
+#X obj 559 122 print SETPIX1;
 #X connect 0 0 10 0;
 #X connect 1 0 0 0;
 #X connect 2 0 1 0;
@@ -71,6 +71,6 @@
 #X connect 26 0 27 0;
 #X connect 27 0 1 0;
 #X connect 30 0 0 0;
-#X connect 31 0 33 0;
-#X connect 33 0 32 0;
-#X connect 34 0 33 1;
+#X connect 31 0 32 0;
+#X connect 32 0 34 0;
+#X connect 33 0 32 1;
