@@ -13,7 +13,7 @@ unsigned long numCRCErrors = 0;
 
 /////////////////////////////////
 
-int sendSensorsEveryMs = 2000;
+int sendSensorsEveryMs = 1000;
 unsigned long lastTimeSentSensors = 0;
 
 int readSensorsEveryMs = 10;
@@ -235,21 +235,22 @@ void processCmdLed() {
   }
 }
 
-void sendASCIIMsgSensor(uint8_t boardId, const float *v, const int isRotating[3]) {
+void sendASCIIMsgSensor(uint8_t boardId, const float *v,
+                        const int isRotating[3]) {
   Serial.print("S");
   Serial.print(boardId);
   Serial.print(" ");
   Serial.print(v[0]);
   Serial.print(" ");
-  Serial.print(isRotating[0]);
+  Serial.print(isRotating[0], 3);
   Serial.print(" ");
   Serial.print(v[1]);
   Serial.print(" ");
-  Serial.print(isRotating[1]);
+  Serial.print(isRotating[1], 3);
   Serial.print(" ");
   Serial.print(v[2]);
   Serial.print(" ");
-  Serial.print(isRotating[2]);
+  Serial.print(isRotating[2], 3);
   Serial.println();
 }
 
@@ -275,7 +276,7 @@ void relayFinalData() {
     case 1: // boardId
     {
       int v = inSerial.read();
-      if(v == -1){
+      if (v == -1) {
         return;
       }
       boardId = v;
@@ -297,12 +298,12 @@ void relayFinalData() {
     case 3: // uint8_t values
     {
       int v = inSerial.read();
-      if (v == -1){
+      if (v == -1) {
         return;
       }
       isRotating[rcvIsRotatingIndex] = v;
       rcvIsRotatingIndex++;
-      if (rcvIsRotatingIndex==3){
+      if (rcvIsRotatingIndex == 3) {
         readerState = 4;
       }
       break;
