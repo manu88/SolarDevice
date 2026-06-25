@@ -16,3 +16,5 @@ moon-colors 120 120 140 92 108 174;
 #Durée des pulses du soleil mininum 300ms
 base-pulse-sun-1 1000;
 base-pulse-sun-0 1000;
+log-msgs 1;
+

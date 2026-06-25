@@ -510,6 +510,8 @@
 #X obj 374 315 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
 #X obj 324 399 print osc-inputs;
 #X obj 352 256 route /sensor;
+#X obj 557 86 bng 19 250 50 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000;
+#X obj 559 124 config-query log-msgs;
 #X connect 0 0 1 0;
 #X connect 1 0 3 0;
 #X connect 1 0 5 0;
@@ -517,6 +519,8 @@
 #X connect 5 0 7 0;
 #X connect 6 0 5 1;
 #X connect 8 0 2 0;
+#X connect 9 0 10 0;
+#X connect 10 0 6 0;
 #X restore 251 43 pd receive_params;
 #X obj 471 116 sound/main_audio;
 #X obj 51 29 bng 19 250 50 0 empty empty reload\ config\ file 0 -10 0 12 #fcfcfc #000000 #000000;
