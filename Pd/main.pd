@@ -399,7 +399,7 @@
 #X connect 7 0 5 0;
 #X connect 8 0 5 0;
 #X restore 428 683 pd debug;
-#N canvas 477 311 1288 577 receive_params 0;
+#N canvas 477 311 1288 577 receive_params 1;
 #X obj 87 121 iemnet/udpreceive 8012;
 #X obj 104 198 osc/unpackOSC;
 #N canvas 92 131 1254 789 sensors 0;

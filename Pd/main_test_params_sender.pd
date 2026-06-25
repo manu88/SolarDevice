@@ -1,4 +1,4 @@
-#N canvas 462 430 1278 511 12;
+#N canvas 483 394 1278 511 12;
 #X obj 87 302 osc/packOSC;
 #X msg 219 339 connect 127.0.0.1 8012;
 #X obj 69 374 iemnet/udpsend;
@@ -29,7 +29,7 @@
 #X obj 665 114 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
 #X obj 700 43 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
 #X msg 601 385 send /duty_cycle \$1 \$2;
-#X msg 596 348 500 500;
+#X msg 596 348 304 5000;
 #X connect 0 0 2 0;
 #X connect 1 0 2 0;
 #X connect 3 0 6 0;
