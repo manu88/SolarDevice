@@ -15,11 +15,10 @@
 #X obj 213 88 print start-mendo-seq;
 #X obj 206 146 t b b;
 #X obj 278 503 outlet;
-#X obj 128 248 text sequence restart-seq;
+#X obj 128 248 text sequence start-seq;
 #X connect 0 0 16 0;
 #X connect 1 0 16 0;
 #X connect 2 0 15 0;
-#X connect 2 0 14 0;
 #X connect 3 0 7 0;
 #X connect 4 0 8 0;
 #X connect 5 0 4 0;

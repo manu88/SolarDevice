@@ -2,7 +2,7 @@
 #;
 # Attention: Ne pas oublier les `;` en fin de lignes -- même dans les commentaires!;
 #;
-led-controller-host 127.0.0.1;
+led-controller-host 127.0.0.1;   
 min-sun-luminosity 150;
 #Combien de pulses lors des animations à chaque heures?;
 hour-anim-cycles 2;
