@@ -5,6 +5,7 @@ from typing import Optional
 from utils import serial_ports
 from controller import Controller
 from ui import UILeds
+import json
 
 
 def list_serial_ports():
@@ -45,6 +46,14 @@ parser.add_argument(
     "-s", "--stub", help="no serial", action="store_true")
 parser.add_argument(
     "-u", "--ui", help="show leds", action="store_true")
+parser.add_argument("-c", "--conf", help="Use config file")
+
+
+def load_conf(path: str) -> str:
+    with open(path,  "r", encoding="utf-8") as f:
+        data = json.load(f)
+        serial_port = data["main_arduino"]["port_com"]
+        return serial_port
 
 
 def main():
@@ -52,6 +61,10 @@ def main():
     if args.list:
         list_serial_ports()
         return
+
+    if args.conf:
+        print(f"using conf file {args.conf}")
+        args.serialport = load_conf(args.conf)
 
     use_ui = bool(args.ui)
     no_serial = bool(args.stub)
