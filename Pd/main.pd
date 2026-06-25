@@ -1,4 +1,4 @@
-#N canvas 697 160 1073 902 12;
+#N canvas 499 160 1073 902 12;
 #N canvas 860 156 764 256 init 1;
 #X obj 278 132 config config.txt;
 #X obj 145 16 loadbang;
@@ -610,6 +610,7 @@
 #X obj 366 292 print HOURLY ANIM START;
 #X obj 450 435 print HOURLY ANIM DONE;
 #X obj 370 351 start-all-mendocinos;
+#X text 614 645 python3 "/Users/retake7/Documents/WORK-LAPTOP/SOLAR DEVICE/TECH/PROGRAMMATION/SolarDevice/DisplayController/main.py" /dev/cu.usbmodem puis tapes TAB d'heures: Changement d'heures: hour-anim;
 #X connect 2 0 23 1;
 #X connect 3 0 5 0;
 #X connect 4 0 1 0;
