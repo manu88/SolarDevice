@@ -10,10 +10,6 @@ Voir le [README](doc/README.md)
 
 Contient le code de Nico
 
-## Scheduler
-
-Gère la logique globale du système. Voir le [README](Scheduler/README.md)
-
 ## DisplayController
 
 Programme d'interface entre Pd (via OSC) et les Leds (via arduino). Voir le [README](DisplayController/README.md)
