@@ -243,7 +243,7 @@
 #X obj -150 217 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
 #X obj 89 48 route 0 1 2 3 4 5 6 7 8 9 10 11;
 #X obj -496 65 * 6;
-#N canvas 87 263 1234 712 test-state 0;
+#N canvas 223 377 1234 712 test-state 0;
 #X obj 192 117 unpack f f;
 #X obj 201 165 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
 #X obj 141 316 &&;
@@ -336,7 +336,6 @@
 #X obj -44 167 change;
 #X obj -176 180 t f f;
 #X msg -40 188 0;
-#X obj -57 482 print;
 #X connect 0 0 1 0;
 #X connect 1 0 28 1;
 #X connect 1 0 96 0;
@@ -465,7 +464,6 @@
 #X connect 84 0 86 0;
 #X connect 85 0 84 0;
 #X connect 86 0 90 0;
-#X connect 86 0 98 0;
 #X connect 87 0 88 0;
 #X connect 87 0 92 0;
 #X connect 88 0 94 0;

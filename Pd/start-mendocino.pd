@@ -23,8 +23,8 @@
 #X connect 6 2 2 0;
 #X connect 6 3 1 0;
 #X restore 177 313 pd set-msg;
-#X msg 112 437 pix1 10 \$1 \$2 \$3;
-#X msg 259 436 pix1 11 \$1 \$2 \$3;
+#X msg 112 437 pix1 6 \$1 \$2 \$3;
+#X msg 259 436 pix1 7 \$1 \$2 \$3;
 #N canvas 1064 249 450 300 set-msg 0;
 #X obj 62 74 inlet;
 #X msg 46 132 set pix1 \$1;
@@ -50,6 +50,8 @@
 #X msg 45 383 \$1 \$1 \$1;
 #X msg 22 514 update;
 #X obj 43 244 start-mendocino-sequencer;
+#X obj 117 123 change;
+#X obj 137 166 print start-mendocino state;
 #X connect 0 0 4 0;
 #X connect 1 0 2 0;
 #X connect 1 0 6 0;
@@ -61,8 +63,7 @@
 #X connect 8 0 10 0;
 #X connect 9 0 8 0;
 #X connect 10 0 5 0;
-#X connect 11 0 10 1;
-#X connect 11 0 16 0;
+#X connect 11 0 17 0;
 #X connect 12 0 13 0;
 #X connect 13 0 15 0;
 #X connect 13 1 14 0;
@@ -70,3 +71,6 @@
 #X connect 14 0 7 0;
 #X connect 15 0 10 0;
 #X connect 16 0 12 0;
+#X connect 17 0 10 1;
+#X connect 17 0 16 0;
+#X connect 17 0 18 0;
