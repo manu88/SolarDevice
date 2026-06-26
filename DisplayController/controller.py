@@ -2,6 +2,7 @@ import traceback
 import struct
 import time
 import sys
+import os
 from threading import Thread, Lock
 from typing import Optional, List
 import serial
@@ -92,6 +93,7 @@ class Controller:
         print("Received SIGTERM, clear display")
         self._clear_buffer()
         self.update_display()
+        os.kill(os.getpid(), signal.SIGKILL)
         self.stop()
 
     def _open_arduino(self):
@@ -229,6 +231,10 @@ class Controller:
 
     def stop(self):
         print("Stopping")
+        if self.read_thread:
+            self.read_thread.join()
+        if self.arduino:
+            self.arduino.close()
         # ugly but c'est la vie
         sys.exit(0)
 
