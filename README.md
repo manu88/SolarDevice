@@ -22,10 +22,6 @@ patches pure-data de controle. Voir le [README](Pd/README.md)
 
 Contient les firmwares
 
-## config
-
-Configuration de l'installation. Voir le [README](config/README.md)
-
 ## tools
 
 Contient les scripts pour éteindre/redemarrer les raspberry, ainsi que pure data.
