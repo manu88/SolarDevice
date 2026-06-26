@@ -10,6 +10,7 @@ from pythonosc import udp_client
 from pythonosc import osc_server
 from ui import UILeds
 from sensor_reader import SensorReader
+import signal
 
 MIN_VERSION = (0, 1, 0)
 
@@ -61,7 +62,7 @@ class Controller:
             self.read_thread = Thread(target=self._run_thread)
         self.pack_com_str = ">BBB"
 
-        self.buffer1 = [0 for i in range(payload_size)]
+        self._clear_buffer()
 
         self.dispatcher = Dispatcher()
         self.dispatcher.map("/ping", self.osc_ping)
@@ -81,6 +82,15 @@ class Controller:
         self.update_time_accum = 0
         self.num_updates = 0
         self.num_dropped_updates = 0
+        signal.signal(signal.SIGTERM, self._on_sigterm)
+
+    def _clear_buffer(self):
+        self.buffer1 = [0 for i in range(payload_size)]
+
+    def _on_sigterm(self, signum, frame):
+        print("Received SIGTERM, clear display")
+        self._clear_buffer()
+        self.update_display()
 
     def _open_arduino(self):
         assert (self.serial_port)
