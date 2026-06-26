@@ -1,0 +1,36 @@
+In : sudo nano /etc/systemd/system/soldar_device.service
+put :
+[Unit]
+Description=Solar device main script to run
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=solar
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=/home/solar/.Xauthority
+WorkingDirectory=/home/solar/SolarDeviceV2
+ExecStart=/home/solar/SolarDeviceV2/venv/bin/python -u /home/solar/SolarDeviceV2/main.py
+
+Restart=always
+RestartSec=5
+
+# Optional but useful
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
+
+
+
+TO display the console : 
+// IN autostart : 
+nano /home/solar/.config/autostart/solar.desktop
+Complete with : 
+-----------------------------
+[Desktop Entry]
+Type=Application
+Name=Solar UI
+Exec=/home/solar/SolarDeviceV2/start_log_viewer.sh
+

@@ -6,6 +6,10 @@ Contenu du repo:
 
 Voir le [README](doc/README.md)
 
+## V2
+
+Contient le code de Nico
+
 ## Scheduler
 
 Gère la logique globale du système. Voir le [README](Scheduler/README.md)

@@ -1,0 +1,62 @@
+{
+  "coordinate": "[48.8566, 2.3522]",
+  "timezone": "Europe/Paris",
+  "record_every_s": 10,
+  "pure_data": {
+    "ip": "255.255.255.255",
+    "port": 8012,
+    "resend_all_every_sec": 10,
+    "debut_print_osc": true
+  },
+  "main_arduino": {
+    "port_com": "/dev/ttyACM0"
+  },
+  "hall_sensor_arduino": {
+    "port_com": "",
+    "baudrate": 9600
+  },
+  "bms_api": {
+    "ip": "0.0.0.0",
+    "port": 8888,
+    "debut_print_osc": true,
+    "power_input_on_230V_watt": 500
+  },
+  "info_climat_api": {
+    "authentification": "ABpXQFMtACICL1ZhBHIGL1gwUmcJfwEmA39VNlwyBHkHZlU4DmsHbFY8VClVegAxWHUPbF1qCDFRMlc3AHIFeQBhVzpTOQBnAmlWMgQ9Bi1YdFIvCTcBJgN%2FVTpcOQR5B2VVNg5qB3tWMVQ0VXsANlhpD25dfQgvUTNXNwBqBWIAYVc7UzMAagJlVjMEKwYtWG1SOwllATgDZlVhXDcEMQdlVWAOaQc3VjlUN1V7ADBYbg9tXWUIMFE6VzQAaAV5AHxXSlNDAH8CLVZ2BGEGdFh2UmcJaAFt",
+    "key": "5843c5d3fb19aea4ac430f5585a78c6d",
+    "refresh_rate_sec": 3600
+  },
+  "ephemeride_api": {
+    "refresh_rate_sec": 3600
+  },
+  "luminosite_scale": {
+    "luminosity_on_230V": 100,
+    "power_to_luminosity": "(0,100) (300,100)",
+    "current_cloud_reducer": "(0,0) (100,0)",
+    "battery_remaining_reducer": "(0,0) (100,0)",
+    "next_day_sunlight_hour_reducer": "(0,0) (24,0)"
+  },
+  "duty_cycle_duration_s": {
+    "power_to_duration_s": "(0,10.0) (100,10.0) (200,4.0) (300,0.6)",
+    "current_cloud_reducer": "(0,0) (100,0)",
+    "battery_remaining_reducer": "(0,0) (100,0)",
+    "next_day_sunlight_hour_reducer": "(0,0) (24,0)"
+  },
+  "duty_cycle_fill_percent": {
+    "power_to_fill_percent": "(0,40.0) (100,60.0) (200,30.0) (300,60)",
+    "current_cloud_reducer": "(0,0) (100,0)",
+    "battery_remaining_reducer": "(0,0) (100,0)",
+    "next_day_sunlight_hour_reducer": "(0,0) (24,0)"
+  },
+  "day_slice": {
+    "day": "[0, 40, 60, 94, 100]",
+    "night": "[0, 100]",
+    "force_envoie_day": -1
+  },
+  "playback": {
+    "activate": false,
+    "use_plugged_battery_data": false,
+    "starting_date_iso_format": "2026-07-27T16:02",
+    "playback_speed": 60.0
+  }
+}
