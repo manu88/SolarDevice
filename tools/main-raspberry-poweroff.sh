@@ -1,0 +1,1 @@
+ssh -t solar@10.0.01 "sudo poweroff"
