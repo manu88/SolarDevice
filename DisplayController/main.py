@@ -79,7 +79,9 @@ def main():
     ui = None
     if use_ui:
         ui = UILeds(num_leds=26)
-    run(serial_port=args.serialport, osc_addr="192.168.1.255", ui=ui)
+    osc_addr = "255.255.255.255"
+    print(f"Sending osc data on {osc_addr}")
+    run(serial_port=args.serialport, osc_addr=osc_addr, ui=ui)
 
 
 if __name__ == "__main__":
