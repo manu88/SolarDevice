@@ -567,7 +567,7 @@
 #X connect 4 0 1 0;
 #X connect 5 0 1 0;
 #X restore 469 77 pd map-audio-msgs;
-#N canvas 429 400 1136 670 map-anim-msgs 0;
+#N canvas 648 176 1136 670 map-anim-msgs 0;
 #X obj 204 7 inlet;
 #X obj 216 357 outlet;
 #X msg 530 224 sun-luminosity \$1;
@@ -583,6 +583,15 @@
 #X obj 211 45 spigot 1;
 #X obj 331 17 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
 #X obj 598 137 hsl 162 19 0 1 0 0 empty empty empty -2 -10 0 12 #fcfcfc #000000 #000000 0 1;
+#X text 828 362 day-states:;
+#X text 834 388 0 matin;
+#X text 834 414 1 midi;
+#X text 834 440 2 aprem;
+#X text 834 466 3 soir;
+#X text 833 488 4 nuit;
+#X msg 581 40 0.5;
+#X msg 621 38 0.25;
+#X msg 573 426 /day 0;
 #X connect 0 0 12 0;
 #X connect 2 0 1 0;
 #X connect 3 0 1 0;
@@ -600,6 +609,9 @@
 #X connect 12 0 1 0;
 #X connect 13 0 12 1;
 #X connect 14 0 2 0;
+#X connect 21 0 11 0;
+#X connect 22 0 11 0;
+#X connect 23 0 1 0;
 #X restore 265 104 pd map-anim-msgs;
 #X obj 173 433 route brightness;
 #N canvas 637 292 973 541 state-selector 0;

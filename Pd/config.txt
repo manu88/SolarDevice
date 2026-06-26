@@ -7,11 +7,12 @@ min-sun-luminosity 0.5;
 #Combien de pulses lors des animations à chaque heures?;
 hour-anim-cycles 2;
 #Les gradients sont définis du centre vers l'exterieur;
-matin-gradient 243 223 225 5 3 3;
-midi-gradient 127 127 60 5 5 5;
-aprem-gradient 191 221 220 5 5 5;
-soir-gradient 221 191 191 8 4 4;
-nuit-gradient 92 108 175 40 40 40;
+matin-gradient 230 216 220 5 3 3;
+midi-gradient 229 211 144 5 5 3;
+aprem-gradient 204 225 207 5 5 5;
+soir-gradient 204 193 205 8 4 4;
+nuit-gradient 92 108 175 10 10 10;
+#
 #Couleurs de soleil dans la journée;
 matin-soleil-couleur 255 240 245;
 midi-soleil-couleur 255 255 255;
