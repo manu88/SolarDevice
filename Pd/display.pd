@@ -30,10 +30,10 @@
 #X text 677 9 Hack pour Mirrorer les leds 'soleil' en position 0-1;
 #X obj 548 325 print;
 #X msg 110 283 disconnect;
-#X obj 471 25 route 0;
 #X obj 544 98 spigot 0;
 #X obj 591 42 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
 #X obj 559 122 print SETPIX1;
+#X obj 471 25 route 1;
 #X connect 0 0 10 0;
 #X connect 1 0 0 0;
 #X connect 2 0 1 0;
@@ -57,7 +57,7 @@
 #X connect 19 1 6 0;
 #X connect 19 2 8 0;
 #X connect 19 2 24 0;
-#X connect 19 2 31 0;
+#X connect 19 2 34 0;
 #X connect 19 3 20 0;
 #X connect 19 4 7 0;
 #X connect 20 0 1 0;
@@ -71,6 +71,6 @@
 #X connect 26 0 27 0;
 #X connect 27 0 1 0;
 #X connect 30 0 0 0;
-#X connect 31 0 32 0;
-#X connect 32 0 34 0;
-#X connect 33 0 32 1;
+#X connect 31 0 33 0;
+#X connect 32 0 31 1;
+#X connect 34 0 31 0;

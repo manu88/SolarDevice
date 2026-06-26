@@ -2,13 +2,13 @@
 #;
 # Attention: Ne pas oublier les `;` en fin de lignes -- même dans les commentaires!;
 #;
-led-controller-host 127.0.0.1;   
+led-controller-host 192.168.1.24;   
 min-sun-luminosity 150;
 #Combien de pulses lors des animations à chaque heures?;
 hour-anim-cycles 2;
 #Les gradients sont définis du centre vers l'exterieur;
 matin-gradient 243 223 225 248 244 248;
-midi-gradient 255 255 120 128 128 60;
+midi-gradient 127 127 60 30 30 20;
 aprem-gradient 191 221 220 105 107 105;
 soir-gradient 221 191 191 105 107 105;
 nuit-gradient 92 108 175 40 40 40;
