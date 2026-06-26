@@ -13,5 +13,8 @@ midi-gradient 255 255 120 128 128 60;
 aprem-gradient 191 221 220 105 107 105;
 soir-gradient 221 191 191 105 107 105;
 nuit-gradient 92 108 175 40 40 40;
-log-msgs 0;
+start-animation-color 255 255 255;
+#;
+#Debug section;
+log-msgs 1;
 
