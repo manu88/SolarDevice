@@ -18,10 +18,6 @@ Programme d'interface entre Pd (via OSC) et les Leds (via arduino). Voir le [REA
 
 patches pure-data de controle. Voir le [README](Pd/README.md)
 
-## Météo
-
-Programme d'interface à l'API infoclimat et Pd (via OSC)
-
 ## Arduino
 
 Contient les firmwares
