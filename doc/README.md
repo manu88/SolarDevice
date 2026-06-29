@@ -1,5 +1,33 @@
 # Documentation
 
+## Images disque rasbperry-Pi
+
+### Backup d'une carte SD
+
+Instructions pour macos, la commande `dd` fonctionnera sur Linux, mais il est nécessaire d'adapter la partie `diskutil` qui ne sert qu'à déterminer le nom du disque.
+
+```bash
+> diskutil list
+
+
+/dev/disk9 (external, physical):
+   #:                       TYPE NAME                    SIZE       IDENTIFIER
+   0:     FDisk_partition_scheme                        *62.6 GB    disk9
+   1:             Windows_FAT_32 bootfs                  536.9 MB   disk9s1
+   2:                      Linux                         62.1 GB    disk9s2
+
+# le disque à utiliser ici est le numéro 9
+# ne pas oublier d'ajouter le 'r' avant disk9: disk9 -> /dev/rdisk9
+# of: chemin pour créer l'image disque
+sudo dd if=/dev/rdisk9 of=/Users/manueldeneu/Documents/dev/SolarDevice/Backups/bms.img bs=1m
+# cette commande bloque le terminal jusqu'à la complétion de la copie
+```
+
+### Restauration d'une carte SD
+Utiliser l'application [Raspberry-Pi Imager](https://www.raspberrypi.com/software) et 
+
+
+
 ## Configuration
 
 ### Configuration des paramètres d'animation de puredata
