@@ -1,4 +1,4 @@
-#N canvas 213 218 1373 781 12;
+#N canvas 213 308 1373 781 12;
 #X msg -413 68 \$1;
 #X obj -413 132 mod 12;
 #X obj -496 38 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
@@ -351,7 +351,6 @@
 #X obj -40 159 change;
 #X obj -176 180 t f f;
 #X msg -40 188 0;
-#X obj -130 622 print TEST;
 #X obj -13 253 print RESET MENDO STATES;
 #X connect 0 0 1 0;
 #X connect 1 0 28 1;
@@ -459,7 +458,7 @@
 #X connect 77 0 38 0;
 #X connect 77 0 37 0;
 #X connect 77 0 36 0;
-#X connect 77 0 99 0;
+#X connect 77 0 98 0;
 #X connect 79 0 2 0;
 #X connect 79 1 0 0;
 #X connect 79 2 85 0;
@@ -489,7 +488,6 @@
 #X connect 90 0 89 0;
 #X connect 90 1 91 1;
 #X connect 91 0 82 0;
-#X connect 91 0 98 0;
 #X connect 93 0 94 0;
 #X connect 94 0 84 1;
 #X connect 95 0 97 0;
