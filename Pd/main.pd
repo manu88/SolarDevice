@@ -666,6 +666,8 @@
 #X msg 307 302 1;
 #X obj 456 432 tgl 19 0 empty empty doing\ hourly\ anim 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
 #X msg 127 800 servo 1;
+#X obj 574 542 route servo;
+#X msg 675 584 servo \$1;
 #X connect 2 0 23 1;
 #X connect 3 0 5 0;
 #X connect 4 0 1 0;
@@ -677,7 +679,7 @@
 #X connect 10 0 1 0;
 #X connect 11 0 10 1;
 #X connect 12 0 2 3;
-#X connect 12 1 23 1;
+#X connect 12 1 36 0;
 #X connect 13 0 12 1;
 #X connect 14 0 16 0;
 #X connect 15 0 13 0;
@@ -709,3 +711,6 @@
 #X connect 32 0 23 0;
 #X connect 33 0 34 0;
 #X connect 35 0 1 0;
+#X connect 36 0 37 0;
+#X connect 36 1 23 1;
+#X connect 37 0 4 0;
