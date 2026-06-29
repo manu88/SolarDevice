@@ -360,10 +360,12 @@
 #X obj 88 298 delay 1000;
 #X obj 470 216 change;
 #X obj 325 208 change;
-#X obj 252 426 outlet;
+#X obj 252 469 outlet;
 #X text 320 417 ramp time;
 #X obj 258 391 max 100;
-#X obj 546 281 * 1;
+#X obj 546 281 / 2;
+#X obj 269 440 min 1000;
+#X obj 370 482 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
 #X connect 0 0 9 0;
 #X connect 1 0 3 0;
 #X connect 2 0 8 0;
@@ -382,8 +384,10 @@
 #X connect 13 0 0 1;
 #X connect 14 0 12 1;
 #X connect 14 0 18 0;
-#X connect 17 0 15 0;
+#X connect 17 0 19 0;
 #X connect 18 0 17 0;
+#X connect 19 0 15 0;
+#X connect 19 0 20 0;
 #X restore 64 75 pd pulse-beat;
 #X obj 63 49 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
 #X obj 154 161 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
@@ -403,7 +407,7 @@
 #X obj 603 402 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
 #X obj 582 282 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
 #X obj 594 322 pow 3;
-#X obj 68 215 pow 3;
+#X obj 114 215 pow 2;
 #X connect 0 0 4 1;
 #X connect 0 0 20 0;
 #X connect 4 0 2 0;
