@@ -24,9 +24,8 @@ sudo dd if=/dev/rdisk9 of=/Users/manueldeneu/Documents/dev/SolarDevice/Backups/b
 ```
 
 ### Restauration d'une carte SD
-Utiliser l'application [Raspberry-Pi Imager](https://www.raspberrypi.com/software) et 
 
-
+Utiliser l'application [Raspberry-Pi Imager](https://www.raspberrypi.com/software) et
 
 ## Configuration
 
