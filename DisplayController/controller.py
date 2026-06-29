@@ -75,6 +75,7 @@ class Controller:
         self.dispatcher.map("/dump", self.osc_dump)
         self.dispatcher.map("/dump_arduino", self.osc_dump_arduino)
         self.dispatcher.map("/update", self.osc_update)
+        self.dispatcher.map("/kick", self.osc_kick_servo)
         self.server = osc_server.ThreadingOSCUDPServer(
             ("", 8010), self.dispatcher)
 
@@ -115,6 +116,12 @@ class Controller:
     def osc_dump_arduino(self, args):
         if self.arduino:
             self._send_arduino(cmd=0XBD, buffer=[0])
+        else:
+            print("No serial port set for arduino")
+
+    def osc_kick_servo(self, args, index: int):
+        if self.arduino:
+            self._send_arduino(cmd=0XAF, buffer=bytes([index]))
         else:
             print("No serial port set for arduino")
 
@@ -198,11 +205,15 @@ class Controller:
             self.firmware_version = ver
             check_firmware_version(ver)
         if line.startswith("S") and len(line) > 2 and line[0].isdigit:
+            last_motor_id = self.sensors.lst_cmd_motor_id
             received_idx = self.sensors.on_sensor_line(line)
             # if speed < 3:
             for idx in received_idx:
                 self.osc_client.send_message(
                     "/sensor", [idx, self.sensors.sensors[idx], self.sensors.is_rotating[idx]])
+
+            if last_motor_id != self.sensors.lst_cmd_motor_id:
+                self.osc_client.send_message("/motor_ack", [])
 
         else:
             print(line)

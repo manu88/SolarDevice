@@ -7,7 +7,7 @@
 #error ("Invalid Fastled version, expected 3001000")
 #endif
 
-#define FIRMWARE_VERSION "0.1.0"
+#define FIRMWARE_VERSION "0.1.1"
 
 unsigned long numCRCErrors = 0;
 
@@ -47,6 +47,7 @@ typedef struct {
   uint8_t boardId;
   float v[3];
   uint8_t isRotating[3];
+  uint8_t cmdMotorId;
   uint8_t end;
 } SensorMsg;
 }
@@ -63,6 +64,8 @@ void setup() {
   setupSensors();
 
   setAll(0, 0, 0);
+  pinMode(2, OUTPUT);
+  digitalWrite(2, HIGH);
 
   Serial.println("Connected");
   Serial.print("Version: ");
@@ -203,6 +206,12 @@ void processDump() {
   Serial.println(numCRCErrors);
 }
 
+void processStartMotor() {
+  digitalWrite(2, LOW);
+  delay(10);
+  digitalWrite(2, HIGH);
+}
+
 void processCmd() {
   switch (currentCmd) {
   case CmdId_Invalid:
@@ -210,6 +219,10 @@ void processCmd() {
     return;
   case CmdId_Leds:
     processCmdLed();
+    return;
+  case CmdId_StartMotor:
+    processStartMotor();
+    Serial.println("Start motor");
     return;
   case CmdId_Dump:
     processDump();
@@ -236,7 +249,7 @@ void processCmdLed() {
 }
 
 void sendASCIIMsgSensor(uint8_t boardId, const float *v,
-                        const int isRotating[3]) {
+                        const int isRotating[3], uint8_t lastCmd) {
   Serial.print("S");
   Serial.print(boardId);
   Serial.print(" ");
@@ -251,12 +264,16 @@ void sendASCIIMsgSensor(uint8_t boardId, const float *v,
   Serial.print(v[2]);
   Serial.print(" ");
   Serial.print(isRotating[2], 3);
+  Serial.print(" ");
+  Serial.print(lastCmd);
   Serial.println();
 }
 
+static uint8_t cmdMotorId;
 void relayFinalData() {
   static uint8_t readerState = 0;
   static uint8_t boardId = -1;
+
   static uint8_t currentFloatReadPos = 0;
   static float v[3] = {0};
   static int isRotating[3] = {0};
@@ -308,11 +325,19 @@ void relayFinalData() {
       }
       break;
     }
-    case 4: // end val;
+    case 4: {
+      int v = inSerial.read();
+      if (v == -1) {
+        return;
+      }
+      cmdMotorId = v;
+      readerState = 5;
+    }
+    case 5: // end val;
     {
       uint8_t inByte = inSerial.read();
       if (inByte == END_VAL) {
-        sendASCIIMsgSensor(boardId, v, isRotating);
+        sendASCIIMsgSensor(boardId, v, isRotating, cmdMotorId);
         readerState = 0;
         boardId = -1;
         currentFloatReadPos = 0;

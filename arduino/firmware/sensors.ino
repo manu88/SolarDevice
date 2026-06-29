@@ -74,9 +74,9 @@ void processSensor(int sensorId) {
     reading->lastIdleCheckTime = now;
     if (reading->inPeak == 0) {
       reading->inPeak = 1;
-      if (reading->revStartTime > 0 && reading->revStartTime != now ) {
+      if (reading->revStartTime > 0 && reading->revStartTime != now) {
         unsigned long elapsed = now - reading->revStartTime;
-        float speed =1000.f / elapsed;
+        float speed = 1000.f / elapsed;
         if (speed < START_MAX_SPEED) {
           reading->speed = speed;
           if (reading->rotatingCount < MIN_ROTATIONS) {
@@ -107,11 +107,10 @@ void processSensor(int sensorId) {
   }
 }
 
-
-
-
+extern uint8_t cmdMotorId;
 void sendSensors() {
   float v[3] = {sensors[0].speed, sensors[1].speed, sensors[2].speed};
-  int r[3] = {sensors[0].isRotating, sensors[1].isRotating, sensors[2].isRotating};
-  sendASCIIMsgSensor(0, v, r);
+  int r[3] = {sensors[0].isRotating, sensors[1].isRotating,
+              sensors[2].isRotating};
+  sendASCIIMsgSensor(0, v, r, cmdMotorId);
 }

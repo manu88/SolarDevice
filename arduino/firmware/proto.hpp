@@ -8,7 +8,7 @@ typedef struct {
   uint8_t start;
   uint8_t cmd;
   uint8_t payloadSize;
-  //uint8_t payload[payloadSize];
+  // uint8_t payload[payloadSize];
   uint8_t crc;
 } ComHeader;
 
@@ -30,6 +30,7 @@ typedef enum {
   CmdId_Invalid = 0,
   CmdId_Leds = 0XBC,
   CmdId_Dump = 0XBD,
+  CmdId_StartMotor = 0XAF,
 } CmdId;
 
 } // extern "C"

@@ -1,8 +1,13 @@
 /// SENDER Code
 
 #include <AltSoftSerial.h>
+#include <PWMServo.h>
 #include <SoftwareSerial.h>
-#define BOARD_ID 3
+#define BOARD_ID 1
+
+#define SERVO_PIN SERVO_PIN_B // PIN 10
+PWMServo myServo;
+uint8_t currentCmdMotorId = 0;
 
 // software serial #1: RX = digital pin 7, TX = digital pin 8
 SoftwareSerial outSerial(7, 8);
@@ -26,6 +31,7 @@ typedef struct {
   uint8_t boardId;
   float v[3];
   uint8_t isRotating[3];
+  uint8_t cmdMotorId;
   uint8_t end;
 } SensorMsg;
 }
@@ -38,12 +44,21 @@ void setup() {
   inSerial.begin(19200);
   inSerial.listen();
 
+  setupServo();
+
+  pinMode(2, INPUT_PULLUP);
+
 #ifdef SERIAL_DEBUG
   Serial.begin(9600);
   Serial.print("SensorSender BoardId=");
   Serial.println(BOARD_ID);
 #endif
   delay(sendSensorsEveryMs / 2 + random(sendSensorsEveryMs / 4));
+}
+
+void setupServo() {
+  myServo.attach(SERVO_PIN); // Min 500µs, max 2500µs
+  myServo.write(90);
 }
 
 void relayData() {
@@ -128,7 +143,19 @@ void relayData() {
   }
 }
 
+static unsigned long servo_nextTimeStop = 0;
+static int servo_valueToSet = -1;
+
+int servoCmdInput = 0;
 void loop() {
+  if (digitalRead(2) == 0 && servoCmdInput == 0) {
+    Serial.println("INPUT LOW");
+    servoCmdInput = 1;
+    servo_valueToSet = 70;
+    servo_nextTimeStop = millis() + 1000;
+    currentCmdMotorId += 1;
+  }
+  loopServo();
   relayData();
   handleLoopSensors();
 }
@@ -147,5 +174,31 @@ void handleLoopSensors() {
     ledState = !ledState;
     sendSensors();
     lastTimeSentSensors = now;
+  }
+}
+
+// 70 1000
+void loopServo() {
+
+  if (Serial.available()) {
+    int value = Serial.parseInt();
+    int wait = Serial.parseInt();
+    Serial.print("value: ");
+    Serial.print(value);
+    Serial.print(" wait:");
+    Serial.println(wait);
+    servo_valueToSet = value;
+    servo_nextTimeStop = millis() + wait;
+    currentCmdMotorId += 1;
+  }
+
+  if (servo_nextTimeStop != 0 && millis() >= servo_nextTimeStop) {
+    Serial.println("Stop");
+    servoCmdInput = 0;
+    servo_nextTimeStop = 0;
+    servo_valueToSet = -1;
+    myServo.write(90);
+  } else if (servo_valueToSet != -1) {
+    myServo.write(servo_valueToSet);
   }
 }

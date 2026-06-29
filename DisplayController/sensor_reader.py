@@ -15,6 +15,7 @@ class SensorReader:
         self.board_ids: Dict[int, float] = {
             0: 0, 1: 0, 2: 0, 3: 0}
         self.unresponsive_boards: Set[int] = set([0, 1, 2, 3])
+        self.lst_cmd_motor_id = 0
 
     def _check_boards_ok(self):
         now = time.time()
@@ -33,7 +34,7 @@ class SensorReader:
     def on_sensor_line(self, line: str) -> List[int]:
         ret = []
         toks = line.split(" ")
-        if len(toks) != 7:
+        if len(toks) != 8:
             print(f"Skipping '{line}': {len(toks)}")
             return []
         if toks[0][0] != "S":
@@ -50,9 +51,14 @@ class SensorReader:
 
         # format float byte float byte float byte
         values = toks[1:]
-        if len(values) != 6:
-            print(f"expected 6 values, got {len(values)}")
-        v0, r0, v1, r1, v2, r2 = toks[1:]
+        if len(values) != 7:
+            print(f"expected 7 values, got {len(values)}")
+        v0, r0, v1, r1, v2, r2, lst_cmd_id = toks[1:]
+
+        if lst_cmd_id != self.lst_cmd_motor_id:
+            print(f"Command id changed {lst_cmd_id}")
+            self.lst_cmd_motor_id = lst_cmd_id
+
         idx_start = board_id * 3
         if idx_start < 0 or idx_start >= NUM_SENSORS:
             print(f"invalid idx_start {idx_start}")

@@ -118,6 +118,7 @@ void sendMsgSensor(uint8_t boardId, const float *v, const int isRotating[3]) {
   msg.isRotating[0] = isRotating[0];
   msg.isRotating[1] = isRotating[1];
   msg.isRotating[2] = isRotating[2];
+  msg.cmdMotorId =  currentCmdMotorId;
   outSerial.write((const uint8_t *)&msg, sizeof(SensorMsg));
 }
 
@@ -145,6 +146,6 @@ void sendSensors() {
   int r[3] = {sensors[0].isRotating, sensors[1].isRotating, sensors[2].isRotating};
   sendMsgSensor(BOARD_ID, v,r);
 #ifdef SERIAL_DEBUG
-  sendASCIIMsgSensor(BOARD_ID, v, r);
+  //sendASCIIMsgSensor(BOARD_ID, v, r);
 #endif
 }
