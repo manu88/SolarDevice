@@ -79,7 +79,7 @@ def main():
     ui = None
     if use_ui:
         ui = UILeds(num_leds=26)
-    osc_addr = "255.255.255.255"
+    osc_addr = "10.0.0.255"
     print(f"Sending osc data on {osc_addr}")
     run(serial_port=args.serialport, osc_addr=osc_addr, ui=ui)
 
