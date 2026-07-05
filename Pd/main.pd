@@ -611,7 +611,7 @@
 #X obj 576 232 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
 #X obj 566 201 == 4;
 #X obj 506 236 spigot 0;
-#X msg 76 12 /day 4;
+#X msg 76 12 /day 3;
 #X connect 0 0 9 0;
 #X connect 2 0 1 0;
 #X connect 3 0 1 0;
