@@ -599,6 +599,8 @@
 #X obj 402 161 -;
 #X msg 402 136 1 \$1;
 #X obj 404 182 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
+#X msg 671 39 0;
+#X msg 778 238 /duty_cycle 10000 1000;
 #X connect 0 0 10 0;
 #X connect 2 0 1 0;
 #X connect 3 0 1 0;
@@ -622,6 +624,8 @@
 #X connect 25 0 24 0;
 #X connect 26 0 3 0;
 #X connect 26 0 2 0;
+#X connect 27 0 9 0;
+#X connect 28 0 1 0;
 #X restore 265 104 pd map-anim-msgs;
 #X obj 173 433 route brightness;
 #N canvas 637 292 973 541 state-selector 0;
