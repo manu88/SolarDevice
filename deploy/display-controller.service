@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=python3 main.py /dev/ttyACM0
+ExecStart=python3 -u  main.py /dev/ttyACM0
 Restart=on-failure
 RestartSec=10s
 User=solar
