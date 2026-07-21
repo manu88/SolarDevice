@@ -62,6 +62,8 @@ class Controller:
         self.read_thread = None
         if serial_port:
             self.read_thread = Thread(target=self._run_thread)
+            self.watchdog_thread = Thread(target=self._run_watchdog)
+        self.watchdog_flag = 0
         self.pack_com_str = ">BBB"
 
         self._clear_buffer()
@@ -220,7 +222,7 @@ class Controller:
 
     def read_arduino_msg(self) -> bool:
         ret = False
-        while self.arduino.in_waiting:
+        if self.arduino.in_waiting:
             lines = self.arduino.readlines()
             if len(lines) > 0:
                 ret = True
@@ -238,21 +240,37 @@ class Controller:
         print("Serving on {}".format(self.server.server_address))
         if self.read_thread:
             self.read_thread.start()
+        if self.watchdog_thread:
+            self.watchdog_thread.start()
         self.server.serve_forever()
 
     def stop(self):
         print("Stopping")
         if self.read_thread:
             self.read_thread.join()
+        if self.watchdog_thread:
+            self.watchdog_thread.join()
         if self.arduino:
             self.arduino.close()
         # ugly but c'est la vie
         sys.exit(0)
 
+    def _run_watchdog(self):
+        acc = 0
+        while self._should_stop is False:
+            time.sleep(2)
+            if self.watchdog_flag == 1:
+                acc += 1
+            else:
+                acc = 0
+            print(f"acc flag = {acc}")
+
     def _run_thread(self):
         received_nothing_count = 0
         while self._should_stop is False:
+            self.watchdog_flag = 1
             received_something = self.read_arduino_msg()
+            self.watchdog_flag = 0
             if received_something:
                 received_nothing_count = 0
             else:
