@@ -255,6 +255,13 @@ class Controller:
         # ugly but c'est la vie
         sys.exit(0)
 
+    def _reset_arduino(self):
+        print("reset arduino: assert dtr")
+        self.arduino.dtr = True
+        time.sleep(1)
+        print("reset arduino: unset dtr")
+        self.arduino.dtr = False
+
     def _run_watchdog(self):
         acc = 0
         while self._should_stop is False:
@@ -264,6 +271,9 @@ class Controller:
             else:
                 acc = 0
             print(f"acc flag = {acc}")
+            if acc >= 2:
+                self._reset_arduino()
+                acc = 0
 
     def _run_thread(self):
         received_nothing_count = 0
