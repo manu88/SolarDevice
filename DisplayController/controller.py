@@ -270,8 +270,8 @@ class Controller:
                 acc += 1
             else:
                 acc = 0
-            print(f"acc flag = {acc}")
             if acc >= 2:
+                print("Watchdog: reset now")
                 self._reset_arduino()
                 acc = 0
 
