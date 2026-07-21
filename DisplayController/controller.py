@@ -256,11 +256,12 @@ class Controller:
         sys.exit(0)
 
     def _reset_arduino(self):
-        print("reset arduino: assert dtr")
-        self.arduino.dtr = True
-        time.sleep(1)
-        print("reset arduino: unset dtr")
-        self.arduino.dtr = False
+        with self.arduino_lock:
+            print("reset arduino: assert dtr")
+            self.arduino.dtr = True
+            time.sleep(1)
+            print("reset arduino: unset dtr")
+            self.arduino.dtr = False
 
     def _run_watchdog(self):
         acc = 0
