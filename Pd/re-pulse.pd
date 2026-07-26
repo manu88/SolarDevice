@@ -389,6 +389,7 @@
 #X obj -274 704 print GOT CMD ACK;
 #X obj -55 640 metro 2000;
 #X obj -252 444 print TEST-STATE;
+#X obj -290 386 print mendo-speed;
 #X connect 0 0 1 0;
 #X connect 1 0 28 1;
 #X connect 1 0 95 0;
@@ -516,6 +517,7 @@
 #X connect 83 0 110 0;
 #X connect 83 1 107 0;
 #X connect 84 0 83 0;
+#X connect 84 0 111 0;
 #X connect 85 0 89 0;
 #X connect 86 0 87 0;
 #X connect 86 0 91 0;
