@@ -60,6 +60,7 @@ class Controller:
             self.firmware_version = "STUB - no arduino"
         self._should_stop = False
         self.read_thread = None
+        self.watchdog_thread = None
         if serial_port:
             self.read_thread = Thread(target=self._run_thread)
             self.watchdog_thread = Thread(target=self._run_watchdog)
