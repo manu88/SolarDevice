@@ -70,6 +70,7 @@ class Controller:
 
         self.dispatcher = Dispatcher()
         self.dispatcher.map("/ping", self.osc_ping)
+        self.dispatcher.map("/kill", self.osc_kill)
         self.dispatcher.map("/pix1", self.osc_set_pix1)
         self.dispatcher.map("/all", self.osc_set_all)
         self.dispatcher.map("/clear1", self.osc_clear1)
@@ -103,6 +104,9 @@ class Controller:
         assert (self.serial_port)
         self.arduino = serial.Serial(
             port=self.serial_port, baudrate=115200, timeout=.1)
+
+    def osc_kill(self, args):
+        self._reset_arduino()
 
     def osc_ping(self, args):
         print(f"ping {args}")
@@ -256,12 +260,14 @@ class Controller:
         sys.exit(0)
 
     def _reset_arduino(self):
-        with self.arduino_lock:
-            print("reset arduino: assert dtr")
-            self.arduino.dtr = True
-            time.sleep(1)
-            print("reset arduino: unset dtr")
-            self.arduino.dtr = False
+        print("Killing controller")
+        os.kill(os.getpid(), signal.SIGKILL)
+        # with self.arduino_lock:
+        #    print("reset arduino: assert dtr")
+        #    self.arduino.dtr = True
+        #    time.sleep(1)
+        #    print("reset arduino: unset dtr")
+        #    self.arduino.dtr = False
 
     def _run_watchdog(self):
         acc = 0
