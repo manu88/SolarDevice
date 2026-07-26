@@ -1,0 +1,13 @@
+#N canvas 534 211 425 310 12;
+#X obj 31 205 iemnet/udpsend;
+#X obj 174 27 loadbang;
+#X obj 172 68 delay 1000;
+#X msg 32 172 connect 127.0.0.1 8010;
+#X obj 215 174 osc/packOSC;
+#X msg 139 107 send /duty_cycle2 2000 3000;
+#X connect 1 0 3 0;
+#X connect 1 0 2 0;
+#X connect 2 0 5 0;
+#X connect 3 0 0 0;
+#X connect 4 0 0 0;
+#X connect 5 0 4 0;
