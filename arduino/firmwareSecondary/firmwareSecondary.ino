@@ -1,17 +1,16 @@
 /*
 Firmware de control des Servos et lecture des capteurs hall.
-L'identifiant de la carte est faite 
+L'identifiant de la carte est faite
 */
 #include <Servo.h>
 
-#define BOARD_ID 1
+int boardID = 1;
 // Servos
 Servo servos[3];
 
 const int servo0Pin = 3;
 const int servo1Pin = 5;
 const int servo2Pin = 6;
-
 
 // sensors
 
@@ -28,7 +27,24 @@ void setup() {
   servos[2].attach(servo2Pin);
 
   setupSensors();
-  
+
+  pinMode(A3, INPUT_PULLUP);
+  pinMode(A4, INPUT_PULLUP);
+  int v0 = !digitalRead(A3);
+  int v1 = !digitalRead(A4);
+
+  Serial.print(v0);
+  Serial.print(" - ");
+  Serial.print(v1);
+
+  Serial.println();
+  if (v0 == 1) {
+    boardID = 2;
+  } else if (v1 == 1) {
+    boardID = 3;
+  }
+  Serial.print("BoardId=");
+  Serial.println(boardID);
 }
 
 void handleLoopSensors() {
@@ -40,18 +56,18 @@ void handleLoopSensors() {
 
   now = millis();
   if (now - lastTimeSentSensors >= sendSensorsEveryMs) {
-    sendSensors();
+    sendSensors(boardID);
     lastTimeSentSensors = now;
   }
 }
 
 void loop() {
-   handleLoopSensors();
+  handleLoopSensors();
   if (Serial.available()) {
     int value = Serial.parseInt();
     Serial.println(value);
-    if(value >=1 && value <4){
-      int index = value-1;
+    if (value >= 1 && value < 4) {
+      int index = value - 1;
       Serial.print("Start motor ");
       Serial.println(index);
       servos[index].write(60);
@@ -61,5 +77,4 @@ void loop() {
       servos[index].write(90);
     }
   }
-  
 }

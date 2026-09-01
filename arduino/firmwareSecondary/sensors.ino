@@ -74,7 +74,7 @@ void processSensor(int sensorId) {
     reading->lastIdleCheckTime = now;
     if (reading->inPeak == 0) {
       reading->inPeak = 1;
-      if (reading->revStartTime > 0 && reading->revStartTime != now ) {
+      if (reading->revStartTime > 0 && reading->revStartTime != now) {
         unsigned long elapsed = now - reading->revStartTime;
         float speed = 1000.f / elapsed;
         if (speed < START_MAX_SPEED) {
@@ -107,7 +107,8 @@ void processSensor(int sensorId) {
   }
 }
 
-void sendASCIIMsgSensor(uint8_t boardId, const float *v, const int isRotating[3]) {
+void sendASCIIMsgSensor(uint8_t boardId, const float *v,
+                        const int isRotating[3]) {
   Serial.print("S");
   Serial.print(boardId);
   Serial.print(" ");
@@ -125,13 +126,9 @@ void sendASCIIMsgSensor(uint8_t boardId, const float *v, const int isRotating[3]
   Serial.println();
 }
 
-
-void sendSensors() {
+void sendSensors(int boardID) {
   float v[3] = {sensors[0].speed, sensors[1].speed, sensors[2].speed};
-  int r[3] = {sensors[0].isRotating, sensors[1].isRotating, sensors[2].isRotating};
-
-  //sendMsgSensor(BOARD_ID, v,r);
-
-  sendASCIIMsgSensor(BOARD_ID, v, r);
-
+  int r[3] = {sensors[0].isRotating, sensors[1].isRotating,
+              sensors[2].isRotating};
+  sendASCIIMsgSensor(boardID, v, r);
 }
