@@ -4,7 +4,9 @@ from threading import Thread
 from typing import Optional
 from utils import serial_ports
 from controller import Controller
+from secondary_controller import SecondaryController
 from ui import UILeds
+from osc_server import OSCServer
 import json
 
 
@@ -22,19 +24,28 @@ def controller_loop(controller: Controller):
         controller.stop()
 
 
-def run(serial_port: Optional[str], osc_addr: str, ui: Optional[UILeds]):
-    controller = Controller(serial_port=serial_port, osc_addr=osc_addr, ui=ui)
+def run(serial_port: Optional[str], osc_client_addr: str, ui: Optional[UILeds]):
 
-    if ui:
-        thd = Thread(target=controller_loop, args=(controller,))
-        thd.start()
-        time.sleep(1)
-        print("Start UI loop")
-        ui.mainloop()
-        controller.stop()
-        thd.join()
-    else:
-        controller_loop(controller)
+    # controller = Controller(serial_port=serial_port, osc_addr=osc_addr, ui=ui)
+    secondary_controller = SecondaryController(["/dev/cu.usbmodem213101",
+                                                "/dev/cu.usbmodem1401"])
+
+    server = OSCServer(osc_client_addr=osc_client_addr)
+    server.secondary_ctlr = secondary_controller
+    secondary_controller.osc_server = server
+
+    secondary_controller.start()
+    server.start()
+#    if ui:
+#        thd = Thread(target=controller_loop, args=(controller,))
+#        thd.start()
+#        time.sleep(1)
+#        print("Start UI loop")
+#        ui.mainloop()
+#        controller.stop()
+#        thd.join()
+#    else:
+#        controller_loop(controller)
 
 
 parser = argparse.ArgumentParser(
@@ -79,9 +90,9 @@ def main():
     ui = None
     if use_ui:
         ui = UILeds(num_leds=26)
-    osc_addr = "10.0.0.255"
+    osc_addr = "127.0.0.1"
     print(f"Sending osc data on {osc_addr}")
-    run(serial_port=args.serialport, osc_addr=osc_addr, ui=ui)
+    run(serial_port=args.serialport, osc_client_addr=osc_addr, ui=ui)
 
 
 if __name__ == "__main__":
