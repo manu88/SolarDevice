@@ -1,11 +1,13 @@
 import serial
-from typing import Dict
+from typing import Dict, Set
 import traceback
 import time
 from threading import Thread
 from sensor_reader import SensorReader
 from osc_server_interface import OSCServerInterface
 from display_controller import DisplayController
+
+BAUD_RATE = 115200
 
 
 class ArduinosController:
@@ -15,11 +17,13 @@ class ArduinosController:
         self.sensors = SensorReader()
         self._should_stop = False
 
+        self.arduinos_to_remove_from_list: Set[str] = set()
+        self.arduino_ports_to_open: Set[str] = set()
         self.arduinos: Dict[str, serial.Serial] = dict()
-        for ports in serial_ports:
+        for port in serial_ports:
             arduino = serial.Serial(
-                port=ports, baudrate=115200, timeout=.1)
-            self.arduinos[ports] = arduino
+                port=port, baudrate=BAUD_RATE, timeout=.1)
+            self.arduinos[port] = arduino
         self.board_ids: Dict[int, serial.Serial] = dict()
 
         self.read_thread = Thread(target=self._run_thread)
@@ -73,28 +77,62 @@ class ArduinosController:
 
         return ret
 
+    def get_board_id_from_arduino(self, arduino: serial.Serial) -> int:
+        for key, val in self.board_ids.items():
+            if val == arduino:
+                return key
+        return -1
+
     def _check_arduino(self, arduino: serial.Serial):
-        received_nothing_count = 0
+        try:
+            self.read_arduino_msg(arduino)
+        except OSError as e:
+            board_id = self.get_board_id_from_arduino(arduino)
+            print(
+                f"Got OSError {e} for boar_id={board_id} port={arduino.port}")
+            if board_id != -1:
+                self._remove_board(board_id, arduino)
 
-        received_something = self.read_arduino_msg(arduino)
-        if received_something:
-            received_nothing_count = 0
-        else:
-            received_nothing_count += 1
-            if received_nothing_count > 3:
-                print("-> Reopen arduino")
-                # with self.arduino_lock:
-                #    self.arduino.close()
-                #    self._open_arduino()
-                print("<- Done Reopen arduino")
+    def _remove_board(self, board_id: int, arduino: serial.Serial):
+        print(
+            f"remove port={arduino.port} boar_id={board_id} from board_ids")
+        del self.board_ids[board_id]
+        if board_id == 0:
+            self.display_ctrl.arduino = None
+        print(f"Add {arduino.port} to open list")
+        self.arduino_ports_to_open.add(arduino.port)
+        self.arduinos_to_remove_from_list.add(arduino.port)
 
-            time.sleep(1)
+    def _try_open(self, port: str) -> bool:
+        print(f"Try reopen {port}")
+        try:
+            arduino = serial.Serial(
+                port=port, baudrate=BAUD_RATE, timeout=.1)
+        except Exception:
+            return False
+        self.arduinos[port] = arduino
+        return True
+
+    def _try_reopen_closed(self):
+        ok_list = []
+        for port in self.arduino_ports_to_open:
+            if self._try_open(port):
+                ok_list.append(port)
+        for port in ok_list:
+            self.arduino_ports_to_open.remove(port)
 
     def _run_thread(self):
         print("SecondaryController: start thread")
         while self._should_stop is False:
+            self._try_reopen_closed()
+
             for arduino in self.arduinos.values():
                 self._check_arduino(arduino)
+
+            for port in self.arduinos_to_remove_from_list:
+                del self.arduinos[port]
+            self.arduinos_to_remove_from_list.clear()
+            time.sleep(1)
 
         print("Cleanup")
         for arduino in self.arduinos.values():

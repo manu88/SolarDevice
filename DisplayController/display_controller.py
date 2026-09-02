@@ -57,8 +57,6 @@ class DisplayController:
             self.buffer1[(i*3)+2] = b
 
     def _send_arduino(self, cmd: int, buffer):
-        if self.arduino is None:
-            return
         crc: int = checksum(buffer)
         assert 0 <= crc < 256
 
