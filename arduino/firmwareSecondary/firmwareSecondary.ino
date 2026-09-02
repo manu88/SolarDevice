@@ -24,7 +24,7 @@ unsigned long lastTimeReadSensors = 0;
 unsigned long lastTimeSentSensors = 0;
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   servos[0].attach(servo0Pin);
   servos[1].attach(servo1Pin);
   servos[2].attach(servo2Pin);

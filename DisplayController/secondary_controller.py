@@ -16,7 +16,7 @@ class SecondaryController:
         self.arduinos: Dict[str, serial.Serial] = dict()
         for ports in serial_ports:
             arduino = serial.Serial(
-                port=ports, baudrate=9600, timeout=.1)
+                port=ports, baudrate=115200, timeout=.1)
             self.arduinos[ports] = arduino
         self.board_ids: Dict[int, serial.Serial] = dict()
 
