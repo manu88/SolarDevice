@@ -1,7 +1,6 @@
-import time
+
 import argparse
-from threading import Thread
-from typing import Optional
+from typing import Optional, List
 from utils import serial_ports
 from display_controller import DisplayController
 from arduinos_controller import ArduinosController
@@ -16,18 +15,10 @@ def list_serial_ports():
         print(p)
 
 
-def controller_loop(controller: DisplayController):
-    print("Start controller_loop")
-    try:
-        controller.start()
-    except KeyboardInterrupt:
-        controller.stop()
-
-
-def run(serial_port: Optional[str], osc_client_addr: str, ui: Optional[UILeds]):
+def run(serial_ports: List[str], osc_client_addr: str, ui: Optional[UILeds]):
     display_controller = DisplayController(ui=ui)
-    arduinos_controller = ArduinosController(display_controller, ["/dev/cu.usbmodem213101",
-                                                                  "/dev/cu.usbmodem1401"])
+    arduinos_controller = ArduinosController(display_controller, serial_ports)
+    # ["/dev/cu.usbmodem213101","/dev/cu.usbmodem1401"])
 
     server = OSCServer(osc_client_addr=osc_client_addr)
     server.secondary_ctlr = arduinos_controller
@@ -41,35 +32,13 @@ def run(serial_port: Optional[str], osc_client_addr: str, ui: Optional[UILeds]):
     print("OSC server Returned")
     arduinos_controller.stop()
 
-#    if ui:
-#        thd = Thread(target=controller_loop, args=(controller,))
-#        thd.start()
-#        time.sleep(1)
-#        print("Start UI loop")
-#        ui.mainloop()
-#        controller.stop()
-#        thd.join()
-#    else:
-#        controller_loop(controller)
-
 
 parser = argparse.ArgumentParser(
     prog='DisplayController')
-parser.add_argument("serialport", nargs="?")
+parser.add_argument("serialports", nargs="+")
 parser.add_argument(
     "-l", "--list", help="list serial ports and exit", action="store_true")
-parser.add_argument(
-    "-s", "--stub", help="no serial", action="store_true")
-parser.add_argument(
-    "-u", "--ui", help="show leds", action="store_true")
-parser.add_argument("-c", "--conf", help="Use config file")
-
-
-def load_conf(path: str) -> str:
-    with open(path,  "r", encoding="utf-8") as f:
-        data = json.load(f)
-        serial_port = data["main_arduino"]["port_com"]
-        return serial_port
+parser.add_argument("-a", "--addr", help="Address to broadcast osc to")
 
 
 def main():
@@ -78,26 +47,23 @@ def main():
         list_serial_ports()
         return
 
-    if args.conf:
-        print(f"using conf file {args.conf}")
-        args.serialport = load_conf(args.conf)
-
-    use_ui = bool(args.ui)
-    no_serial = bool(args.stub)
-    if args.serialport is None and no_serial is False:
-        print("missing serialport")
+    if args.addr is None:
+        print("missing addr")
         parser.print_usage()
         return
-    print(use_ui)
-    if no_serial is False:
-        print(f"using serial port '{args.serialport}'")
+
+    if args.serialports is None:
+        print("missing serialports")
+        parser.print_usage()
+        return
+    print(args.serialports)
 
     ui = None
-    if use_ui:
-        ui = UILeds(num_leds=26)
-    osc_addr = "127.0.0.1"
+    # if use_ui:
+    #    ui = UILeds(num_leds=26)
+    osc_addr = args.addr
     print(f"Sending osc data on {osc_addr}")
-    run(serial_port=args.serialport, osc_client_addr=osc_addr, ui=ui)
+    run(serial_ports=args.serialports, osc_client_addr=osc_addr, ui=ui)
 
 
 if __name__ == "__main__":
