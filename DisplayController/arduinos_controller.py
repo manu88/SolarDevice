@@ -21,9 +21,7 @@ class ArduinosController:
         self.arduino_ports_to_open: Set[str] = set()
         self.arduinos: Dict[str, serial.Serial] = dict()
         for port in serial_ports:
-            arduino = serial.Serial(
-                port=port, baudrate=BAUD_RATE, timeout=.1)
-            self.arduinos[port] = arduino
+            self.arduino_ports_to_open.add(port)
         self.board_ids: Dict[int, serial.Serial] = dict()
 
         self.read_thread = Thread(target=self._run_thread)
@@ -121,6 +119,11 @@ class ArduinosController:
         for port in ok_list:
             self.arduino_ports_to_open.remove(port)
 
+    def _handle_closed(self):
+        for port in self.arduinos_to_remove_from_list:
+            del self.arduinos[port]
+        self.arduinos_to_remove_from_list.clear()
+
     def _run_thread(self):
         print("SecondaryController: start thread")
         while self._should_stop is False:
@@ -129,9 +132,8 @@ class ArduinosController:
             for arduino in self.arduinos.values():
                 self._check_arduino(arduino)
 
-            for port in self.arduinos_to_remove_from_list:
-                del self.arduinos[port]
-            self.arduinos_to_remove_from_list.clear()
+            self._handle_closed()
+
             time.sleep(1)
 
         print("Cleanup")
