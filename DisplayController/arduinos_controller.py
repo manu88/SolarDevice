@@ -47,7 +47,7 @@ class ArduinosController:
 
     def _process_arduino_msg(self, arduino: serial.Serial, l: str):
         line = l.strip()
-        # print(f"received '{line}'")
+
         if line.startswith("BoardId="):
             board_id = int(line[8:])
             print(f"Board id is {board_id}")
@@ -62,6 +62,8 @@ class ArduinosController:
             for idx in received_idx:
                 self.osc_server.send_sensor(
                     idx, self.sensors.sensors[idx], self.sensors.is_rotating[idx])
+        else:
+            print(f"received '{line}'")
 
     def read_arduino_msg(self, arduino: serial.Serial) -> bool:
         ret = False
