@@ -3,8 +3,8 @@ import argparse
 from threading import Thread
 from typing import Optional
 from utils import serial_ports
-from controller import Controller
-from secondary_controller import SecondaryController
+from display_controller import DisplayController
+from arduinos_controller import ArduinosController
 from ui import UILeds
 from osc_server import OSCServer
 import json
@@ -16,7 +16,7 @@ def list_serial_ports():
         print(p)
 
 
-def controller_loop(controller: Controller):
+def controller_loop(controller: DisplayController):
     print("Start controller_loop")
     try:
         controller.start()
@@ -25,17 +25,22 @@ def controller_loop(controller: Controller):
 
 
 def run(serial_port: Optional[str], osc_client_addr: str, ui: Optional[UILeds]):
-
-    # controller = Controller(serial_port=serial_port, osc_addr=osc_addr, ui=ui)
-    secondary_controller = SecondaryController(["/dev/cu.usbmodem213101",
-                                                "/dev/cu.usbmodem1401"])
+    display_controller = DisplayController(ui=ui)
+    arduinos_controller = ArduinosController(display_controller, ["/dev/cu.usbmodem213101",
+                                                                  "/dev/cu.usbmodem1401"])
 
     server = OSCServer(osc_client_addr=osc_client_addr)
-    server.secondary_ctlr = secondary_controller
-    secondary_controller.osc_server = server
+    server.secondary_ctlr = arduinos_controller
+    arduinos_controller.osc_server = server
 
-    secondary_controller.start()
-    server.start()
+    arduinos_controller.start()
+    try:
+        server.start()
+    except KeyboardInterrupt:
+        server.stop()
+    print("OSC server Returned")
+    arduinos_controller.stop()
+
 #    if ui:
 #        thd = Thread(target=controller_loop, args=(controller,))
 #        thd.start()

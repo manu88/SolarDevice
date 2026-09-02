@@ -5,10 +5,12 @@ import time
 from threading import Thread
 from sensor_reader import SensorReader
 from osc_server_interface import OSCServerInterface
+from display_controller import DisplayController
 
 
-class SecondaryController:
-    def __init__(self, serial_ports: list[str]) -> None:
+class ArduinosController:
+    def __init__(self, display_ctrl: DisplayController, serial_ports: list[str]) -> None:
+        self.display_ctrl = display_ctrl
         self.osc_server: OSCServerInterface = None
         self.sensors = SensorReader()
         self._should_stop = False
@@ -22,14 +24,13 @@ class SecondaryController:
 
         self.read_thread = Thread(target=self._run_thread)
 
+    def stop(self):
+        self._should_stop = True
+        print("Stopping arduinos controller")
+        self.read_thread.join()
+
     def start(self):
         self.read_thread.start()
-
-    def _run_thread(self):
-        print("SecondaryController: start thread")
-        while self._should_stop is False:
-            for arduino in self.arduinos.values():
-                self._check_arduino(arduino)
 
     def send_motor(self, board_id: int, motor_id: int, duration: int):
         if board_id not in self.board_ids:
@@ -45,6 +46,10 @@ class SecondaryController:
             board_id = int(line[8:])
             print(f"Board id is {board_id}")
             self.board_ids[board_id] = arduino
+            if (board_id == 0):
+                print(
+                    f"Setting display controller to arduino at {arduino.port}")
+                self.display_ctrl.arduino = arduino
             print(f"setting arduino at {arduino.port} as board id {board_id}")
         elif line.startswith("S") and len(line) > 2 and line[0].isdigit:
             received_idx = self.sensors.on_sensor_line(line)
@@ -84,3 +89,13 @@ class SecondaryController:
                 print("<- Done Reopen arduino")
 
             time.sleep(1)
+
+    def _run_thread(self):
+        print("SecondaryController: start thread")
+        while self._should_stop is False:
+            for arduino in self.arduinos.values():
+                self._check_arduino(arduino)
+
+        print("Cleanup")
+        for arduino in self.arduinos.values():
+            arduino.close()
