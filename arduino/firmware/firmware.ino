@@ -1,5 +1,4 @@
 #include "proto.hpp"
-#include <AltSoftSerial.h>
 #include <FastLED.h>
 
 const int boardID = 0; // firmware, i.e with led control is board 0
@@ -33,19 +32,6 @@ void setAll(int r, int g, int b) {
     leds[x] = CRGB(r, g, b);
   }
   FastLED.show();
-}
-
-extern "C" {
-#define START_VAL 0XAB
-#define END_VAL 0XEF
-typedef struct {
-  uint8_t start;
-  uint8_t boardId;
-  float v[3];
-  uint8_t isRotating[3];
-  uint8_t cmdMotorId;
-  uint8_t end;
-} SensorMsg;
 }
 
 /////////////////////////////////

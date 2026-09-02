@@ -107,7 +107,6 @@ void processSensor(int sensorId) {
   }
 }
 
-
 void sendSensors(uint8_t boardId) {
   Serial.print("S");
   Serial.print(boardId);
@@ -125,4 +124,3 @@ void sendSensors(uint8_t boardId) {
   Serial.print(sensors[2].isRotating, 3);
   Serial.println();
 }
-
