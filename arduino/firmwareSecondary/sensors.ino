@@ -107,28 +107,20 @@ void processSensor(int sensorId) {
   }
 }
 
-void sendASCIIMsgSensor(uint8_t boardId, const float *v,
-                        const int isRotating[3]) {
+void sendSensors(uint8_t boardId) {
   Serial.print("S");
   Serial.print(boardId);
   Serial.print(" ");
-  Serial.print(v[0]);
+  Serial.print(sensors[0].speed);
   Serial.print(" ");
-  Serial.print(isRotating[0]);
+  Serial.print(sensors[0].isRotating, 3);
   Serial.print(" ");
-  Serial.print(v[1]);
+  Serial.print(sensors[1].speed);
   Serial.print(" ");
-  Serial.print(isRotating[1]);
+  Serial.print(sensors[1].isRotating, 3);
   Serial.print(" ");
-  Serial.print(v[2]);
+  Serial.print(sensors[2].speed);
   Serial.print(" ");
-  Serial.print(isRotating[2]);
+  Serial.print(sensors[2].isRotating, 3);
   Serial.println();
-}
-
-void sendSensors(int boardID) {
-  float v[3] = {sensors[0].speed, sensors[1].speed, sensors[2].speed};
-  int r[3] = {sensors[0].isRotating, sensors[1].isRotating,
-              sensors[2].isRotating};
-  sendASCIIMsgSensor(boardID, v, r);
 }

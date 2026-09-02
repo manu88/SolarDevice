@@ -2,6 +2,8 @@
 #include <AltSoftSerial.h>
 #include <FastLED.h>
 
+const int boardID = 0; // firmware, i.e with led control is board 0
+
 // Fastled version 3.1.0
 #if (FASTLED_VERSION != 3001000)
 #error ("Invalid Fastled version, expected 3001000")
@@ -13,10 +15,10 @@ unsigned long numCRCErrors = 0;
 
 /////////////////////////////////
 
-int sendSensorsEveryMs = 1000;
-unsigned long lastTimeSentSensors = 0;
-
 int readSensorsEveryMs = 10;
+int sendSensorsEveryMs = 1000;
+
+unsigned long lastTimeSentSensors = 0;
 unsigned long lastTimeReadSensors = 0;
 
 #define NUM_LEDS 26
@@ -32,12 +34,6 @@ void setAll(int r, int g, int b) {
   }
   FastLED.show();
 }
-
-/////////////////////////////////
-
-// only using RX, no need to wire TX
-// Arduino Uno  TX=9 RX=8
-AltSoftSerial inSerial;
 
 extern "C" {
 #define START_VAL 0XAB
@@ -56,7 +52,6 @@ typedef struct {
 
 void setup() {
   Serial.begin(115200);
-  inSerial.begin(19200);
   FastLED.addLeds<WS2801, DATA_PIN, CLOCK_PIN, RGB>(
       leds, NUM_LEDS); //, DATA_RATE_MHZ(8));
   FastLED.setBrightness(BRIGHTNESS);
@@ -64,12 +59,9 @@ void setup() {
   setupSensors();
 
   setAll(0, 0, 0);
-  pinMode(2, OUTPUT);
-  digitalWrite(2, HIGH);
 
-  Serial.println("Connected");
-  Serial.print("Version: ");
-  Serial.println(FIRMWARE_VERSION);
+  Serial.print("BoardId=");
+  Serial.println(boardID);
 }
 
 static ParserState parserState = ParserState_Start;
@@ -206,12 +198,6 @@ void processDump() {
   Serial.println(numCRCErrors);
 }
 
-void processStartMotor() {
-  digitalWrite(2, LOW);
-  delay(10);
-  digitalWrite(2, HIGH);
-}
-
 void processCmd() {
   switch (currentCmd) {
   case CmdId_Invalid:
@@ -219,10 +205,6 @@ void processCmd() {
     return;
   case CmdId_Leds:
     processCmdLed();
-    return;
-  case CmdId_StartMotor:
-    processStartMotor();
-    Serial.println("Start motor");
     return;
   case CmdId_Dump:
     processDump();
@@ -248,112 +230,6 @@ void processCmdLed() {
   }
 }
 
-void sendASCIIMsgSensor(uint8_t boardId, const float *v,
-                        const int isRotating[3], uint8_t lastCmd) {
-  Serial.print("S");
-  Serial.print(boardId);
-  Serial.print(" ");
-  Serial.print(v[0]);
-  Serial.print(" ");
-  Serial.print(isRotating[0], 3);
-  Serial.print(" ");
-  Serial.print(v[1]);
-  Serial.print(" ");
-  Serial.print(isRotating[1], 3);
-  Serial.print(" ");
-  Serial.print(v[2]);
-  Serial.print(" ");
-  Serial.print(isRotating[2], 3);
-  Serial.print(" ");
-  Serial.print(lastCmd);
-  Serial.println();
-}
-
-static uint8_t cmdMotorId;
-void relayFinalData() {
-  static uint8_t readerState = 0;
-  static uint8_t boardId = -1;
-
-  static uint8_t currentFloatReadPos = 0;
-  static float v[3] = {0};
-  static int isRotating[3] = {0};
-  static uint8_t rcvIsRotatingIndex = 0;
-  inSerial.listen();
-  while (inSerial.available() > 0) {
-    switch (readerState) {
-    case 0: // Waiting for start;
-    {
-      uint8_t inByte = inSerial.read();
-      if (inByte == START_VAL) {
-        readerState = 1;
-        currentFloatReadPos = 0;
-      }
-      break;
-    }
-    case 1: // boardId
-    {
-      int v = inSerial.read();
-      if (v == -1) {
-        return;
-      }
-      boardId = v;
-      readerState = 2;
-      break;
-    }
-    case 2: // float values
-    {
-      char *readPos = ((char *)v) + currentFloatReadPos;
-      size_t ret = inSerial.readBytes(readPos, 3 * sizeof(float));
-      currentFloatReadPos += ret;
-      if (currentFloatReadPos < 3 * sizeof(float)) {
-        currentFloatReadPos = ret;
-      } else {
-        readerState = 3;
-      }
-      break;
-    }
-    case 3: // uint8_t values
-    {
-      int v = inSerial.read();
-      if (v == -1) {
-        return;
-      }
-      isRotating[rcvIsRotatingIndex] = v;
-      rcvIsRotatingIndex++;
-      if (rcvIsRotatingIndex == 3) {
-        readerState = 4;
-      }
-      break;
-    }
-    case 4: {
-      int v = inSerial.read();
-      if (v == -1) {
-        return;
-      }
-      cmdMotorId = v;
-      readerState = 5;
-    }
-    case 5: // end val;
-    {
-      uint8_t inByte = inSerial.read();
-      if (inByte == END_VAL) {
-        sendASCIIMsgSensor(boardId, v, isRotating, cmdMotorId);
-        readerState = 0;
-        boardId = -1;
-        currentFloatReadPos = 0;
-        rcvIsRotatingIndex = 0;
-        v[0] = 0;
-        v[1] = 0;
-        v[2] = 0;
-        isRotating[0] = 0;
-        isRotating[1] = 0;
-        isRotating[2] = 0;
-      }
-    }
-    }
-  }
-}
-
 void loop() {
   while (Serial.available() > 0) {
     if (parseInput()) {
@@ -366,12 +242,11 @@ void loop() {
     loopSensors();
     lastTimeReadSensors = now;
   }
-  relayFinalData();
-
+  
   now = millis();
 
   if (now - lastTimeSentSensors >= sendSensorsEveryMs) {
     lastTimeSentSensors = now;
-    sendSensors();
+    sendSensors(boardID);
   }
 }

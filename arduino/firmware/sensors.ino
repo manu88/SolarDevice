@@ -107,10 +107,22 @@ void processSensor(int sensorId) {
   }
 }
 
-extern uint8_t cmdMotorId;
-void sendSensors() {
-  float v[3] = {sensors[0].speed, sensors[1].speed, sensors[2].speed};
-  int r[3] = {sensors[0].isRotating, sensors[1].isRotating,
-              sensors[2].isRotating};
-  sendASCIIMsgSensor(0, v, r, cmdMotorId);
+
+void sendSensors(uint8_t boardId) {
+  Serial.print("S");
+  Serial.print(boardId);
+  Serial.print(" ");
+  Serial.print(sensors[0].speed);
+  Serial.print(" ");
+  Serial.print(sensors[0].isRotating, 3);
+  Serial.print(" ");
+  Serial.print(sensors[1].speed);
+  Serial.print(" ");
+  Serial.print(sensors[1].isRotating, 3);
+  Serial.print(" ");
+  Serial.print(sensors[2].speed);
+  Serial.print(" ");
+  Serial.print(sensors[2].isRotating, 3);
+  Serial.println();
 }
+

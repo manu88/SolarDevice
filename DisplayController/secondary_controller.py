@@ -36,7 +36,6 @@ class SecondaryController:
             return
         arduino = self.board_ids[board_id]
         cmd = f"{motor_id+1};{duration}\n"
-        print(f"send command '{cmd}'")
         arduino.write(cmd.encode())
 
     def _process_arduino_msg(self, arduino: serial.Serial, l: str):

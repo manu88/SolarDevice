@@ -30,7 +30,6 @@ typedef enum {
   CmdId_Invalid = 0,
   CmdId_Leds = 0XBC,
   CmdId_Dump = 0XBD,
-  CmdId_StartMotor = 0XAF,
 } CmdId;
 
 } // extern "C"
