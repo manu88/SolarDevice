@@ -38,6 +38,10 @@ class ArduinosController:
         if board_id not in self.board_ids:
             return
         arduino = self.board_ids[board_id]
+        if board_id == 0:
+            self.display_ctrl.send_motor(
+                motor_id=motor_id+1, duration=duration)
+            return
         cmd = f"{motor_id+1};{duration}\n"
         arduino.write(cmd.encode())
 

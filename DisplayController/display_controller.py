@@ -57,6 +57,8 @@ class DisplayController:
             self.buffer1[(i*3)+2] = b
 
     def _send_arduino(self, cmd: int, buffer):
+        if self.arduino is None:
+            return
         crc: int = checksum(buffer)
         assert 0 <= crc < 256
 
@@ -68,6 +70,11 @@ class DisplayController:
 
         except serialutil.SerialException as e:
             print(f"send_payload:SerialException {e}")
+
+    def send_motor(self, motor_id: int, duration: int):
+        b0, b1 = duration.to_bytes(2)
+        buf = [motor_id, 0, b1, b0]
+        self._send_arduino(cmd=0XAF, buffer=buf)
 
     def update_display(self):
         buffer = self.buffer1
@@ -83,6 +90,4 @@ class DisplayController:
 
         if self.ui:
             self.ui.update_buff(buffer)
-        if self.arduino is None:
-            return
         self._send_arduino(cmd=0XBC, buffer=buffer)

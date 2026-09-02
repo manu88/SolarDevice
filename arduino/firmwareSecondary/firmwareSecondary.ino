@@ -15,6 +15,9 @@ const int servo0Pin = 3;
 const int servo1Pin = 5;
 const int servo2Pin = 6;
 
+unsigned long motorStartedTime[NUM_SERVOS] = {-1, -1, -1};
+int motorCommandDuration[NUM_SERVOS] = {-1, -1, -1};
+
 // sensors
 
 int readSensorsEveryMs = 10;
@@ -68,9 +71,6 @@ void handleLoopSensors() {
 const byte numChars = 32;
 char receivedChars[numChars]; // an array to store the received data
 bool newData = false;
-
-unsigned long motorStartedTime[NUM_SERVOS] = {-1, -1, -1};
-int motorCommandDuration[NUM_SERVOS] = {-1, -1, -1};
 
 void startMotor(int index, int duration) {
 #if DEBUG

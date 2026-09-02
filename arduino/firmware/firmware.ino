@@ -1,5 +1,6 @@
 #include "proto.hpp"
 #include <FastLED.h>
+#include <Servo.h>
 
 const int boardID = 0; // firmware, i.e with led control is board 0
 
@@ -11,6 +12,17 @@ const int boardID = 0; // firmware, i.e with led control is board 0
 #define FIRMWARE_VERSION "0.1.1"
 
 unsigned long numCRCErrors = 0;
+
+/////////////////////////////////
+#define NUM_SERVOS 3
+Servo servos[NUM_SERVOS];
+
+const int servo0Pin = 3;
+const int servo1Pin = 5;
+const int servo2Pin = 6;
+
+unsigned long motorStartedTime[NUM_SERVOS] = {-1, -1, -1};
+int motorCommandDuration[NUM_SERVOS] = {-1, -1, -1};
 
 /////////////////////////////////
 
@@ -43,6 +55,10 @@ void setup() {
   FastLED.setBrightness(BRIGHTNESS);
 
   setupSensors();
+
+  servos[0].attach(servo0Pin);
+  servos[1].attach(servo1Pin);
+  servos[2].attach(servo2Pin);
 
   setAll(0, 0, 0);
 
@@ -192,12 +208,33 @@ void processCmd() {
   case CmdId_Leds:
     processCmdLed();
     return;
+  case CmdId_StartMotor:
+    processStartMotor();
+    return;
   case CmdId_Dump:
     processDump();
     return;
   default:
     Serial.print("Invalid cmdID: ");
     Serial.println(currentCmd, HEX);
+  }
+}
+
+void startMotor(int index, int duration) {
+  servos[index].write(60);
+  motorStartedTime[index] = millis();
+  motorCommandDuration[index] = duration;
+}
+
+void processStartMotor() {
+  if (expectedPayloadSize != 4) {
+    Serial.print("unexpected expectedPayloadSize: ");
+    Serial.println(expectedPayloadSize);
+  }
+  uint8_t value = payload[0];
+  uint16_t duration = ((uint16_t)payload[3] << 8) | payload[2];
+  if (value >= 1 && value < 4) {
+    startMotor(value - 1, duration);
   }
 }
 
@@ -217,6 +254,18 @@ void processCmdLed() {
 }
 
 void loop() {
+  for (int i = 0; i < NUM_SERVOS; ++i) {
+    if (motorCommandDuration[i] != -1 &&
+        millis() - motorStartedTime[i] >= motorCommandDuration[i]) {
+#if DEBUG
+      Serial.print("Stop motor ");
+      Serial.println(i);
+#endif
+      servos[i].write(90);
+      motorCommandDuration[i] = -1;
+    }
+  }
+
   while (Serial.available() > 0) {
     if (parseInput()) {
       processCmd();
@@ -228,7 +277,7 @@ void loop() {
     loopSensors();
     lastTimeReadSensors = now;
   }
-  
+
   now = millis();
 
   if (now - lastTimeSentSensors >= sendSensorsEveryMs) {
