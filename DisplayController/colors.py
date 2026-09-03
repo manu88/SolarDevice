@@ -52,7 +52,7 @@ def tests():
     start_col = "#2D22C0"
     mid_col = "#4AA4B6"
     end_col = "#1DBD4D"
-    num_colors = 10
+    num_colors = 24
     colors = linear_gradient(
         hex_to_rgb(start_col),  hex_to_rgb(end_col), n=num_colors)
 

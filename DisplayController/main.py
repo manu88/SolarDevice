@@ -61,7 +61,7 @@ def run(serial_ports: List[str], osc_client_addr: str, ui: Optional[UILeds], use
 
 parser = argparse.ArgumentParser(
     prog='DisplayController')
-parser.add_argument("serialports", nargs="?")
+parser.add_argument("serialports", nargs="+")
 parser.add_argument(
     "-l", "--list", help="list serial ports and exit", action="store_true")
 parser.add_argument("-a", "--addr", help="Address to broadcast osc to")

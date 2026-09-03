@@ -24,7 +24,9 @@ class OSCServer(OSCServerInterface):
         self.dispatcher.map("/dump", self.osc_dump)
         self.dispatcher.map("/dump-arduinos", self.osc_dump_arduino)
 
-        self.dispatcher.map("/test-logic", self.osc_test_logic)
+        self.dispatcher.map("/set-grad-color", self.osc_set_grad_color)
+        self.dispatcher.map("/set-grad-spread", self.osc_set_grad_spread)
+        self.dispatcher.map("/set-sun", self.osc_set_sun)
 
         self.server = osc_server.ThreadingOSCUDPServer(
             ("", 8010), self.dispatcher)
@@ -72,5 +74,11 @@ class OSCServer(OSCServerInterface):
         self.osc_client.send_message(
             "/sensor", [index, value, is_rotating])
 
-    def osc_test_logic(self, args):
-        self.logic.test_logic()
+    def osc_set_grad_color(self, args, typ: int, r: float, g: float, b: float):
+        self.logic.set_grad_color(typ, r, g, b)
+
+    def osc_set_sun(self, _,  pos: float):
+        self.logic.sun_pos = int(pos)
+
+    def osc_set_grad_spread(self, _, size: float):
+        self.logic.set_grad_size(int(size))
