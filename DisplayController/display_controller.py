@@ -79,8 +79,6 @@ class DisplayController:
         self._send_arduino(cmd=0XAF, buffer=buf)
 
     def update_display(self):
-        buffer = self.buffer1
-
         update_time = time.time()
         diff = update_time - self.last_update_time
         if diff < self.min_ms_between_updates/1000:
@@ -91,8 +89,8 @@ class DisplayController:
         self.num_updates += 1
 
         if self.ui:
-            self.ui.update_buff(buffer)
-        self._send_arduino(cmd=0XBC, buffer=buffer)
+            self.ui.update_buff(self.buffer1)
+        self._send_arduino(cmd=0XBC, buffer=self.buffer1)
 
     def dump(self):
         print("Buffer1:")
