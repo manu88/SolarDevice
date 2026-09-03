@@ -55,7 +55,7 @@ def run(serial_ports: List[str], osc_client_addr: str, ui: Optional[UILeds]):
 
 parser = argparse.ArgumentParser(
     prog='DisplayController')
-parser.add_argument("serialports", nargs="+")
+parser.add_argument("serialports", nargs="?")
 parser.add_argument(
     "-l", "--list", help="list serial ports and exit", action="store_true")
 parser.add_argument("-a", "--addr", help="Address to broadcast osc to")
@@ -74,11 +74,13 @@ def main():
         parser.print_usage()
         return
 
-    if args.serialports is None:
-        print("missing serialports")
-        parser.print_usage()
-        return
-    print(args.serialports)
+    serialports = []
+    if isinstance(args.serialports, str):
+        serialports.append(args.serialports)
+    elif isinstance(args.serialports, list):
+        serialports = args.serialports
+
+    print(serialports)
 
     ui = None
     use_ui = bool(args.ui)
@@ -86,7 +88,7 @@ def main():
         ui = UILeds(num_leds=24)
     osc_addr = args.addr
     print(f"Sending osc data on {osc_addr}")
-    run(serial_ports=args.serialports, osc_client_addr=osc_addr, ui=ui)
+    run(serial_ports=serialports, osc_client_addr=osc_addr, ui=ui)
 
 
 if __name__ == "__main__":
