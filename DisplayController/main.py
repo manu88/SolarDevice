@@ -1,18 +1,34 @@
 
 import argparse
+import time
+from threading import Thread
 from typing import Optional, List
 from utils import serial_ports
 from display_controller import DisplayController
 from arduinos_controller import ArduinosController
 from ui import UILeds
 from osc_server import OSCServer
-import json
 
 
 def list_serial_ports():
     ports = serial_ports()
     for p in ports:
         print(p)
+
+
+def run_server(server: OSCServer):
+    try:
+        server.start()
+    except KeyboardInterrupt:
+        pass
+    server.stop()
+    print("OSC server Returned")
+
+
+def run_server_thread(server: OSCServer):
+    thd = Thread(target=run_server, args=(server,))
+    thd.start()
+    return thd
 
 
 def run(serial_ports: List[str], osc_client_addr: str, ui: Optional[UILeds]):
@@ -25,11 +41,15 @@ def run(serial_ports: List[str], osc_client_addr: str, ui: Optional[UILeds]):
     arduinos_controller.osc_server = server
 
     arduinos_controller.start()
-    try:
-        server.start()
-    except KeyboardInterrupt:
+
+    if ui:
+        thread = run_server_thread(server)
+        print("Start UI loop")
+        time.sleep(1)
+        ui.mainloop()
         server.stop()
-    print("OSC server Returned")
+        thread.join()
+    run_server(server)
     arduinos_controller.stop()
 
 
@@ -39,6 +59,8 @@ parser.add_argument("serialports", nargs="+")
 parser.add_argument(
     "-l", "--list", help="list serial ports and exit", action="store_true")
 parser.add_argument("-a", "--addr", help="Address to broadcast osc to")
+parser.add_argument(
+    "-u", "--ui", help="show leds", action="store_true")
 
 
 def main():
@@ -59,8 +81,9 @@ def main():
     print(args.serialports)
 
     ui = None
-    # if use_ui:
-    #    ui = UILeds(num_leds=26)
+    use_ui = bool(args.ui)
+    if use_ui:
+        ui = UILeds(num_leds=24)
     osc_addr = args.addr
     print(f"Sending osc data on {osc_addr}")
     run(serial_ports=args.serialports, osc_client_addr=osc_addr, ui=ui)

@@ -18,8 +18,6 @@ class UILeds(tk.Tk):
             self.led_frames.append(led_frame)
             self.led_frames[i].grid(row=0, column=i*2)
             w = 5 if i % 2 == 0 else 20
-            if i == 1:
-                w = 100
             pad = tk.Frame(self, width=w, height=30,
                            background="black")
             pad.grid(row=0, column=(i*2)+1)
