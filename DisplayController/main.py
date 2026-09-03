@@ -8,6 +8,7 @@ from display_controller import DisplayController
 from arduinos_controller import ArduinosController
 from ui import UILeds
 from osc_server import OSCServer
+from logic_controller import LogicController
 
 
 def list_serial_ports():
@@ -20,8 +21,7 @@ def run_server(server: OSCServer):
     try:
         server.start()
     except KeyboardInterrupt:
-        pass
-    server.stop()
+        server.stop()
     print("OSC server Returned")
 
 
@@ -31,17 +31,19 @@ def run_server_thread(server: OSCServer):
     return thd
 
 
-def run(serial_ports: List[str], osc_client_addr: str, ui: Optional[UILeds]):
+def run(serial_ports: List[str], osc_client_addr: str, ui: Optional[UILeds], use_logic: bool):
     display_controller = DisplayController(ui=ui)
     arduinos_controller = ArduinosController(display_controller, serial_ports)
-    # ["/dev/cu.usbmodem213101","/dev/cu.usbmodem1401"])
 
-    server = OSCServer(osc_client_addr=osc_client_addr)
+    logic = LogicController(display_controller=display_controller)
+
+    server = OSCServer(osc_client_addr=osc_client_addr, logic=logic)
     server.secondary_ctlr = arduinos_controller
     arduinos_controller.osc_server = server
 
     arduinos_controller.start()
-
+    if use_logic:
+        logic.start()
     if ui:
         thread = run_server_thread(server)
         print("Start UI loop")
@@ -49,7 +51,11 @@ def run(serial_ports: List[str], osc_client_addr: str, ui: Optional[UILeds]):
         ui.mainloop()
         server.stop()
         thread.join()
-    run_server(server)
+    else:
+        run_server(server)
+    if use_logic:
+        logic.stop()
+
     arduinos_controller.stop()
 
 
@@ -61,6 +67,8 @@ parser.add_argument(
 parser.add_argument("-a", "--addr", help="Address to broadcast osc to")
 parser.add_argument(
     "-u", "--ui", help="show leds", action="store_true")
+parser.add_argument(
+    "--logic", help="python logic", action="store_true")
 
 
 def main():
@@ -88,7 +96,8 @@ def main():
         ui = UILeds(num_leds=24)
     osc_addr = args.addr
     print(f"Sending osc data on {osc_addr}")
-    run(serial_ports=serialports, osc_client_addr=osc_addr, ui=ui)
+    run(serial_ports=serialports, osc_client_addr=osc_addr,
+        ui=ui, use_logic=args.logic)
 
 
 if __name__ == "__main__":

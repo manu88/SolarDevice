@@ -4,10 +4,12 @@ from pythonosc import udp_client
 from pythonosc.dispatcher import Dispatcher
 from arduinos_controller import ArduinosController
 from osc_server_interface import OSCServerInterface
+from logic_controller import LogicController
 
 
 class OSCServer(OSCServerInterface):
-    def __init__(self, osc_client_addr: str) -> None:
+    def __init__(self, osc_client_addr: str, logic: LogicController) -> None:
+        self.logic = logic
         self.secondary_ctlr: Optional[ArduinosController] = None
         self.osc_client = udp_client.SimpleUDPClient(
             osc_client_addr, 8012, allow_broadcast=True)
@@ -21,6 +23,8 @@ class OSCServer(OSCServerInterface):
         self.dispatcher.map("/clear1", self.osc_clear1)
         self.dispatcher.map("/dump", self.osc_dump)
         self.dispatcher.map("/dump-arduinos", self.osc_dump_arduino)
+
+        self.dispatcher.map("/test-logic", self.osc_test_logic)
 
         self.server = osc_server.ThreadingOSCUDPServer(
             ("", 8010), self.dispatcher)
@@ -67,3 +71,6 @@ class OSCServer(OSCServerInterface):
     def send_sensor(self, index: int, value: float, is_rotating: int):
         self.osc_client.send_message(
             "/sensor", [index, value, is_rotating])
+
+    def osc_test_logic(self, args):
+        self.logic.test_logic()

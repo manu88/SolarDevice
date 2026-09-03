@@ -29,9 +29,10 @@ class UILeds(tk.Tk):
 
     def update_buff(self, buffer):
         for i in range(self.num_leds):
-            r = buffer[i*3]
-            g = buffer[(i*3)+1]
-            b = buffer[(i*3)+2]
+            ii = ((33-i) % 24)
+            r = buffer[ii*3]
+            g = buffer[(ii*3)+1]
+            b = buffer[(ii*3)+2]
             self.led_frames[i].config(bg=_rgb((r, g, b)))
 
     def clear(self):
