@@ -19,12 +19,20 @@ class OSCServer(OSCServerInterface):
         self.dispatcher.map("/pix1", self.osc_set_pix1)
         self.dispatcher.map("/all", self.osc_set_all)
         self.dispatcher.map("/clear1", self.osc_clear1)
+        self.dispatcher.map("/dump", self.osc_dump)
+        self.dispatcher.map("/dump-arduinos", self.osc_dump_arduino)
 
         self.server = osc_server.ThreadingOSCUDPServer(
             ("", 8010), self.dispatcher)
 
     def osc_ping(self, args):
         print(f"ping {args}")
+
+    def osc_dump(self, _):
+        self.secondary_ctlr.display_ctrl.dump()
+
+    def osc_dump_arduino(self, _):
+        self.secondary_ctlr.display_ctrl.dump_arduino()
 
     def osc_update(self, _):
         # print("osc_update")

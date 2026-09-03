@@ -43,6 +43,8 @@ class DisplayController:
     def set_pix1(self, i: int, r: int, g: int, b: int):
         if i*3 >= len(self.buffer1):
             return
+        # reverse order because strip is counter clockwise and offset from 0/noon
+        i = (33-i) % 24
         self.buffer1[i*3] = r
         self.buffer1[(i*3)+1] = g
         self.buffer1[(i*3)+2] = b
@@ -91,3 +93,20 @@ class DisplayController:
         if self.ui:
             self.ui.update_buff(buffer)
         self._send_arduino(cmd=0XBC, buffer=buffer)
+
+    def dump(self):
+        print("Buffer1:")
+        for i in range(payload_size//3):
+            print(
+                f"{i}: r={self.buffer1[i*3]} g={self.buffer1[(i*3)+1]} b={self.buffer1[(i*3)+2]}")
+        avg = self.update_time_accum / self.num_updates if self.num_updates != 0 else 0
+        print(f"{self.num_updates} updates -> {avg*1000}ms")
+        print(f"{self.num_dropped_updates} dropped updates | min_ms_between_updates={self.min_ms_between_updates} ms ")
+        dropped_percent = 0
+        if self.num_updates:
+            dropped_percent = self.num_dropped_updates/self.num_updates
+        print(f"dropped msg %: {dropped_percent*100:0.1f}%")
+
+    def dump_arduino(self):
+        if self.arduino:
+            self._send_arduino(cmd=0XBD, buffer=[0])
