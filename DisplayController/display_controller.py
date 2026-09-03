@@ -8,7 +8,7 @@ from ui import UILeds
 import signal
 
 
-payload_size = 78
+payload_size = 72
 
 
 def checksum(data) -> int:

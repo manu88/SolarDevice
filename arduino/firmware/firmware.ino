@@ -32,7 +32,7 @@ int sendSensorsEveryMs = 1000;
 unsigned long lastTimeSentSensors = 0;
 unsigned long lastTimeReadSensors = 0;
 
-#define NUM_LEDS 26
+#define NUM_LEDS 24
 #define DATA_PIN 11 // Change this to match your LED strip's data pin
 #define CLOCK_PIN 13
 #define BRIGHTNESS 255
@@ -71,7 +71,8 @@ static CmdId currentCmd = CmdId_Invalid;
 static uint8_t expectedPayloadSize = 0;
 static uint8_t currentPayloadSize = 0;
 
-#define PAYLOAD_SIZE 78
+#define PAYLOAD_SIZE 72
+static_assert(PAYLOAD_SIZE == NUM_LEDS * 3, "");
 static uint8_t payload[PAYLOAD_SIZE];
 
 void resetParserState() {
