@@ -244,6 +244,7 @@ void processCmdLed() {
     Serial.print("unexpected expectedPayloadSize: ");
     Serial.println(expectedPayloadSize);
   } else {
+    FastLED.clearData();
     for (int i = 0; i < NUM_LEDS; i += 1) {
       int r = payload[i * 3];
       int g = payload[(i * 3) + 1];
