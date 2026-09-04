@@ -86,7 +86,7 @@ class PulsedGradient:
         self.start_col = [245, 241, 235]  # sun color
         self.mid_col = [105, 96, 254]
         self.end_col = [3, 7, 87]
-        self.grad_size = 12
+        self.grad_size = 0
         self.gradient = polylinear_gradient(
             [self.start_col, self.mid_col,  self.end_col], n=self.grad_size)
 
@@ -114,6 +114,8 @@ class PulsedGradient:
             [self.start_col, self.mid_col,  self.end_col], n=self.grad_size)
 
     def set_size(self, size: int):
+        if self.grad_size == size:
+            return
         self.grad_size = size
         self.gradient = polylinear_gradient(
             [self.start_col, self.mid_col,  self.end_col], n=self.grad_size)
@@ -127,10 +129,12 @@ class PulsedGradient:
             r = int(self.gradient[i][0] * percent)
             g = int(self.gradient[i][1] * percent)
             b = int(self.gradient[i][2] * percent)
-            sun_0_pos = (start_idx+i) % 24
-            sun_1_pos = (start_idx-i+1) % 24
+            sun_0_pos = (start_idx-i) % 24
+            sun_1_pos = (start_idx+i+1) % 24
             display_controller.set_pix1(sun_0_pos, r, g, b)
             display_controller.set_pix1(sun_1_pos, r, g, b)
+        display_controller.set_pix1(start_idx, 255, 255, 255)
+        display_controller.set_pix1((start_idx+1) % 24, 255, 255, 255)
 
     def update(self, elapsed_ms: int):
         if self.time_waiting_until > 0:
