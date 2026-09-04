@@ -1,4 +1,4 @@
-from threading import Thread
+from threading import Thread, Lock
 import time
 from enum import Enum
 from display_controller import DisplayController
@@ -50,8 +50,7 @@ class Pulse:
         self.gradient = polylinear_gradient(
             [self.start_col, self.mid_col,  self.end_col], n=self.grad_size)
 
-    def paint(self, elapsed_ms: int, sun_pos: int,  display_controller: DisplayController):
-        self.update(elapsed_ms)
+    def paint(self,  sun_pos: int,  display_controller: DisplayController):
         self.draw_gradient_at(sun_pos, display_controller)
 
     def draw_gradient_at(self, start_idx: int, display_controller: DisplayController):
@@ -97,6 +96,7 @@ class LogicController:
         self.pulse = Pulse()
 
         self.sun_pos: int = 0
+        self.update_lock = Lock()
 
     def start(self):
         self._should_run = True
@@ -110,26 +110,34 @@ class LogicController:
         elapsed = 0
         while self._should_run:
             self.display_controller.clear_buffer()
-            self.paint(elapsed)
+            with self.update_lock:
+                self.update(elapsed)
+                self.paint()
             self.display_controller.update_display()
             time.sleep(self.update_delay_ms/1000)
             elapsed += self.update_delay_ms
         print("logic returned")
 
-    def paint(self, elapsed_ms):
-        self.pulse.paint(elapsed_ms=elapsed_ms, sun_pos=self.sun_pos,
+    def paint(self):
+        self.pulse.paint(sun_pos=self.sun_pos,
                          display_controller=self.display_controller)
 
+    def update(self, elapsed_ms):
+        self.pulse.update(elapsed_ms)
+
     def set_grad_size(self, size: int):
-        self.pulse.set_size(size)
+        with self.update_lock:
+            self.pulse.set_size(size)
 
     def set_grad_color(self, typ: int, r: float, g: float, b: float):
-        if typ == 0:
-            self.pulse.set_start_color(int(r), int(g), int(b))
-        elif typ == 1:
-            self.pulse.set_mid_color(int(r), int(g), int(b))
-        elif typ == 2:
-            self.pulse.set_end_color(int(r), int(g), int(b))
+        with self.update_lock:
+            if typ == 0:
+                self.pulse.set_start_color(int(r), int(g), int(b))
+            elif typ == 1:
+                self.pulse.set_mid_color(int(r), int(g), int(b))
+            elif typ == 2:
+                self.pulse.set_end_color(int(r), int(g), int(b))
 
     def set_pulse_times(self, high: float, low: float):
-        self.pulse.set_pulse_times(int(high), int(low))
+        with self.update_lock:
+            self.pulse.set_pulse_times(int(high), int(low))

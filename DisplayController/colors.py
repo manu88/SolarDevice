@@ -36,7 +36,6 @@ def polylinear_gradient(colors, n):
     # The number of colors per individual linear gradient
     n_out = int(float(n / (len(colors)-1)))
     # returns dictionary defined by color_dict()
-    print("n_out ", n_out)
     gradient_dict = linear_gradient(colors[0], colors[1], n_out)
 
     if len(colors) > 1:
