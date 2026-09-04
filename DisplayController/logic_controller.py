@@ -66,7 +66,7 @@ class Pulse:
 
     def update(self, elapsed_ms: int):
         if self.time_waiting_until > 0:
-            if (elapsed_ms >= self.time_waiting_until):
+            if elapsed_ms >= self.time_waiting_until:
                 self.time_waiting_until = 0
             return
 
@@ -111,6 +111,10 @@ class LogicController:
         while self._should_run:
             self.display_controller.clear_buffer()
             with self.update_lock:
+                if self.anim_state != self.next_state:
+                    print(
+                        f"Change state from {self.anim_state} to {self.next_state}")
+                    self.anim_state = self.next_state
                 self.update(elapsed)
                 self.paint()
             self.display_controller.update_display()
@@ -119,11 +123,25 @@ class LogicController:
         print("logic returned")
 
     def paint(self):
-        self.pulse.paint(sun_pos=self.sun_pos,
-                         display_controller=self.display_controller)
+        if self.anim_state == AnimState.WELCOME_ANIM:
+            pass
+        elif self.anim_state == AnimState.ON_THE_CLOCK:
+            pass
+        elif self.anim_state == AnimState.PULSES:
+            self.pulse.paint(sun_pos=self.sun_pos,
+                             display_controller=self.display_controller)
+        else:
+            print(f"paint: Undefined anim state {self.anim_state}")
 
     def update(self, elapsed_ms):
-        self.pulse.update(elapsed_ms)
+        if self.anim_state == AnimState.WELCOME_ANIM:
+            pass
+        elif self.anim_state == AnimState.ON_THE_CLOCK:
+            pass
+        elif self.anim_state == AnimState.PULSES:
+            self.pulse.update(elapsed_ms)
+        else:
+            print(f"update: Undefined anim state {self.anim_state}")
 
     def set_grad_size(self, size: int):
         with self.update_lock:
