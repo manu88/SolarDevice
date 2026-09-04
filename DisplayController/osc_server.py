@@ -27,6 +27,7 @@ class OSCServer(OSCServerInterface):
         self.dispatcher.map("/set-grad-color", self.osc_set_grad_color)
         self.dispatcher.map("/set-grad-spread", self.osc_set_grad_spread)
         self.dispatcher.map("/set-sun", self.osc_set_sun)
+        self.dispatcher.map("/set-state", self.osc_set_state)
 
         self.server = osc_server.ThreadingOSCUDPServer(
             ("", 8010), self.dispatcher)
@@ -76,6 +77,9 @@ class OSCServer(OSCServerInterface):
 
     def osc_set_grad_color(self, args, typ: int, r: float, g: float, b: float):
         self.logic.set_grad_color(typ, r, g, b)
+
+    def osc_set_state(self, _, state: float):
+        self.logic.set_next_state(int(state))
 
     def osc_set_sun(self, _,  pos: float):
         self.logic.sun_pos = int(pos)

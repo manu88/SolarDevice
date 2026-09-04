@@ -2,6 +2,24 @@ from display_controller import DisplayController
 from colors import polylinear_gradient
 
 
+class WelcomeAnim:
+    def __init__(self) -> None:
+        self.current_pos = 0
+        self.time_acc = 0
+        self.time_to_change = 1500
+
+    def paint(self,  display_controller: DisplayController):
+        display_controller.set_pix1(self.current_pos, 100, 100, 100)
+
+    def update(self, elapsed_ms: int):
+        self.time_acc += elapsed_ms
+        if self.time_acc >= self.time_to_change:
+            self.time_acc = 0
+            self.current_pos += 1
+            if self.current_pos >= 24:
+                self.current_pos = 0
+
+
 class Pulse:
     def __init__(self) -> None:
         self.percent_pulse = 0

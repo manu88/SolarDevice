@@ -2,7 +2,7 @@ from threading import Thread, Lock
 import time
 from enum import Enum
 from display_controller import DisplayController
-from anims import Pulse
+from anims import Pulse, WelcomeAnim
 
 
 class AnimState(Enum):
@@ -18,9 +18,12 @@ class LogicController:
         self.thread = Thread(target=self._run)
         self._should_run = False
         self.anim_state = AnimState.UNDEFINED
+        self.anim_start_started_at_ms = 0
         self.next_state = AnimState.WELCOME_ANIM
 
         self.update_delay_ms = 40
+        self.welcome_anim = WelcomeAnim()
+        self.welcome_anim_duration_ms = 10000
         self.pulse = Pulse()
 
         self.sun_pos: int = 0
@@ -34,15 +37,22 @@ class LogicController:
         self._should_run = False
         self.thread.join()
 
+    # self.update_lock IS ALREADY LOCKED
+    def _check_state(self, elapsed: int):
+        if self.anim_state != self.next_state:
+            print(
+                f"Change state from {self.anim_state} to {self.next_state}")
+            self.anim_state = self.next_state
+            self.anim_start_started_at_ms = elapsed
+        elif self.anim_state == AnimState.WELCOME_ANIM and elapsed - self.anim_start_started_at_ms >= self.welcome_anim_duration_ms:
+            self.next_state = AnimState.PULSES
+
     def _run(self):
         elapsed = 0
         while self._should_run:
             self.display_controller.clear_buffer()
             with self.update_lock:
-                if self.anim_state != self.next_state:
-                    print(
-                        f"Change state from {self.anim_state} to {self.next_state}")
-                    self.anim_state = self.next_state
+                self._check_state(elapsed)
                 self.update(elapsed)
                 self.paint()
             self.display_controller.update_display()
@@ -50,9 +60,10 @@ class LogicController:
             elapsed += self.update_delay_ms
         print("logic returned")
 
+    # self.update_lock IS ALREADY LOCKED
     def paint(self):
         if self.anim_state == AnimState.WELCOME_ANIM:
-            pass
+            self.welcome_anim.paint(display_controller=self.display_controller)
         elif self.anim_state == AnimState.ON_THE_CLOCK:
             pass
         elif self.anim_state == AnimState.PULSES:
@@ -61,9 +72,10 @@ class LogicController:
         else:
             print(f"paint: Undefined anim state {self.anim_state}")
 
+    # self.update_lock IS ALREADY LOCKED
     def update(self, elapsed_ms):
         if self.anim_state == AnimState.WELCOME_ANIM:
-            pass
+            self.welcome_anim.update(elapsed_ms)
         elif self.anim_state == AnimState.ON_THE_CLOCK:
             pass
         elif self.anim_state == AnimState.PULSES:
@@ -87,3 +99,7 @@ class LogicController:
     def set_pulse_times(self, high: float, low: float):
         with self.update_lock:
             self.pulse.set_pulse_times(int(high), int(low))
+
+    def set_next_state(self, anim_state: int):
+        with self.update_lock:
+            self.next_state = AnimState(anim_state)
