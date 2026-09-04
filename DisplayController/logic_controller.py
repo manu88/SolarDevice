@@ -5,6 +5,7 @@ from enum import Enum
 from display_controller import DisplayController
 from arduinos_controller import ArduinosController
 from anims import PulsedGradient, WelcomeAnim, Pulse
+from conf import Config
 
 
 class AnimState(Enum):
@@ -14,10 +15,10 @@ class AnimState(Enum):
     ON_THE_CLOCK = 3
 
 
-class OnTheClockMotorController:
+class MotorChecker:
     def __init__(self, arduinos_controller: ArduinosController) -> None:
         self.arduinos_controller = arduinos_controller
-        self.check_every_ms = 5000
+        self.check_every_ms = Config.CHECK_IF_RUNNING_EVERY_MS
         self.last_check_ms = 0
 
     def _do_check_motor(self, index: int):
@@ -25,7 +26,7 @@ class OnTheClockMotorController:
         is_rotating = self.arduinos_controller.sensors.is_rotating[index]
         if is_rotating:
             return
-        if speed < 0.03:
+        if speed < Config.RESTART_IF_UNDER_SPEED:
             self.arduinos_controller.set_motor(index, 500)
 
     def _do_check_motors(self):
@@ -48,11 +49,11 @@ class LogicController:
         self.anim_state = AnimState.UNDEFINED
         self.anim_start_started_at_ms = 0
         self.next_state = AnimState.PULSES
-        self.update_delay_ms = 40
+        self.update_delay_ms = Config.LOGIC_FRAME_DURATION_MS
         self.welcome_anim = WelcomeAnim()
         self.pulse_anim = PulsedGradient()
         self.clock_anim = Pulse(num_periods=30)
-        self.clock_motor_controller = OnTheClockMotorController(
+        self.clock_motor_controller = MotorChecker(
             arduinos_controller)
 
         self.current_hour = datetime.datetime.now().hour
@@ -93,17 +94,17 @@ class LogicController:
     def _run(self):
         elapsed = 0
         while self._should_run:
-            try:
-                self.display_controller.clear_buffer()
-                with self.update_lock:
-                    self._check_state(elapsed)
-                    self.update(elapsed)
-                    self.paint()
-                self.display_controller.update_display()
-                time.sleep(self.update_delay_ms/1000)
-                elapsed += self.update_delay_ms
-            except Exception as e:
-                print(f"Got exception in main logic loop: {e}")
+            # try:
+            self.display_controller.clear_buffer()
+            with self.update_lock:
+                self._check_state(elapsed)
+                self.update(elapsed)
+                self.paint()
+            self.display_controller.update_display()
+            time.sleep(self.update_delay_ms/1000)
+            elapsed += self.update_delay_ms
+        # except Exception as e:
+        #    print(f"Got exception in main logic loop: {e}")
         print("logic returned")
 
     # self.update_lock IS ALREADY LOCKED

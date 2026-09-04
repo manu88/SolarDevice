@@ -86,9 +86,8 @@ class PulsedGradient:
         self.start_col = [245, 241, 235]  # sun color
         self.mid_col = [105, 96, 254]
         self.end_col = [3, 7, 87]
-        self.grad_size = 0
         self.gradient = polylinear_gradient(
-            [self.start_col, self.mid_col,  self.end_col], n=self.grad_size)
+            [self.start_col, self.mid_col,  self.end_col], n=4)
 
     def reset(self):
         self.percent_pulse = 0
@@ -100,35 +99,38 @@ class PulsedGradient:
 
     def set_start_color(self, r: int, g: int, b: int):
         self.start_col = [r, g, b]
+        size = len(self.gradient)
         self.gradient = polylinear_gradient(
-            [self.start_col, self.mid_col,  self.end_col], n=self.grad_size)
+            [self.start_col, self.mid_col,  self.end_col], n=size)
 
     def set_mid_color(self, r: int, g: int, b: int):
         self.mid_col = [r, g, b]
+        size = len(self.gradient)
         self.gradient = polylinear_gradient(
-            [self.start_col, self.mid_col,  self.end_col], n=self.grad_size)
+            [self.start_col, self.mid_col,  self.end_col], n=size)
 
     def set_end_color(self, r: int, g: int, b: int):
         self.end_col = [r, g, b]
+        size = len(self.gradient)
         self.gradient = polylinear_gradient(
-            [self.start_col, self.mid_col,  self.end_col], n=self.grad_size)
+            [self.start_col, self.mid_col,  self.end_col], n=size)
 
     def set_size(self, size: int):
-        if self.grad_size == size:
+        if size == len(self.gradient):
             return
-        self.grad_size = size
         self.gradient = polylinear_gradient(
-            [self.start_col, self.mid_col,  self.end_col], n=self.grad_size)
+            [self.start_col, self.mid_col,  self.end_col], n=size)
 
     def paint(self,  sun_pos: int,  display_controller: DisplayController):
         self.draw_gradient_at(sun_pos, display_controller)
 
     def draw_gradient_at(self, start_idx: int, display_controller: DisplayController):
         percent = float(self.percent_pulse/100)
-        for i in range(self.grad_size):
-            r = int(self.gradient[i][0] * percent)
-            g = int(self.gradient[i][1] * percent)
-            b = int(self.gradient[i][2] * percent)
+
+        for i, color in enumerate(self.gradient):
+            r = int(color[0] * percent)
+            g = int(color[1] * percent)
+            b = int(color[2] * percent)
             sun_0_pos = (start_idx-i) % 24
             sun_1_pos = (start_idx+i+1) % 24
             display_controller.set_pix1(sun_0_pos, r, g, b)
