@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=pd -nogui main.pd  -path /home/solar/
+ExecStart=pd -nogui main_audio.pd  -path /home/solar/
 Restart=on-failure
 RestartSec=10s
 User=solar
