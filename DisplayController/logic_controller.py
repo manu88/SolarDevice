@@ -20,8 +20,19 @@ class MotorChecker:
         self.arduinos_controller = arduinos_controller
         self.check_every_ms = Config.CHECK_IF_RUNNING_EVERY_MS
         self.last_check_ms = 0
+        self.indices_to_check = list(range(12))
+
+    def check(self, index: int):
+        self.indices_to_check = [index]
+
+    def check_all(self):
+        self.indices_to_check = list(range(12))
+
+    def check_none(self):
+        self.indices_to_check = []
 
     def _do_check_motor(self, index: int):
+        print(f"_do_check_motor on index {index}")
         speed = self.arduinos_controller.sensors.sensors[index]
         is_rotating = self.arduinos_controller.sensors.is_rotating[index]
         if is_rotating:
@@ -30,7 +41,7 @@ class MotorChecker:
             self.arduinos_controller.set_motor(index, 500)
 
     def _do_check_motors(self):
-        for i in range(12):
+        for i in self.indices_to_check:
             self._do_check_motor(i)
 
     def update(self, elapsed_ms: int):
@@ -53,7 +64,7 @@ class LogicController:
         self.welcome_anim = WelcomeAnim()
         self.pulse_anim = PulsedGradient()
         self.clock_anim = Pulse(num_periods=30)
-        self.clock_motor_controller = MotorChecker(
+        self.motor_checker = MotorChecker(
             arduinos_controller)
 
         self.current_hour = datetime.datetime.now().hour
@@ -78,6 +89,8 @@ class LogicController:
             if hh != self.current_hour:
                 print(f"Hour changed from {self.current_hour} to {hh}")
                 self.current_hour = hh
+                # self.motor_checker.check_all()
+                self.motor_checker.check_none()
                 self.next_state = AnimState.ON_THE_CLOCK
 
     # self.update_lock IS ALREADY LOCKED
@@ -90,6 +103,7 @@ class LogicController:
             self.anim_start_started_at_ms = elapsed
             if self.anim_state == AnimState.PULSES:
                 self.pulse_anim.reset()
+                self.motor_checker.check(self.current_hour % 12)
 
     def _run(self):
         elapsed = 0
@@ -127,7 +141,6 @@ class LogicController:
     # self.update_lock IS ALREADY LOCKED
 
     def update_on_the_clock(self, elapsed_ms):
-        self.clock_motor_controller.update(elapsed_ms)
         if self.clock_anim.update(elapsed_ms):
             print("CLOCK ANIM Done")
             self.next_state = AnimState.PULSES
@@ -135,6 +148,7 @@ class LogicController:
 
     # self.update_lock IS ALREADY LOCKED
     def update(self, elapsed_ms):
+        self.motor_checker.update(elapsed_ms)
         if self.realtime:
             current_hour = datetime.datetime.now().hour
             if current_hour != self.current_hour:
