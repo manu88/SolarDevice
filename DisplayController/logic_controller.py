@@ -2,7 +2,7 @@ from threading import Thread
 import time
 from enum import Enum
 from display_controller import DisplayController
-from colors import linear_gradient, hex_to_rgb, polylinear_gradient
+from colors import polylinear_gradient
 
 
 class AnimState(Enum):
@@ -50,8 +50,9 @@ class Pulse:
         self.gradient = polylinear_gradient(
             [self.start_col, self.mid_col,  self.end_col], n=self.grad_size)
 
-    def paint(self, elapsed_ms: int, display_controller: DisplayController):
-        self
+    def paint(self, elapsed_ms: int, sun_pos: int,  display_controller: DisplayController):
+        self.update(elapsed_ms)
+        self.draw_gradient_at(sun_pos, display_controller)
 
     def draw_gradient_at(self, start_idx: int, display_controller: DisplayController):
         percent = float(self.percent_pulse/100)
@@ -68,7 +69,6 @@ class Pulse:
         if self.time_waiting_until > 0:
             if (elapsed_ms >= self.time_waiting_until):
                 self.time_waiting_until = 0
-                print(f"Done waiting at {elapsed_ms}")
             return
 
         self.percent_pulse += self.target_inc
@@ -77,16 +77,12 @@ class Pulse:
             self.target_inc = -self.target_inc
             if self.time_waiting_until == 0:
                 self.time_waiting_until = elapsed_ms + self.time_high_ms
-                print(
-                    f"HIGH: at {elapsed_ms} sleep until {self.time_waiting_until} self.target_inc={self.target_inc}")
 
         elif self.percent_pulse < 0:
             self.percent_pulse = 0
             self.target_inc = -self.target_inc
             if self.time_waiting_until == 0:
                 self.time_waiting_until = elapsed_ms + self.time_low_ms
-                print(
-                    f"LOW: at {elapsed_ms} sleep until {self.time_waiting_until} self.target_inc={self.target_inc}")
 
 
 class LogicController:
@@ -121,14 +117,13 @@ class LogicController:
         print("logic returned")
 
     def paint(self, elapsed_ms):
-        self.pulse.update(elapsed_ms)
-        self.pulse.draw_gradient_at(self.sun_pos, self.display_controller)
+        self.pulse.paint(elapsed_ms=elapsed_ms, sun_pos=self.sun_pos,
+                         display_controller=self.display_controller)
 
     def set_grad_size(self, size: int):
         self.pulse.set_size(size)
 
     def set_grad_color(self, typ: int, r: float, g: float, b: float):
-        print(f"Test logic typ={typ} r={r} g={g} b={b}")
         if typ == 0:
             self.pulse.set_start_color(int(r), int(g), int(b))
         elif typ == 1:
