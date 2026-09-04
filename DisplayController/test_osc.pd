@@ -152,7 +152,6 @@
 #X msg 736 161 /realtime \$1;
 #X obj 743 109 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
 #X obj 676 570 route /sensor /current-sensor;
-#X obj 923 571 print;
 #X connect 0 0 1 0;
 #X connect 2 0 1 0;
 #X connect 3 0 4 0;
@@ -209,4 +208,3 @@
 #X connect 49 0 0 0;
 #X connect 50 0 49 0;
 #X connect 51 0 21 0;
-#X connect 51 1 52 0;

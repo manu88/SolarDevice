@@ -78,7 +78,7 @@ class LogicController:
         self.motor_checker = MotorChecker(
             arduinos_controller)
 
-        self.current_hour = datetime.datetime.now().hour
+        self.current_hour = -1
         self.update_lock = Lock()
         self.realtime = True
         self.last_time_sent_sensor = 0
@@ -102,9 +102,7 @@ class LogicController:
             if hh != self.current_hour:
                 print(f"Hour changed from {self.current_hour} to {hh}")
                 self.current_hour = hh
-                # self.motor_checker.check_all()
-                self.motor_checker.check_all()
-                self.next_state = AnimState.ON_THE_CLOCK
+                self.hour_changed()
 
     # self.update_lock IS ALREADY LOCKED
     def _check_state(self, elapsed: int):
@@ -151,8 +149,13 @@ class LogicController:
                                   display_controller=self.display_controller)
         else:
             print(f"paint: Undefined anim state {self.anim_state}")
-    # self.update_lock IS ALREADY LOCKED
 
+    # self.update_lock IS ALREADY LOCKED
+    def hour_changed(self):
+        self.motor_checker.check_all()
+        self.next_state = AnimState.ON_THE_CLOCK
+
+    # self.update_lock IS ALREADY LOCKED
     def update_on_the_clock(self, elapsed_ms):
         if self.clock_anim.update(elapsed_ms):
             print("CLOCK ANIM Done")
@@ -177,13 +180,13 @@ class LogicController:
     def update(self, elapsed_ms):
         self.send_osc_data(elapsed_ms)
         self.motor_checker.update(elapsed_ms)
-        if self.realtime:
+        if self.realtime and self.anim_state != AnimState.WELCOME_ANIM:
             current_hour = datetime.datetime.now().hour
             if current_hour != self.current_hour:
                 print(
                     f"Hour changed from {self.current_hour} to {current_hour}")
                 self.current_hour = current_hour
-                self.next_state = AnimState.ON_THE_CLOCK
+                self.hour_changed()
                 return
         if self.anim_state == AnimState.WELCOME_ANIM:
             if self.welcome_anim.update(elapsed_ms):
