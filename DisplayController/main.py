@@ -39,6 +39,7 @@ def run(serial_ports: List[str], osc_client_addr: str, ui: Optional[UILeds], use
         display_controller=display_controller, arduinos_controller=arduinos_controller)
 
     server = OSCServer(osc_client_addr=osc_client_addr, logic=logic)
+    logic.osc_server = server
     server.secondary_ctlr = arduinos_controller
     arduinos_controller.osc_server = server
 

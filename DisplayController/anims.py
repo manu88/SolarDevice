@@ -34,7 +34,7 @@ class Pulse:
         self.time_high_ms = 800
         self.time_low_ms = 300
         self.time_waiting_until = 0
-        self.target_inc = 5
+        self.target_inc = 2
 
         self.current_period = 0
         self.num_periods = num_periods
@@ -82,7 +82,7 @@ class PulsedGradient:
         self.time_high_ms = 800
         self.time_low_ms = 300
         self.time_waiting_until = 0
-        self.target_inc = 5
+        self.target_inc = 2
         self.start_col = [245, 241, 235]  # sun color
         self.mid_col = [105, 96, 254]
         self.end_col = [3, 7, 87]

@@ -4,7 +4,7 @@ import traceback
 import time
 from threading import Thread
 from sensor_reader import SensorReader
-from osc_server_interface import OSCServerInterface
+
 from display_controller import DisplayController
 
 BAUD_RATE = 115200

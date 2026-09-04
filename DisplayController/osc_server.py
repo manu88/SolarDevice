@@ -2,7 +2,7 @@ from typing import Optional
 from pythonosc import osc_server
 from pythonosc import udp_client
 from pythonosc.dispatcher import Dispatcher
-from arduinos_controller import ArduinosController, servos_mapping
+from arduinos_controller import ArduinosController
 from osc_server_interface import OSCServerInterface
 from logic_controller import LogicController
 
@@ -74,6 +74,9 @@ class OSCServer(OSCServerInterface):
 
     def stop(self):
         self.server.shutdown()
+
+    def send_hour(self, hour: int):
+        self.osc_client.send_message("/clock", [hour, 0])
 
     def send_sensor(self, index: int, value: float, is_rotating: int):
         self.osc_client.send_message(
