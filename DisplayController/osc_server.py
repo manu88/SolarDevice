@@ -79,12 +79,18 @@ class OSCServer(OSCServerInterface):
         self.osc_client.send_message("/clock", [hour, 0])
 
     def send_current_sensor(self, index: int, value: float, is_rotating: int):
-        self.osc_client.send_message(
-            "/current-sensor", [index, value, is_rotating])
+        try:
+            self.osc_client.send_message(
+                "/current-sensor", [index, value, is_rotating])
+        except Exception:
+            pass
 
     def send_sensor(self, index: int, value: float, is_rotating: int):
-        self.osc_client.send_message(
-            "/sensor", [index, value, is_rotating])
+        try:
+            self.osc_client.send_message(
+                "/sensor", [index, value, is_rotating])
+        except Exception:
+            pass
 
     def osc_set_grad_color(self, _, typ: int, r: float, g: float, b: float):
         self.logic.set_grad_color(typ, r, g, b)
