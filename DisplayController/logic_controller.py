@@ -1,5 +1,6 @@
 from threading import Thread, Lock
 import time
+import datetime
 from enum import Enum
 from display_controller import DisplayController
 from arduinos_controller import ArduinosController
@@ -16,7 +17,7 @@ class AnimState(Enum):
 class OnTheClockMotorController:
     def __init__(self, arduinos_controller: ArduinosController) -> None:
         self.arduinos_controller = arduinos_controller
-        self.check_every_ms = 3000
+        self.check_every_ms = 5000
         self.last_check_ms = 0
 
     def _do_check_motor(self, index: int):
@@ -54,8 +55,9 @@ class LogicController:
         self.clock_motor_controller = OnTheClockMotorController(
             arduinos_controller)
 
-        self.sun_pos: int = 0
+        self.current_hour = datetime.datetime.now().hour
         self.update_lock = Lock()
+        self.realtime = True
 
     def start(self):
         self._should_run = True
@@ -64,6 +66,18 @@ class LogicController:
     def stop(self):
         self._should_run = False
         self.thread.join()
+
+    def set_use_realtime(self, use_realtime: int):
+        with self.update_lock:
+            self.realtime = bool(use_realtime)
+            print(f"set clockmode realtime={self.realtime}")
+
+    def on_clock(self, hh: int, mm: int):
+        with self.update_lock:
+            if hh != self.current_hour:
+                print(f"Hour changed from {self.current_hour} to {hh}")
+                self.current_hour = hh
+                self.next_state = AnimState.ON_THE_CLOCK
 
     # self.update_lock IS ALREADY LOCKED
     def _check_state(self, elapsed: int):
@@ -79,14 +93,17 @@ class LogicController:
     def _run(self):
         elapsed = 0
         while self._should_run:
-            self.display_controller.clear_buffer()
-            with self.update_lock:
-                self._check_state(elapsed)
-                self.update(elapsed)
-                self.paint()
-            self.display_controller.update_display()
-            time.sleep(self.update_delay_ms/1000)
-            elapsed += self.update_delay_ms
+            try:
+                self.display_controller.clear_buffer()
+                with self.update_lock:
+                    self._check_state(elapsed)
+                    self.update(elapsed)
+                    self.paint()
+                self.display_controller.update_display()
+                time.sleep(self.update_delay_ms/1000)
+                elapsed += self.update_delay_ms
+            except Exception as e:
+                print(f"Got exception in main logic loop: {e}")
         print("logic returned")
 
     # self.update_lock IS ALREADY LOCKED
@@ -102,7 +119,7 @@ class LogicController:
         elif self.anim_state == AnimState.ON_THE_CLOCK:
             self.clock_anim.paint(display_controller=self.display_controller)
         elif self.anim_state == AnimState.PULSES:
-            self.pulse_anim.paint(sun_pos=self.sun_pos,
+            self.pulse_anim.paint(sun_pos=(self.current_hour % 12)*2,
                                   display_controller=self.display_controller)
         else:
             print(f"paint: Undefined anim state {self.anim_state}")
@@ -117,6 +134,14 @@ class LogicController:
 
     # self.update_lock IS ALREADY LOCKED
     def update(self, elapsed_ms):
+        if self.realtime:
+            current_hour = datetime.datetime.now().hour
+            if current_hour != self.current_hour:
+                print(
+                    f"Hour changed from {self.current_hour} to {current_hour}")
+                self.current_hour = current_hour
+                self.next_state = AnimState.ON_THE_CLOCK
+                return
         if self.anim_state == AnimState.WELCOME_ANIM:
             if self.welcome_anim.update(elapsed_ms):
                 print("Welcom anim done")

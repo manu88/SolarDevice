@@ -133,8 +133,10 @@ class PulsedGradient:
             sun_1_pos = (start_idx+i+1) % 24
             display_controller.set_pix1(sun_0_pos, r, g, b)
             display_controller.set_pix1(sun_1_pos, r, g, b)
-        display_controller.set_pix1(start_idx, 255, 255, 255)
-        display_controller.set_pix1((start_idx+1) % 24, 255, 255, 255)
+        sun_val = int(percent * 255)
+        display_controller.set_pix1(start_idx, sun_val, sun_val, sun_val)
+        display_controller.set_pix1((start_idx+1) %
+                                    24, sun_val, sun_val, sun_val)
 
     def update(self, elapsed_ms: int):
         if self.time_waiting_until > 0:

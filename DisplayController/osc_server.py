@@ -14,16 +14,18 @@ class OSCServer(OSCServerInterface):
         self.osc_client = udp_client.SimpleUDPClient(
             osc_client_addr, 8012, allow_broadcast=True)
         self.dispatcher = Dispatcher()
-        self.dispatcher.map("/servo", self.osc_servo)
-
         self.dispatcher.map("/ping", self.osc_ping)
+        self.dispatcher.map("/dump", self.osc_dump)
+        self.dispatcher.map("/dump-arduinos", self.osc_dump_arduino)
+        self.dispatcher.map("/clock", self.osc_clock)
+        self.dispatcher.map("/realtime", self.osc_set_realtime)
+
+        # to sort, mostly debug/tests
+        self.dispatcher.map("/servo", self.osc_servo)
         self.dispatcher.map("/update", self.osc_update)
         self.dispatcher.map("/pix1", self.osc_set_pix1)
         self.dispatcher.map("/all", self.osc_set_all)
         self.dispatcher.map("/clear1", self.osc_clear1)
-        self.dispatcher.map("/dump", self.osc_dump)
-        self.dispatcher.map("/dump-arduinos", self.osc_dump_arduino)
-
         self.dispatcher.map("/set-grad-color", self.osc_set_grad_color)
         self.dispatcher.map("/set-grad-spread", self.osc_set_grad_spread)
         self.dispatcher.map("/set-sun", self.osc_set_sun)
@@ -32,6 +34,12 @@ class OSCServer(OSCServerInterface):
 
         self.server = osc_server.ThreadingOSCUDPServer(
             ("", 8010), self.dispatcher)
+
+    def osc_clock(self, _, hh: float, mm: float):
+        self.logic.on_clock(int(hh), int(mm))
+
+    def osc_set_realtime(self, _, use_realtime: float):
+        self.logic.set_use_realtime(int(use_realtime))
 
     def osc_ping(self, args):
         print(f"ping {args}")
