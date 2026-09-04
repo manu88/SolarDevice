@@ -82,3 +82,6 @@ class OSCServer(OSCServerInterface):
 
     def osc_set_grad_spread(self, _, size: float):
         self.logic.set_grad_size(int(size))
+
+    def osc_set_pulse_times(self, _, high: float, low: float):
+        self.logic.set_pulse_times(high, low)
