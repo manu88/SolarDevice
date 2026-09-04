@@ -92,7 +92,6 @@ class PulsedGradient:
 
     def set_day_state(self, day_state: int):
         colors = Config.GRADIENT_COLORS[day_state]
-        print(colors)
         self.start_col = colors[0]
         self.mid_col = colors[1]
         self.end_col = colors[2]
