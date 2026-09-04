@@ -18,8 +18,11 @@ class OSCServer(OSCServerInterface):
         self.dispatcher.map("/dump", self.osc_dump)
         self.dispatcher.map("/dump-arduinos", self.osc_dump_arduino)
         self.dispatcher.map("/clock", self.osc_clock)
+        self.dispatcher.map("/day", self.osc_day)
         self.dispatcher.map("/realtime", self.osc_set_realtime)
 
+        self.dispatcher.map("/luminosity", self.osc_luminosity)
+        self.dispatcher.map("/nebulosity", self.osc_nebulosity)
         # to sort, mostly debug/tests
         self.dispatcher.map("/servo", self.osc_servo)
         self.dispatcher.map("/update", self.osc_update)
@@ -34,6 +37,15 @@ class OSCServer(OSCServerInterface):
 
         self.server = osc_server.ThreadingOSCUDPServer(
             ("", 8010), self.dispatcher)
+
+    def osc_nebulosity(self, _, neb: float):
+        print(f"Got nebulosity {neb}")
+
+    def osc_luminosity(self, _, lum: float):
+        print(f"Got luminosity {lum}")
+
+    def osc_day(self, _, state: float):
+        self.logic.set_day_state(int(state))
 
     def osc_clock(self, _, hh: float, mm: float):
         self.logic.on_clock(int(hh), int(mm))

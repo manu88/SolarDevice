@@ -97,6 +97,15 @@ class LogicController:
             self.realtime = bool(use_realtime)
             print(f"set clockmode realtime={self.realtime}")
 
+    def set_day_state(self, day_state: int):
+        if day_state < 0 or day_state > 4:
+            print(f"Skipping invalid day state  {day_state}")
+            return
+        print(f"set day state to {day_state}")
+        with self.update_lock:
+            self.pulse_anim.set_day_state(day_state)
+        # 0 matin, 1 midi 2 aprem 3 soir 4 nuit
+
     def on_clock(self, hh: int, mm: int):
         with self.update_lock:
             if hh != self.current_hour:

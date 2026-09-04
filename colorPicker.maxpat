@@ -9,8 +9,30 @@
             "modernui": 1
         },
         "classnamespace": "box",
-        "rect": [ 354.0, 187.0, 1000.0, 780.0 ],
+        "rect": [ 595.0, 207.0, 1000.0, 780.0 ],
         "boxes": [
+            {
+                "box": {
+                    "id": "obj-6",
+                    "linecount": 2,
+                    "maxclass": "comment",
+                    "numinlets": 1,
+                    "numoutlets": 0,
+                    "patching_rect": [ 810.0, 345.0, 150.0, 33.0 ],
+                    "text": "0 matin, 1 midi 2 aprem 3 soir 4 nuit"
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-3",
+                    "maxclass": "message",
+                    "numinlets": 2,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 818.0, 399.0, 71.0, 22.0 ],
+                    "text": "/day 2"
+                }
+            },
             {
                 "box": {
                     "id": "obj-63",
@@ -19,7 +41,7 @@
                     "numoutlets": 1,
                     "outlettype": [ "" ],
                     "patching_rect": [ 641.0, 557.0, 68.0, 22.0 ],
-                    "text": "/set-state 3"
+                    "text": "/set-state 2"
                 }
             },
             {
@@ -247,7 +269,6 @@
                     "numoutlets": 1,
                     "outlettype": [ "" ],
                     "patching_rect": [ 375.0, 431.0, 146.0, 22.0 ],
-                    "presentation_linecount": 2,
                     "text": "/set-grad-color 2 $1 $2 $3"
                 }
             },
@@ -283,7 +304,6 @@
                     "numoutlets": 1,
                     "outlettype": [ "" ],
                     "patching_rect": [ 221.0, 431.0, 146.0, 22.0 ],
-                    "presentation_linecount": 2,
                     "text": "/set-grad-color 1 $1 $2 $3"
                 }
             },
@@ -451,6 +471,12 @@
                 "patchline": {
                     "destination": [ "obj-27", 0 ],
                     "source": [ "obj-28", 0 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-2", 0 ],
+                    "source": [ "obj-3", 0 ]
                 }
             },
             {

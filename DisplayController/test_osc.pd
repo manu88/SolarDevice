@@ -1,4 +1,4 @@
-#N canvas 623 129 1076 930 12;
+#N canvas 66 104 1076 930 12;
 #X obj 195 516 osc/packOSC;
 #X obj 183 614 iemnet/udpsend;
 #X msg 319 569 connect 127.0.0.1 8010;
@@ -148,14 +148,15 @@
 #X obj 851 195 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
 #X msg 543 180 /servo \$1 500;
 #X msg 887 446 /clock \$1 0;
-#X msg 888 394 /set-state 2;
 #X msg 736 161 /realtime \$1;
 #X obj 743 109 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
 #X obj 676 570 route /sensor /current-sensor;
+#X msg 864 394 /set-state 2;
+#X msg 873 313 /day 3;
 #X connect 0 0 1 0;
 #X connect 2 0 1 0;
 #X connect 3 0 4 0;
-#X connect 4 0 51 0;
+#X connect 4 0 50 0;
 #X connect 5 0 0 0;
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
@@ -205,6 +206,7 @@
 #X connect 46 0 0 0;
 #X connect 47 0 0 0;
 #X connect 48 0 0 0;
-#X connect 49 0 0 0;
-#X connect 50 0 49 0;
-#X connect 51 0 21 0;
+#X connect 49 0 48 0;
+#X connect 50 0 21 0;
+#X connect 51 0 0 0;
+#X connect 52 0 0 0;

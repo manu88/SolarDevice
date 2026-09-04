@@ -1,5 +1,6 @@
 from display_controller import DisplayController
 from colors import polylinear_gradient
+from conf import Config
 
 
 class WelcomeAnim:
@@ -89,6 +90,14 @@ class PulsedGradient:
         self.gradient = polylinear_gradient(
             [self.start_col, self.mid_col,  self.end_col], n=4)
 
+    def set_day_state(self, day_state: int):
+        colors = Config.GRADIENT_COLORS[day_state]
+        print(colors)
+        self.start_col = colors[0]
+        self.mid_col = colors[1]
+        self.end_col = colors[2]
+        self._rebuild_grad()
+
     def reset(self):
         self.percent_pulse = 0
         self.time_waiting_until = 0
@@ -97,23 +106,22 @@ class PulsedGradient:
         self.time_high_ms = high
         self.time_low_ms = low
 
-    def set_start_color(self, r: int, g: int, b: int):
-        self.start_col = [r, g, b]
+    def _rebuild_grad(self):
         size = len(self.gradient)
         self.gradient = polylinear_gradient(
             [self.start_col, self.mid_col,  self.end_col], n=size)
+
+    def set_start_color(self, r: int, g: int, b: int):
+        self.start_col = [r, g, b]
+        self._rebuild_grad()
 
     def set_mid_color(self, r: int, g: int, b: int):
         self.mid_col = [r, g, b]
-        size = len(self.gradient)
-        self.gradient = polylinear_gradient(
-            [self.start_col, self.mid_col,  self.end_col], n=size)
+        self._rebuild_grad()
 
     def set_end_color(self, r: int, g: int, b: int):
         self.end_col = [r, g, b]
-        size = len(self.gradient)
-        self.gradient = polylinear_gradient(
-            [self.start_col, self.mid_col,  self.end_col], n=size)
+        self._rebuild_grad()
 
     def set_size(self, size: int):
         if size == len(self.gradient):
