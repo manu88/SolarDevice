@@ -18,6 +18,7 @@ class OSCServer(OSCServerInterface):
         self.dispatcher.map("/dump", self.osc_dump)
         self.dispatcher.map("/dump-arduinos", self.osc_dump_arduino)
         self.dispatcher.map("/clock", self.osc_clock)
+        self.dispatcher.map("/clock2", self.osc_clock2)
         self.dispatcher.map("/day", self.osc_day)
         self.dispatcher.map("/realtime", self.osc_set_realtime)
 
@@ -52,6 +53,9 @@ class OSCServer(OSCServerInterface):
         self.logic.set_day_state(int(state))
 
     def osc_clock(self, _, hh: float, mm: float):
+        self.logic.on_clock(int(hh), int(mm))
+
+    def osc_clock2(self, _, hh: float, mm: float):
         self.logic.on_clock(int(hh), int(mm))
 
     def osc_set_realtime(self, _, use_realtime: float):
