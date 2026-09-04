@@ -2,7 +2,7 @@
 #;
 # Attention: Ne pas oublier les `;` en fin de lignes -- même dans les commentaires!;
 #;
-led-controller-host 127.0.0.1;   
+led-controller-host 127.0.0.1;
 min-sun-luminosity 0.5;
 #Combien de pulses lors des animations à chaque heures?;
 hour-anim-cycles 2;
@@ -23,7 +23,7 @@ start-animation-color 255 255 255;
 #;
 #Mendocinos;
 #;
-mendocino-stop-restart-anim-when-at-min 0.4;
+mendocino-stop-restart-anim-when-at-min 0.3;
 mendocino-restart-anim-when-below 0.4;
 #Debug section;
 log-msgs 0;
