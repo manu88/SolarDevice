@@ -78,6 +78,10 @@ class OSCServer(OSCServerInterface):
     def send_hour(self, hour: int):
         self.osc_client.send_message("/clock", [hour, 0])
 
+    def send_current_sensor(self, index: int, value: float, is_rotating: int):
+        self.osc_client.send_message(
+            "/current-sensor", [index, value, is_rotating])
+
     def send_sensor(self, index: int, value: float, is_rotating: int):
         self.osc_client.send_message(
             "/sensor", [index, value, is_rotating])

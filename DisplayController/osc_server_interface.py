@@ -6,6 +6,9 @@ class OSCServerInterface(ABC):
     def send_sensor(self, index: int, value: float, is_rotating: int):
         assert (0)
 
+    def send_current_sensor(self, index: int, value: float, is_rotating: int):
+        assert (0)
+
     @abstractmethod
     def send_hour(self, hour: int):
         assert (0)

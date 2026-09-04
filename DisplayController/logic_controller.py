@@ -166,7 +166,8 @@ class LogicController:
             index_sensor = self.current_hour % 12
             value = self.arduinos_controller.sensors.sensors[index_sensor]
             is_rotating = self.arduinos_controller.sensors.is_rotating[index_sensor]
-            self.osc_server.send_sensor(index_sensor, value, is_rotating)
+            self.osc_server.send_current_sensor(
+                index_sensor, value, is_rotating)
         if elapsed_ms - self.last_time_sent_hour >= Config.SEND_CURRENT_HOUR_EVERY_MS:
             self.last_time_sent_hour = elapsed_ms
             print("Send hour")
