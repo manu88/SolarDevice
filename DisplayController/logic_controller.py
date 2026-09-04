@@ -70,7 +70,7 @@ class LogicController:
         self._should_run = False
         self.anim_state = AnimState.UNDEFINED
         self.anim_start_started_at_ms = 0
-        self.next_state = AnimState.PULSES
+        self.next_state = AnimState.WELCOME_ANIM
         self.update_delay_ms = Config.LOGIC_FRAME_DURATION_MS
         self.welcome_anim = WelcomeAnim()
         self.pulse_anim = PulsedGradient()
