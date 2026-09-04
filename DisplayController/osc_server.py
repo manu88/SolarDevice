@@ -2,7 +2,7 @@ from typing import Optional
 from pythonosc import osc_server
 from pythonosc import udp_client
 from pythonosc.dispatcher import Dispatcher
-from arduinos_controller import ArduinosController
+from arduinos_controller import ArduinosController, servos_mapping
 from osc_server_interface import OSCServerInterface
 from logic_controller import LogicController
 
@@ -28,6 +28,7 @@ class OSCServer(OSCServerInterface):
         self.dispatcher.map("/set-grad-spread", self.osc_set_grad_spread)
         self.dispatcher.map("/set-sun", self.osc_set_sun)
         self.dispatcher.map("/set-state", self.osc_set_state)
+        self.dispatcher.map("/start-all", self.osc_start_all)
 
         self.server = osc_server.ThreadingOSCUDPServer(
             ("", 8010), self.dispatcher)
@@ -58,12 +59,7 @@ class OSCServer(OSCServerInterface):
         self.secondary_ctlr.display_ctrl.set_pix1(i, int(r), int(g), int(b))
 
     def osc_servo(self, _, servo_idx: int, duration_ms: int):
-        # print(f"osc_servo servo_idx={servo_idx} duration_ms={duration_ms}")
-        real_servo_idx = servo_idx % 3
-        board_id = servo_idx//3
-        # print(
-        #    f"Sending to board={board_id} real_servo_idx={real_servo_idx} duration={duration_ms}")
-        self.secondary_ctlr.send_motor(board_id, real_servo_idx, duration_ms)
+        self.secondary_ctlr.set_motor(servo_idx, duration_ms)
 
     def start(self):
         self.server.serve_forever()
@@ -75,7 +71,7 @@ class OSCServer(OSCServerInterface):
         self.osc_client.send_message(
             "/sensor", [index, value, is_rotating])
 
-    def osc_set_grad_color(self, args, typ: int, r: float, g: float, b: float):
+    def osc_set_grad_color(self, _, typ: int, r: float, g: float, b: float):
         self.logic.set_grad_color(typ, r, g, b)
 
     def osc_set_state(self, _, state: float):
@@ -89,3 +85,7 @@ class OSCServer(OSCServerInterface):
 
     def osc_set_pulse_times(self, _, high: float, low: float):
         self.logic.set_pulse_times(high, low)
+
+    def osc_start_all(self, _):
+        print("Start all mendocinos")
+        self.secondary_ctlr.set_all(1000)

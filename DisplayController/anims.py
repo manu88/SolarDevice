@@ -29,6 +29,54 @@ class WelcomeAnim:
 
 
 class Pulse:
+    def __init__(self, num_periods: int) -> None:
+        self.percent_pulse = 0
+        self.time_high_ms = 800
+        self.time_low_ms = 300
+        self.time_waiting_until = 0
+        self.target_inc = 5
+
+        self.current_period = 0
+        self.num_periods = num_periods
+        self.color = [255, 255, 255]
+
+    def reset(self):
+        self.percent_pulse = 0
+        self.current_period = 0
+        self.time_waiting_until = 0
+
+    def paint(self,  display_controller: DisplayController):
+        percent = float(self.percent_pulse/100)
+        r = int(self.color[0] * percent)
+        g = int(self.color[1] * percent)
+        b = int(self.color[2] * percent)
+        display_controller.set_all(r, g, b)
+
+    def update(self, elapsed_ms: int) -> bool:
+        if self.time_waiting_until > 0:
+            if elapsed_ms >= self.time_waiting_until:
+                self.time_waiting_until = 0
+                if self.percent_pulse == 0:
+                    self.current_period += 1
+                    return self.current_period >= self.num_periods
+            return False
+
+        self.percent_pulse += self.target_inc
+        if self.percent_pulse >= 100:
+            self.percent_pulse = 100
+            self.target_inc = -self.target_inc
+            if self.time_waiting_until == 0:
+                self.time_waiting_until = elapsed_ms + self.time_high_ms
+
+        elif self.percent_pulse < 0:
+            self.percent_pulse = 0
+            self.target_inc = -self.target_inc
+            if self.time_waiting_until == 0:
+                self.time_waiting_until = elapsed_ms + self.time_low_ms
+        return False
+
+
+class PulsedGradient:
     def __init__(self) -> None:
         self.percent_pulse = 0
         self.time_high_ms = 800
@@ -41,6 +89,10 @@ class Pulse:
         self.grad_size = 12
         self.gradient = polylinear_gradient(
             [self.start_col, self.mid_col,  self.end_col], n=self.grad_size)
+
+    def reset(self):
+        self.percent_pulse = 0
+        self.time_waiting_until = 0
 
     def set_pulse_times(self, high: int, low: int):
         self.time_high_ms = high

@@ -9,6 +9,22 @@ from display_controller import DisplayController
 
 BAUD_RATE = 115200
 
+# mapping from desired -ie. hours to real
+servos_mapping = {
+    0:  10,
+    1: 11,
+    2: 0,
+    3: 1,
+    4: 2,
+    5: 3,
+    6: 4,
+    7: 5,
+    8: 6,
+    9: 7,
+    10: 8,
+    11: 9,
+}
+
 
 class ArduinosController:
     def __init__(self, display_ctrl: DisplayController, serial_ports: list[str]) -> None:
@@ -33,6 +49,16 @@ class ArduinosController:
 
     def start(self):
         self.read_thread.start()
+
+    def set_all(self, duration_ms: int):
+        for i in range(12):
+            self.set_motor(i, duration_ms)
+
+    def set_motor(self, servo_idx: int, duration_ms: int):
+        index = servos_mapping[servo_idx % 12]
+        real_servo_idx = index % 3
+        board_id = index//3
+        self.send_motor(board_id, real_servo_idx, duration_ms)
 
     def send_motor(self, board_id: int, motor_id: int, duration: int):
         if board_id not in self.board_ids:
