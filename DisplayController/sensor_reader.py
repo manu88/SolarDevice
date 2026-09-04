@@ -8,6 +8,22 @@ NUM_BOARDS = 4
 NUM_SENSORS = 12
 
 
+sensors_mapping = {
+    10: 0,
+    11: 1,
+    0: 2,
+    1: 3,
+    2: 4,
+    3: 5,
+    4: 6,
+    5: 7,
+    6: 8,
+    7: 9,
+    8: 10,
+    9: 11,
+}
+
+
 class SensorReader:
     def __init__(self) -> None:
         self.sensors = [0.0 for i in range(NUM_SENSORS)]
@@ -60,15 +76,18 @@ class SensorReader:
             print(f"invalid idx_start {idx_start}")
             return []
         try:
-            self.sensors[idx_start] = float(v0)
-            self.sensors[idx_start+1] = float(v1)
-            self.sensors[idx_start+2] = float(v2)
-            self.is_rotating[idx_start] = int(r0)
-            self.is_rotating[idx_start+1] = int(r1)
-            self.is_rotating[idx_start+2] = int(r2)
-            ret.append(idx_start)
-            ret.append(idx_start+1)
-            ret.append(idx_start+2)
+            idx_0 = sensors_mapping[idx_start]
+            idx_1 = sensors_mapping[idx_start+1]
+            idx_2 = sensors_mapping[idx_start+2]
+            self.sensors[idx_0] = float(v0)
+            self.sensors[idx_1] = float(v1)
+            self.sensors[idx_2] = float(v2)
+            self.is_rotating[idx_0] = int(r0)
+            self.is_rotating[idx_1] = int(r1)
+            self.is_rotating[idx_2] = int(r2)
+            ret.append(idx_0)
+            ret.append(idx_1)
+            ret.append(idx_2)
         except ValueError as e:
             print(f"ValueError on board {board_id}: {e}")
         self._check_boards_ok()

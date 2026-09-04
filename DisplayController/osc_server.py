@@ -88,4 +88,4 @@ class OSCServer(OSCServerInterface):
 
     def osc_start_all(self, _):
         print("Start all mendocinos")
-        self.secondary_ctlr.set_all(1000)
+        self.secondary_ctlr.set_all(500)
