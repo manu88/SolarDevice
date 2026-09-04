@@ -23,7 +23,6 @@ class LogicController:
 
         self.update_delay_ms = 40
         self.welcome_anim = WelcomeAnim()
-        self.welcome_anim_duration_ms = 10000
         self.pulse = Pulse()
 
         self.sun_pos: int = 0
@@ -44,8 +43,8 @@ class LogicController:
                 f"Change state from {self.anim_state} to {self.next_state}")
             self.anim_state = self.next_state
             self.anim_start_started_at_ms = elapsed
-        elif self.anim_state == AnimState.WELCOME_ANIM and elapsed - self.anim_start_started_at_ms >= self.welcome_anim_duration_ms:
-            self.next_state = AnimState.PULSES
+            if self.anim_state == AnimState.WELCOME_ANIM:
+                self.welcome_anim.reset()
 
     def _run(self):
         elapsed = 0
@@ -75,7 +74,9 @@ class LogicController:
     # self.update_lock IS ALREADY LOCKED
     def update(self, elapsed_ms):
         if self.anim_state == AnimState.WELCOME_ANIM:
-            self.welcome_anim.update(elapsed_ms)
+            if self.welcome_anim.update(elapsed_ms):
+                print("Welcom anim done")
+                self.next_state = AnimState.PULSES
         elif self.anim_state == AnimState.ON_THE_CLOCK:
             pass
         elif self.anim_state == AnimState.PULSES:

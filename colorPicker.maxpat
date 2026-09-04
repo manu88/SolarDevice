@@ -13,6 +13,17 @@
         "boxes": [
             {
                 "box": {
+                    "id": "obj-63",
+                    "maxclass": "message",
+                    "numinlets": 2,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 641.0, 557.0, 68.0, 22.0 ],
+                    "text": "/set-state 1"
+                }
+            },
+            {
+                "box": {
                     "id": "obj-61",
                     "maxclass": "button",
                     "numinlets": 1,
@@ -518,6 +529,12 @@
                 "patchline": {
                     "destination": [ "obj-2", 0 ],
                     "source": [ "obj-61", 0 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-2", 0 ],
+                    "source": [ "obj-63", 0 ]
                 }
             },
             {

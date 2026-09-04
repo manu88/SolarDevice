@@ -112,7 +112,8 @@ class ArduinosController:
         try:
             arduino = serial.Serial(
                 port=port, baudrate=BAUD_RATE, timeout=.1)
-        except Exception:
+        except Exception as e:
+            print(f"_try_open: error {e}")
             return False
         self.arduinos[port] = arduino
         return True

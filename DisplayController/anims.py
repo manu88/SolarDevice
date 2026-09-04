@@ -5,19 +5,27 @@ from colors import polylinear_gradient
 class WelcomeAnim:
     def __init__(self) -> None:
         self.current_pos = 0
-        self.time_acc = 0
-        self.time_to_change = 1500
+        self.last_change_time = 0
+        self.time_to_change = 400
+        self.done = False
+
+    def reset(self):
+        self.done = False
+        self.last_change_time = 0
 
     def paint(self,  display_controller: DisplayController):
-        display_controller.set_pix1(self.current_pos, 100, 100, 100)
+        if not self.done:
+            display_controller.set_pix1(self.current_pos, 100, 100, 100)
 
-    def update(self, elapsed_ms: int):
-        self.time_acc += elapsed_ms
-        if self.time_acc >= self.time_to_change:
-            self.time_acc = 0
+    def update(self, elapsed_ms: int) -> bool:
+        if elapsed_ms - self.last_change_time >= self.time_to_change:
+            self.last_change_time = elapsed_ms
             self.current_pos += 1
             if self.current_pos >= 24:
                 self.current_pos = 0
+                self.done = True
+                return True
+        return False
 
 
 class Pulse:
