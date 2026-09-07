@@ -1,4 +1,4 @@
-#N canvas 582 117 993 530 12;
+#N canvas 536 495 993 530 12;
 #N canvas 860 156 764 256 init 0;
 #X obj 278 132 config config.txt;
 #X obj 145 16 loadbang;
@@ -26,7 +26,7 @@
 #X connect 7 0 0 0;
 #X connect 8 0 2 0;
 #X restore 51 71 pd init;
-#N canvas 270 279 1288 577 receive_params 0;
+#N canvas -917 95 910 569 receive_params 1;
 #X obj 87 121 iemnet/udpreceive 8012;
 #X obj 104 198 osc/unpackOSC;
 #N canvas 92 131 1254 789 sensors 0;
@@ -162,15 +162,15 @@
 #X obj 249 105 spigot 1;
 #X obj 358 88 tgl 19 1 empty empty Mode\ temps\ réel 0 -10 0 12 #fcfcfc #000000 #000000 1 1;
 #X obj 183 41 loadbang;
-#X obj 115 300 osc/packOSC;
+#X obj 104 347 osc/packOSC;
 #X obj 103 398 iemnet/udpsend;
-#X msg 239 353 connect solar-device-main.local 8010;
-#X obj 746 119 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
+#X msg 103 371 connect solar-device-main.local 8010;
+#X obj 661 112 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
 #X msg 534 109 /realtime \$1;
 #X obj 541 57 tgl 19 0 empty empty Cocher/décocher\ pour\ pas\ temps\ réel 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
 #X msg 659 140 /clock2 \$1 0;
-#X msg 788 150 /clock \$1 0;
-#X text 738 87 Heure:;
+#X msg 764 140 /clock \$1 0;
+#X text 664 88 Heure:;
 #X connect 1 0 4 0;
 #X connect 3 0 0 0;
 #X connect 4 0 2 0;
