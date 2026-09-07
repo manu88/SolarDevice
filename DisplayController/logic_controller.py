@@ -37,13 +37,11 @@ class MotorChecker:
         self.indices_to_check = []
 
     def _do_check_motor(self, index: int):
-        print(f"_do_check_motor on index {index}")
         speed = self.arduinos_controller.sensors.sensors[index]
         is_rotating = self.arduinos_controller.sensors.is_rotating[index]
         if is_rotating:
             return
         if speed < Config.RESTART_IF_UNDER_SPEED:
-            print(f"queuing index={index}")
             self._motors_to_start.add(index)
 
     def _do_check_motors(self):
@@ -53,7 +51,6 @@ class MotorChecker:
     def update(self, elapsed_ms: int):
         if len(self._motors_to_start):
             idx = self._motors_to_start.pop()
-            print(f"Restart motor {idx}")
             self.arduinos_controller.set_motor(idx, 500)
         if elapsed_ms - self.last_check_ms >= self.check_every_ms:
             self.last_check_ms = elapsed_ms
@@ -180,6 +177,7 @@ class LogicController:
             index_sensor = self.current_hour % 12
             value = self.arduinos_controller.sensors.sensors[index_sensor]
             is_rotating = self.arduinos_controller.sensors.is_rotating[index_sensor]
+            print(f"Send current sensor {index_sensor}")
             self.osc_server.send_current_sensor(
                 index_sensor, value, is_rotating)
         if elapsed_ms - self.last_time_sent_hour >= Config.SEND_CURRENT_HOUR_EVERY_MS:
