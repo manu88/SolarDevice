@@ -108,14 +108,14 @@ class LogicController:
             if self.realtime:
                 return
             if hh != self.current_hour:
-                print(f"Hour changed from {self.current_hour} to {hh}")
+                print(f"(2)Hour changed from {self.current_hour} to {hh}")
                 self.current_hour = hh
                 self.hour_changed()
 
     def on_clock2(self, hh: int, mm: int):
         with self.update_lock:
             if hh != self.current_hour:
-                print(f"Hour changed from {self.current_hour} to {hh}")
+                print(f"(3)Hour changed from {self.current_hour} to {hh}")
                 self.current_hour = hh
                 self.hour_changed()
 
@@ -200,7 +200,7 @@ class LogicController:
             current_hour = datetime.datetime.now().hour
             if current_hour != self.current_hour:
                 print(
-                    f"Hour changed from {self.current_hour} to {current_hour}")
+                    f"(1)Hour changed from {self.current_hour} to {current_hour}")
                 self.current_hour = current_hour
                 self.hour_changed()
                 return
