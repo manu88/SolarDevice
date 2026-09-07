@@ -105,7 +105,7 @@ class LogicController:
 
     def on_clock(self, hh: int, mm: int):
         with self.update_lock:
-            if self.realtime:
+            if self.realtime is False:
                 return
             if hh != self.current_hour:
                 print(f"(2)Hour changed from {self.current_hour} to {hh}")
