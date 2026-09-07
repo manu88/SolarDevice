@@ -1,4 +1,4 @@
-#N canvas 302 43 569 1046 12;
+#N canvas 204 41 569 1046 12;
 #N canvas 1009 134 603 417 volume 0;
 #X obj 121 161 / 127;
 #X obj 121 188 pack 0 50;
@@ -76,10 +76,10 @@
 #X coords 0 -1 1 1 140 40 1 100 100;
 #X restore 610 581 pd volume square;
 #X obj 0 0 cnv 15 550 280 empty ViewPort empty 20 12 0 14 #7c7c7c #fcfcfc 0;
-#X obj 187 41 nbx 5 20 -1e+37 1e+37 0 1 Beat_Frequency_final Beat_Frequency_knob empty 0 -8 0 10 #c4fcc4 #000000 #000000 3.4 256;
+#X obj 187 41 nbx 5 20 -1e+37 1e+37 0 1 Beat_Frequency_final Beat_Frequency_knob empty 0 -8 0 10 #c4fcc4 #000000 #000000 10 256;
 #X text 254 41 Hz;
 #X text 106 42 Hz;
-#X obj 37 42 nbx 5 20 -1e+37 1e+37 0 1 Main_Frequency Main_Frequency_knob empty 0 -8 0 10 #fcfcc4 #000000 #000000 432 256;
+#X obj 37 42 nbx 5 20 -1e+37 1e+37 0 1 Main_Frequency Main_Frequency_knob empty 0 -8 0 10 #fcfcc4 #000000 #000000 285 256;
 #X text 14 14 Carrier Frequency;
 #X text 166 14 Beat Frequency;
 #X obj 353 83 hsl 100 20 0 100 0 1 sine_volume_slider sine_volume_knob PresetOk -2 -8 0 10 #dcdcdc #000000 #00ff04 1500 1;
@@ -196,8 +196,8 @@
 #X text 374 1034 Reset to sine wav only;
 #X obj 31 1026 bng 20 250 50 0 preset_throat01 empty Throat 35 10 0 10 #d0900c #000000 #000000;
 #X obj 33 523 bng 30 250 50 0 \$0-nextview0 empty main 36 15 0 10 #ecd48c #000000 #000000;
-#X obj 208 79 vsl 20 100 0 64 0 1 Beat_Frequency_knob green-vsl PresetOk 0 -9 0 10 #c4fcc4 #000000 #00ff04 464 1;
-#X obj 60 79 vsl 20 100 0 440 0 1 Main_Frequency_knob yellow-vsl PresetOK 0 -9 0 10 #fcfc84 #000000 #00ff04 2430 1;
+#X obj 208 79 vsl 20 100 0 64 0 1 Beat_Frequency_knob green-vsl PresetOk 0 -9 0 10 #c4fcc4 #000000 #00ff04 1547 1;
+#X obj 60 79 vsl 20 100 0 440 0 1 Main_Frequency_knob yellow-vsl Realtime-control 0 -9 0 10 #fcfc84 #000000 #00ff04 6412 1;
 #X text 343 259 by Garvalf;
 #X text 352 50 Sine Volume;
 #X obj 174 801 bng 30 250 50 0 \$0-nextview2 empty keyboard 36 15 0 10 #ecd48c #000000 #000000;
@@ -652,12 +652,12 @@
 #X obj 312 1362 bng 30 250 50 0 \$0-nextview3 empty presets 36 15 0 10 #ecd48c #000000 #000000;
 #X obj 174 1362 bng 30 250 50 0 \$0-nextview2 empty keyboard 36 15 0 10 #ecd48c #000000 #000000;
 #X obj 33 1362 bng 30 250 50 0 \$0-nextview0 empty main 36 15 0 10 #ecd48c #000000 #000000;
-#X obj 21 1252 hsl 70 15 0.1 20 0 0 vibrato_right_freq vibrato_right_freq_knob freq\ PresetOK -2 -8 0 10 #fcfcfc #000000 #0400ff 0 1;
-#X obj 23 1288 hsl 70 15 0 10 0 0 vibrato_right_amount vibrato_right_amount_knob amount\ PresetOK -2 -8 0 10 #fcfcfc #000000 #0400ff 0 1;
+#X obj 21 1252 hsl 70 15 0.1 20 0 0 vibrato_right_freq vibrato_right_freq_knob freq\ Realtime-Control -2 -8 0 10 #fcfcfc #000000 #0400ff 0 1;
+#X obj 23 1288 hsl 70 15 0 10 0 0 vibrato_right_amount vibrato_right_amount_knob amount\ Realtime-Control -2 -8 0 10 #fcfcfc #000000 #0400ff 0 1;
 #X text 41 1133 Vibrato;
 #X text 108 1272 R;
-#X obj 20 1171 hsl 70 15 0.1 20 0 0 vibrato_left_freq vibrato_left_freq_knob freq\ PresetOK -2 -8 0 10 #ffffff #000000 #0400ff 0 1;
-#X obj 19 1207 hsl 70 15 0 10 0 0 vibrato_left_amount vibrato_left_amount_knob amount\ PresetOK -2 -8 0 10 #fcfcfc #000000 #0400ff 0 1;
+#X obj 20 1171 hsl 70 15 0.1 20 0 0 vibrato_left_freq vibrato_left_freq_knob freq\ Realtime-Control -2 -8 0 10 #ffffff #000000 #0400ff 0 1;
+#X obj 19 1207 hsl 70 15 0 10 0 0 vibrato_left_amount vibrato_left_amount_knob amount\ Realtime-Control -2 -8 0 10 #fcfcfc #000000 #0400ff 0 1;
 #X text 107 1191 L;
 #N canvas 1224 73 616 414 volume 0;
 #X obj 121 188 pack 0 50;
