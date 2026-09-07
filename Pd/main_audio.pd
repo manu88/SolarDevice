@@ -1,4 +1,4 @@
-#N canvas 582 117 1059 847 12;
+#N canvas 582 117 993 530 12;
 #N canvas 860 156 764 256 init 0;
 #X obj 278 132 config config.txt;
 #X obj 145 16 loadbang;
@@ -160,7 +160,7 @@
 #X obj 249 152 sound/main_audio;
 #X obj 51 29 bng 19 250 50 0 empty empty reload\ config\ file 0 -10 0 12 #fcfcfc #000000 #000000;
 #X obj 249 105 spigot 1;
-#X obj 358 88 tgl 19 1 empty empty Mode\ temps\ réel 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
+#X obj 358 88 tgl 19 1 empty empty Mode\ temps\ réel 0 -10 0 12 #fcfcfc #000000 #000000 1 1;
 #X obj 183 41 loadbang;
 #X obj 115 300 osc/packOSC;
 #X obj 103 398 iemnet/udpsend;
