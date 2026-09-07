@@ -1,4 +1,4 @@
-#N canvas -1212 49 808 874 12;
+#N canvas 579 214 808 874 12;
 #X msg 206 120 save 0;
 #X msg 206 151 save 1;
 #X obj 69 564 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
@@ -73,7 +73,7 @@
 #X text 658 154 Sleep-2;
 #X text 658 184 LucidDreaming-2;
 #X text 658 214 sleep alt-2;
-#X text 654 256;
+#X text 654 256 comment;
 #X text 658 244 Theta-2;
 #X text 658 274 Alpha Waves-2;
 #X text 658 304 Alpha Waves ALT \; -2;
