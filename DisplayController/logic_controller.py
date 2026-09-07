@@ -112,6 +112,13 @@ class LogicController:
                 self.current_hour = hh
                 self.hour_changed()
 
+    def on_clock2(self, hh: int, mm: int):
+        with self.update_lock:
+            if hh != self.current_hour:
+                print(f"Hour changed from {self.current_hour} to {hh}")
+                self.current_hour = hh
+                self.hour_changed()
+
     # self.update_lock IS ALREADY LOCKED
     def _check_state(self, elapsed: int):
         if self.anim_state != self.next_state:

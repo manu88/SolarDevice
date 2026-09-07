@@ -56,7 +56,7 @@ class OSCServer(OSCServerInterface):
         self.logic.on_clock(int(hh), int(mm))
 
     def osc_clock2(self, _, hh: float, mm: float):
-        self.logic.on_clock(int(hh), int(mm))
+        self.logic.on_clock2(int(hh), int(mm))
 
     def osc_set_realtime(self, _, use_realtime: float):
         self.logic.set_use_realtime(int(use_realtime))
