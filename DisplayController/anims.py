@@ -79,6 +79,7 @@ class Pulse:
 
 class PulsedGradient:
     def __init__(self) -> None:
+        self.hide = False
         self.percent_pulse = 0
         self.time_high_ms = 800
         self.time_low_ms = 300
@@ -123,6 +124,10 @@ class PulsedGradient:
         self._rebuild_grad()
 
     def set_size(self, size: int):
+        if size == 0:
+            self.hide = True
+        else:
+            self.hide = False
         if size == len(self.gradient):
             return
         self.gradient = polylinear_gradient(
@@ -133,15 +138,15 @@ class PulsedGradient:
 
     def draw_gradient_at(self, start_idx: int, display_controller: DisplayController):
         percent = float(self.percent_pulse/100)
-
-        for i, color in enumerate(self.gradient):
-            r = int(color[0] * percent)
-            g = int(color[1] * percent)
-            b = int(color[2] * percent)
-            sun_0_pos = (start_idx-i) % 24
-            sun_1_pos = (start_idx+i+1) % 24
-            display_controller.set_pix1(sun_0_pos, r, g, b)
-            display_controller.set_pix1(sun_1_pos, r, g, b)
+        if not self.hide:
+            for i, color in enumerate(self.gradient):
+                r = int(color[0] * percent)
+                g = int(color[1] * percent)
+                b = int(color[2] * percent)
+                sun_0_pos = (start_idx-i) % 24
+                sun_1_pos = (start_idx+i+1) % 24
+                display_controller.set_pix1(sun_0_pos, r, g, b)
+                display_controller.set_pix1(sun_1_pos, r, g, b)
         sun_val = int(percent * 255)
         display_controller.set_pix1(start_idx, sun_val, sun_val, sun_val)
         display_controller.set_pix1((start_idx+1) %
