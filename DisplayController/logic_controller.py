@@ -27,11 +27,11 @@ class MotorChecker:
     def check(self, indexes: list[int]):
         print(
             f"check indexes={indexes} self._motors_to_start={self._motors_to_start}")
-        self._motors_to_start.clear()
+        # self._motors_to_start.clear()
         self.indices_to_check = indexes
 
     def check_all(self):
-        self._motors_to_start.clear()
+        # self._motors_to_start.clear()
         self.indices_to_check = list(range(12))
 
     def check_none(self):
