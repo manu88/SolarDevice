@@ -4,7 +4,8 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=pd -nogui main_audio.pd  -path /home/solar/
+ExecStartPre=amixer -c 3 set Master 60%
+ExecStart=sudo /usr/bin/nice -n -20 sudo -u solar pd -nogui main_audio.pd  -path /home/solar/
 Restart=on-failure
 RestartSec=10s
 User=solar
