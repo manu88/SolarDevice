@@ -1,4 +1,4 @@
-#N canvas -1258 56 808 874 12;
+#N canvas 656 330 808 874 12;
 #X msg 206 120 save 0;
 #X msg 206 151 save 1;
 #X obj 69 564 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
