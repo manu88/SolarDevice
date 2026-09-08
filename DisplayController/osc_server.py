@@ -24,17 +24,11 @@ class OSCServer(OSCServerInterface):
 
         self.dispatcher.map("/luminosity", self.osc_luminosity)
         self.dispatcher.map("/nebulosity", self.osc_nebulosity)
+
         # to sort, mostly debug/tests
-        self.dispatcher.map("/servo", self.osc_servo)
-        self.dispatcher.map("/update", self.osc_update)
-        self.dispatcher.map("/pix1", self.osc_set_pix1)
-        self.dispatcher.map("/all", self.osc_set_all)
-        self.dispatcher.map("/clear1", self.osc_clear1)
         self.dispatcher.map("/set-grad-color", self.osc_set_grad_color)
-        self.dispatcher.map("/set-grad-spread", self.osc_set_grad_spread)
         self.dispatcher.map("/set-sun", self.osc_set_sun)
         self.dispatcher.map("/set-state", self.osc_set_state)
-        self.dispatcher.map("/start-all", self.osc_start_all)
 
         self.server = osc_server.ThreadingOSCUDPServer(
             ("", 8010), self.dispatcher)
@@ -70,25 +64,6 @@ class OSCServer(OSCServerInterface):
     def osc_dump_arduino(self, _):
         self.secondary_ctlr.display_ctrl.dump_arduino()
 
-    def osc_update(self, _):
-        # print("osc_update")
-        self.secondary_ctlr.display_ctrl.update_display()
-
-    def osc_clear1(self, _):
-        # print("clear1")
-        self.secondary_ctlr.display_ctrl.clear_buffer()
-
-    def osc_set_all(self, _, r: float, g: float, b: float):
-        # print("set_all")
-        self.secondary_ctlr.display_ctrl.set_all(int(r), int(g), int(b))
-
-    def osc_set_pix1(self, _, i: int, r: float, g: float, b: float):
-        # print("set_pix1")
-        self.secondary_ctlr.display_ctrl.set_pix1(i, int(r), int(g), int(b))
-
-    def osc_servo(self, _, servo_idx: int, duration_ms: int):
-        self.secondary_ctlr.set_motor(servo_idx, duration_ms)
-
     def start(self):
         self.server.serve_forever()
 
@@ -121,12 +96,5 @@ class OSCServer(OSCServerInterface):
     def osc_set_sun(self, _,  pos: float):
         self.logic.sun_pos = int(pos)
 
-    def osc_set_grad_spread(self, _, size: float):
-        self.logic.set_grad_size(int(size))
-
     def osc_set_pulse_times(self, _, high: float, low: float):
         self.logic.set_pulse_times(high, low)
-
-    def osc_start_all(self, _):
-        print("Start all mendocinos")
-        self.secondary_ctlr.set_all(500)
