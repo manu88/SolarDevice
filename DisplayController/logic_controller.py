@@ -243,8 +243,7 @@ class LogicController:
     def set_duty_cycle(self, on: int, off: int):
         print(f"osc_duty_cycle on={on} off={off}")
         with self.update_lock:
-            self.pulse_anim.time_high_ms = on
-            self.pulse_anim.time_low_ms = off
+            self.pulse_anim.set_duty_cycle(on, off)
 
     def set_luminosity(self, lum: float):
         new_sun_val = int(lum*255)

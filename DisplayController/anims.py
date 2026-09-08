@@ -91,6 +91,10 @@ class PulsedGradient:
         self.gradient = polylinear_gradient(
             [self.start_col, self.mid_col,  self.end_col], n=4)
 
+    def set_duty_cycle(self, on: int, off: int):
+        self.time_high_ms = on
+        self.time_low_ms = off
+
     def set_day_state(self, day_state: int):
         colors = Config.GRADIENT_COLORS[day_state]
         self.start_col = colors[0]
