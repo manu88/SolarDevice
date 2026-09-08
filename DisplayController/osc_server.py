@@ -41,7 +41,7 @@ class OSCServer(OSCServerInterface):
         self.logic.set_grad_size(spread)
 
     def osc_luminosity(self, _, lum: float):
-        print(f"Got luminosity {lum}")
+        self.osc_client.send_message("/luminosity", [lum])
 
     def osc_day(self, _, state: float):
         self.logic.set_day_state(int(state))
