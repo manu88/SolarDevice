@@ -62,6 +62,7 @@ class MotorChecker:
 class LogicController:
     def __init__(self, display_controller: DisplayController, arduinos_controller: ArduinosController) -> None:
         self.osc_server: OSCServerInterface = None
+        self.sun_val = 255
         self.display_controller = display_controller
         self.arduinos_controller = arduinos_controller
         self.thread = Thread(target=self._run)
@@ -174,7 +175,7 @@ class LogicController:
         elif self.anim_state == AnimState.ON_THE_CLOCK:
             self.clock_anim.paint(display_controller=self.display_controller)
         elif self.anim_state == AnimState.PULSES:
-            self.pulse_anim.paint(sun_pos=(self.current_hour % 12)*2,
+            self.pulse_anim.paint(sun_pos=(self.current_hour % 12)*2, sun_val=self.sun_val,
                                   display_controller=self.display_controller)
         else:
             print(f"paint: Undefined anim state {self.anim_state}")
@@ -237,6 +238,13 @@ class LogicController:
         with self.update_lock:
             self.pulse_anim.time_high_ms = on
             self.pulse_anim.time_low_ms = off
+
+    def set_luminosity(self, lum: float):
+        new_sun_val = int(lum*255)
+        if new_sun_val >= Config.SUN_MIN_VAL:
+            with self.update_lock:
+                print(f"set sun val to {new_sun_val} (lum={lum})")
+                self.sun_val = new_sun_val
 
     def set_nebulosity(self, neb: float):
         # max spread = 13

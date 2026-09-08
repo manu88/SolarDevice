@@ -41,6 +41,7 @@ class OSCServer(OSCServerInterface):
         self.osc_client.send_message("/nebulosity", [neb])
 
     def osc_luminosity(self, _, lum: float):
+        self.logic.set_luminosity(lum)
         self.osc_client.send_message("/luminosity", [lum])
 
     def osc_day(self, _, state: float):
