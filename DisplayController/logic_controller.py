@@ -25,6 +25,8 @@ class MotorChecker:
         self._motors_to_start = set()
 
     def check(self, indexes: list[int]):
+        print(
+            f"check indexes={indexes} self._motors_to_start={self._motors_to_start}")
         self._motors_to_start.clear()
         self.indices_to_check = indexes
 
