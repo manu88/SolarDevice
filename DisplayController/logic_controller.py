@@ -70,6 +70,7 @@ class LogicController:
     def __init__(self, display_controller: DisplayController, arduinos_controller: ArduinosController) -> None:
         self.osc_server: OSCServerInterface = None
         self.sun_val = 255
+        self.day_state = 0
         self.display_controller = display_controller
         self.arduinos_controller = arduinos_controller
         self.thread = Thread(target=self._run)
@@ -110,6 +111,7 @@ class LogicController:
             return
         print(f"set day state to {day_state}")
         with self.update_lock:
+            self.day_state = day_state
             self.pulse_anim.set_day_state(day_state)
         # 0 matin, 1 midi 2 aprem 3 soir 4 nuit
 
@@ -252,15 +254,27 @@ class LogicController:
                 self.sun_val = new_sun_val
 
     def set_nebulosity(self, neb: float):
-        # max spread = 13
-        spread = int(13*(1-neb))
-        print(f"Got nebulosity {neb} -> spread= {spread}")
+        print(f"Got nebulosity {neb}")
         with self.update_lock:
-            self.pulse_anim.set_size(spread)
-            if self.anim_state == AnimState.PULSES:
-                self.spread_motors = int((1-neb)*5)
-                print(f"set self.spread_motors={self.spread_motors}")
-                self._update_motors_list_to_check()
+            if self.day_state != 4:
+                self.set_spread(1-neb)
+
+    def set_battery(self, level: float):
+        print(f"Got battery {level}")
+        with self.update_lock:
+            if self.day_state == 4:
+                self.set_spread(level)
+
+    # self.update_lock IS ALREADY LOCKED
+    def set_spread(self, level: float):
+        # max spread = 13
+        spread = int(13*level)
+        print(f"set_spread {level} -> spread= {spread}")
+        self.pulse_anim.set_size(spread)
+        if self.anim_state == AnimState.PULSES:
+            self.spread_motors = int(level*5)
+            print(f"set self.spread_motors={self.spread_motors}")
+            self._update_motors_list_to_check()
 
     def set_grad_color(self, typ: int, r: float, g: float, b: float):
         with self.update_lock:
