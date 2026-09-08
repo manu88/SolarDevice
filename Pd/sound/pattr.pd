@@ -1,4 +1,4 @@
-#N canvas 0 175 1800 913 12;
+#N canvas 0 338 1800 913 12;
 #X obj -507 857 text set \$0-pattr;
 #X obj -214 -38 inlet;
 #X obj -634 408 r Main_Frequency_knob;
@@ -31,7 +31,7 @@
 #X obj 71 408 r sine_subbass_volume_knob;
 #X obj 71 442 route bang;
 #X obj 117 474 f;
-#N canvas 0 238 1800 687 out-msgs 0;
+#N canvas 455 238 1800 687 out-msgs 1;
 #X obj 149 51 inlet;
 #X obj 435 27 inlet;
 #X obj 723 184 outlet;
