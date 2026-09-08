@@ -7,11 +7,11 @@ class Config:
     SEND_CURRENT_HOUR_EVERY_MS = 10000
     ON_THE_CLOCK_NUM_PERIODS = 2
 
-    MORNING_COLORS = [[230, 216, 220], [255, 128, 129], [5, 3, 3]]
-    NOON_COLORS = [[255, 235, 201], [246, 247, 140], [5, 6, 1]]
-    AFTERNOON_COLORS = [[204, 225, 207], [237, 103, 255], [5, 5, 5]]
-    EVENING_COLORS = [[204, 193, 205], [237, 103, 255], [8, 4, 4]]
-    NIGHT_COLORS = [[180, 186, 250], [94, 109, 255], [4, 6, 25]]
+    MORNING_COLORS = [[230, 216, 230], [10, 10, 15], [2, 2, 4]]
+    NOON_COLORS = [[230, 216, 220], [10, 10, 10], [2, 2, 2]]
+    AFTERNOON_COLORS = [[240, 216, 220], [15, 10, 10], [4, 2, 2]]
+    EVENING_COLORS = [[252, 123, 111], [20, 10, 10], [4, 2, 2]]
+    NIGHT_COLORS = [[8, 10, 42], [4, 5, 15], [1, 1, 2]]
 
     GRADIENT_COLORS = [MORNING_COLORS, NOON_COLORS,
                        AFTERNOON_COLORS, EVENING_COLORS, NIGHT_COLORS]
