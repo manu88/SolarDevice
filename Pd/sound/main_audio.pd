@@ -1,4 +1,4 @@
-#N canvas 602 253 1094 626 12;
+#N canvas 622 306 1094 626 12;
 #X obj 63 247 synth-controller;
 #X obj 68 337 droidparty_main;
 #X msg 63 220 load \$1;
@@ -31,6 +31,24 @@
 #X obj 760 501 s green-vsl;
 #X obj 757 368 min 1;
 #X obj 757 395 max 0;
+#N canvas 942 153 456 372 default-params 0;
+#X obj 72 138 s noise_cutoff_knob;
+#X obj 214 141 s noise_resonance_knob;
+#X obj 385 144 s noise_panning_knob;
+#X obj 66 206 s Main_Frequency_knob;
+#X msg 44 74 0;
+#X obj 44 21 inlet;
+#X obj 260 224 s noise_brown_volume_slider;
+#X connect 4 0 0 0;
+#X connect 4 0 1 0;
+#X connect 4 0 2 0;
+#X connect 4 0 3 0;
+#X connect 4 0 6 0;
+#X connect 5 0 4 0;
+#X restore 271 193 pd default-params;
+#X obj 281 113 loadbang;
+#X obj 366 103 bng 19 250 50 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000;
+#X obj 279 142 delay 2000;
 #X connect 2 0 0 0;
 #X connect 4 0 21 0;
 #X connect 5 0 17 0;
@@ -59,3 +77,6 @@
 #X connect 28 0 29 0;
 #X connect 30 0 31 0;
 #X connect 31 0 28 0;
+#X connect 33 0 35 0;
+#X connect 34 0 32 0;
+#X connect 35 0 32 0;
