@@ -92,7 +92,7 @@ class OSCServer(OSCServerInterface):
     def osc_set_grad_color(self, _, typ: int, r: float, g: float, b: float):
         self.logic.set_grad_color(typ, r, g, b)
 
-    def osc_battery(self, _, battery:float):
+    def osc_battery(self, _, battery: float):
         self.logic.set_battery(battery)
 
     def osc_set_state(self, _, state: float):
@@ -100,6 +100,3 @@ class OSCServer(OSCServerInterface):
 
     def osc_set_sun(self, _,  pos: float):
         self.logic.sun_pos = int(pos)
-
-    def osc_set_pulse_times(self, _, high: float, low: float):
-        self.logic.set_pulse_times(high, low)

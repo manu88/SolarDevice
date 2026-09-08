@@ -1,4 +1,4 @@
-#N canvas 613 93 1035 750 12;
+#N canvas 590 155 1035 750 12;
 #X obj 54 438 osc/packOSC;
 #X obj 42 536 iemnet/udpsend;
 #X msg 178 491 connect 127.0.0.1 8010;
@@ -132,10 +132,10 @@
 #X obj 78 124 iemnet/udpreceive 8090;
 #X obj 88 181 osc/unpackOSC;
 #X text 849 216 # 0 matin \, 1 midi 2 aprem 3 soir 4 nuit;
-#X msg 852 250 /day 4;
 #X obj 712 209 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
 #X obj 711 29 vsl 19 162 0 1 0 0 empty empty empty 0 -9 0 12 #fcfcfc #000000 #000000 0 1;
 #X msg 685 261 /battery \$1;
+#X msg 852 250 /day 0;
 #X connect 0 0 1 0;
 #X connect 2 0 1 0;
 #X connect 3 0 4 0;
@@ -165,7 +165,7 @@
 #X connect 28 0 0 0;
 #X connect 29 0 30 0;
 #X connect 30 0 0 0;
-#X connect 32 0 0 0;
-#X connect 33 0 35 0;
-#X connect 34 0 33 0;
+#X connect 32 0 34 0;
+#X connect 33 0 32 0;
+#X connect 34 0 0 0;
 #X connect 35 0 0 0;

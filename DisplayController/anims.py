@@ -77,6 +77,38 @@ class Pulse:
         return False
 
 
+class PulsedAnimation:
+    def __init__(self) -> None:
+        self.gradient = PulsedGradient()
+
+    def set_size(self, size: int):
+        self.gradient.set_size(size)
+
+    def set_start_color(self, r: int, g: int, b: int):
+        self.gradient.set_start_color(r, g, b)
+
+    def set_mid_color(self, r: int, g: int, b: int):
+        self.gradient.set_mid_color(r, g, b)
+
+    def set_end_color(self, r: int, g: int, b: int):
+        self.gradient.set_end_color(r, g, b)
+
+    def set_day_state(self, day_state: int):
+        self.gradient.set_day_state(day_state)
+
+    def reset(self):
+        self.gradient.reset()
+
+    def paint(self,  sun_pos: int, sun_val: int, display_controller: DisplayController):
+        self.gradient.paint(sun_pos, sun_val, display_controller)
+
+    def update(self, elapsed_ms: int):
+        self.gradient.update(elapsed_ms)
+
+    def set_duty_cycle(self, on: int, off: int):
+        self.gradient.set_duty_cycle(on, off)
+
+
 class PulsedGradient:
     def __init__(self) -> None:
         self.hide = False
@@ -105,10 +137,6 @@ class PulsedGradient:
     def reset(self):
         self.percent_pulse = 0
         self.time_waiting_until = 0
-
-    def set_pulse_times(self, high: int, low: int):
-        self.time_high_ms = high
-        self.time_low_ms = low
 
     def _rebuild_grad(self):
         size = len(self.gradient)
