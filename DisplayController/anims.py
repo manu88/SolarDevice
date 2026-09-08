@@ -29,6 +29,46 @@ class WelcomeAnim:
         return False
 
 
+class Chenillard:
+    def __init__(self) -> None:
+        self.current_pos = 0
+        self.current_hour = 4
+        self.last_change_time = 0
+        self.time_to_change = 40
+        self.ttl_ms = 1000
+        self.start_time = 0
+        self.remains = 0
+        self.set_ttl(1000)
+
+    def set_ttl(self, ttl: int):
+        self.ttl_ms = min(ttl, 1200)
+        self.time_to_change = self.ttl_ms/12
+
+    def reset(self, start_time: int):
+        self.last_change_time = 0
+        self.current_pos = 0
+        self.start_time = start_time
+        self.remains = self.ttl_ms
+
+    def paint(self,  display_controller: DisplayController):
+        percent = min(self.remains/(self.ttl_ms*1.5), 1)
+        if percent >= 1:
+            return
+        color = int(255*(1-percent)**2)
+        pix_pos = ((self.current_hour*2)-self.current_pos) % 24
+        display_controller.set_pix1(pix_pos, color, color, color)
+        pix_pos = ((self.current_hour*2)+self.current_pos) % 24
+        display_controller.set_pix1(pix_pos, color, color, color)
+
+    def update(self, elapsed_ms: int):
+        if elapsed_ms - self.last_change_time >= self.time_to_change:
+            self.remains = elapsed_ms - self.start_time
+            self.last_change_time = elapsed_ms
+            self.current_pos += 1
+            if self.current_pos >= 24:
+                self.current_pos = 0
+
+
 class Pulse:
     def __init__(self, num_periods: int) -> None:
         self.percent_pulse = 0
@@ -80,6 +120,7 @@ class Pulse:
 class PulsedAnimation:
     def __init__(self) -> None:
         self.gradient = PulsedGradient()
+        self.anim = Chenillard()
 
     def set_size(self, size: int):
         self.gradient.set_size(size)
@@ -98,15 +139,20 @@ class PulsedAnimation:
 
     def reset(self):
         self.gradient.reset()
+        self.anim.reset(0)
 
     def paint(self,  sun_pos: int, sun_val: int, display_controller: DisplayController):
         self.gradient.paint(sun_pos, sun_val, display_controller)
+        self.anim.paint(display_controller)
 
     def update(self, elapsed_ms: int):
-        self.gradient.update(elapsed_ms)
+        if self.gradient.update(elapsed_ms):
+            self.anim.reset(elapsed_ms)
+        self.anim.update(elapsed_ms)
 
     def set_duty_cycle(self, on: int, off: int):
         self.gradient.set_duty_cycle(on, off)
+        self.anim.set_ttl(on + off)
 
 
 class PulsedGradient:
@@ -122,6 +168,7 @@ class PulsedGradient:
         self.end_col = [3, 7, 87]
         self.gradient = polylinear_gradient(
             [self.start_col, self.mid_col,  self.end_col], n=4)
+        self.done_sent = False
 
     def set_duty_cycle(self, on: int, off: int):
         self.time_high_ms = on
@@ -184,13 +231,16 @@ class PulsedGradient:
         display_controller.set_pix1((start_idx+1) %
                                     24, sun_val, sun_val, sun_val)
 
-    def update(self, elapsed_ms: int):
+    def update(self, elapsed_ms: int) -> bool:
         if self.time_waiting_until > 0:
             if elapsed_ms >= self.time_waiting_until:
                 self.time_waiting_until = 0
-            return
-
+            return False
+        ret = False
         self.percent_pulse += self.target_inc
+        if self.percent_pulse > 70 and self.done_sent is False:
+            ret = True
+            self.done_sent = True
         if self.percent_pulse >= 100:
             self.percent_pulse = 100
             self.target_inc = -self.target_inc
@@ -199,6 +249,8 @@ class PulsedGradient:
 
         elif self.percent_pulse < 0:
             self.percent_pulse = 0
+            self.done_sent = False
             self.target_inc = -self.target_inc
             if self.time_waiting_until == 0:
                 self.time_waiting_until = elapsed_ms + self.time_low_ms
+        return ret
