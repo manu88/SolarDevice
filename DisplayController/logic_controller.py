@@ -51,7 +51,8 @@ class MotorChecker:
     def update(self, elapsed_ms: int):
         if len(self._motors_to_start):
             idx = self._motors_to_start.pop()
-            self.arduinos_controller.set_motor(idx, 500)
+            self.arduinos_controller.set_motor(
+                idx, Config.SERVO_PULSE_DURATION_MS)
         if elapsed_ms - self.last_check_ms >= self.check_every_ms:
             self.last_check_ms = elapsed_ms
             print(f"Time to check motors :{self.indices_to_check}")
