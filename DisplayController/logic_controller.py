@@ -232,6 +232,12 @@ class LogicController:
                 f"update: Undefined anim state {self.anim_state}, resetting to PULSES")
             self.next_state = AnimState.PULSES
 
+    def set_duty_cycle(self, on: int, off: int):
+        print(f"osc_duty_cycle on={on} off={off}")
+        with self.update_lock:
+            self.pulse_anim.time_high_ms = on
+            self.pulse_anim.time_low_ms = off
+
     def set_nebulosity(self, neb: float):
         # max spread = 13
         spread = int(13*(1-neb))

@@ -24,7 +24,7 @@ class OSCServer(OSCServerInterface):
 
         self.dispatcher.map("/luminosity", self.osc_luminosity)
         self.dispatcher.map("/nebulosity", self.osc_nebulosity)
-
+        self.dispatcher.map("/duty_cycle", self.osc_duty_cycle)
         # to sort, mostly debug/tests
         self.dispatcher.map("/set-grad-color", self.osc_set_grad_color)
         self.dispatcher.map("/set-sun", self.osc_set_sun)
@@ -32,6 +32,9 @@ class OSCServer(OSCServerInterface):
 
         self.server = osc_server.ThreadingOSCUDPServer(
             ("", 8010), self.dispatcher)
+
+    def osc_duty_cycle(self, _, on: float, off: float):
+        self.logic.set_duty_cycle(int(on), int(off))
 
     def osc_nebulosity(self, _, neb: float):
         self.logic.set_nebulosity(neb)
