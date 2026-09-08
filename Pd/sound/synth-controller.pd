@@ -1,4 +1,4 @@
-#N canvas 579 214 808 874 12;
+#N canvas -1258 56 808 874 12;
 #X msg 206 120 save 0;
 #X msg 206 151 save 1;
 #X obj 69 564 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
@@ -69,7 +69,6 @@
 #X msg 586 425 load 22;
 #X msg 586 455 load 23;
 #X obj 70 508 pattr 1000 preset.txt;
-#X text 658 124 Delta-2;
 #X text 658 154 Sleep-2;
 #X text 658 184 LucidDreaming-2;
 #X text 658 214 sleep alt-2;
@@ -82,6 +81,14 @@
 #X text 658 408 Beta Waves ALT-2;
 #X text 658 438 Gamma Waves-2;
 #X text 658 468 Energy-2;
+#X text 658 124 Delta-2;
+#X text 262 125 OK;
+#X text 260 153 OK;
+#X text 261 180 OK;
+#X text 261 212 OK;
+#X text 261 242 OK;
+#X text 261 274 OK;
+#X text 261 305 OK;
 #X connect 0 0 69 0;
 #X connect 1 0 69 0;
 #X connect 3 0 69 0;
@@ -135,4 +142,5 @@
 #X connect 65 0 69 0;
 #X connect 66 0 69 0;
 #X connect 67 0 69 0;
+#X connect 68 0 69 0;
 #X connect 69 0 2 0;
