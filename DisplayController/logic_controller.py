@@ -39,8 +39,6 @@ class MotorChecker:
     def _do_check_motor(self, index: int):
         speed = self.arduinos_controller.sensors.sensors[index]
         is_rotating = self.arduinos_controller.sensors.is_rotating[index]
-        print(
-            f"_do_check_motor index={index} speed={speed} is_rotating={is_rotating}")
         if is_rotating:
             return
         if speed < Config.RESTART_IF_UNDER_SPEED:
@@ -48,9 +46,11 @@ class MotorChecker:
 
     def _do_check_motors(self):
         print(
-            f"_do_check_motors: {len(self.indices_to_check)} motors to check")
+            f"_do_check_motors: {len(self.indices_to_check)} motors to CHECK")
         for i in self.indices_to_check:
             self._do_check_motor(i)
+        print(
+            f"_do_check_motors: got {len(self._motors_to_start)} motors to START")
 
     def update(self, elapsed_ms: int):
         if len(self._motors_to_start) > 0:
