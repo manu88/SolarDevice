@@ -47,6 +47,8 @@ class MotorChecker:
             self._motors_to_start.add(index)
 
     def _do_check_motors(self):
+        print(
+            f"_do_check_motors: {len(self.indices_to_check)} motors to check")
         for i in self.indices_to_check:
             self._do_check_motor(i)
 
@@ -202,12 +204,10 @@ class LogicController:
             index_sensor = self.current_hour % 12
             value = self.arduinos_controller.sensors.sensors[index_sensor]
             is_rotating = self.arduinos_controller.sensors.is_rotating[index_sensor]
-            print(f"Send current sensor {index_sensor}")
             self.osc_server.send_current_sensor(
                 index_sensor, value, is_rotating)
         if elapsed_ms - self.last_time_sent_hour >= Config.SEND_CURRENT_HOUR_EVERY_MS:
             self.last_time_sent_hour = elapsed_ms
-            print("Send hour")
             self.osc_server.send_hour(self.current_hour)
 
     # self.update_lock IS ALREADY LOCKED
