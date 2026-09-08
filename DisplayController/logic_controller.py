@@ -49,8 +49,9 @@ class MotorChecker:
             self._do_check_motor(i)
 
     def update(self, elapsed_ms: int):
-        if len(self._motors_to_start):
+        if len(self._motors_to_start) > 0:
             idx = self._motors_to_start.pop()
+            print(f"Send servo command to {idx}")
             self.arduinos_controller.set_motor(
                 idx, Config.SERVO_PULSE_DURATION_MS)
         if elapsed_ms - self.last_check_ms >= self.check_every_ms:
