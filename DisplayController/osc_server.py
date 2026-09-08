@@ -34,11 +34,8 @@ class OSCServer(OSCServerInterface):
             ("", 8010), self.dispatcher)
 
     def osc_nebulosity(self, _, neb: float):
-
-        # max spread = 13
-        spread = int(13*(1-neb))
-        print(f"Got nebulosity {neb} -> spread= {spread}")
-        self.logic.set_grad_size(spread)
+        self.logic.set_nebulosity(neb)
+        self.osc_client.send_message("/nebulosity", [neb])
 
     def osc_luminosity(self, _, lum: float):
         self.osc_client.send_message("/luminosity", [lum])

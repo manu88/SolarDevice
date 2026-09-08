@@ -24,9 +24,9 @@ class MotorChecker:
         self.indices_to_check = []
         self._motors_to_start = set()
 
-    def check(self, index: int):
+    def check(self, indexes: list[int]):
         self._motors_to_start.clear()
-        self.indices_to_check = [index]
+        self.indices_to_check = indexes
 
     def check_all(self):
         self._motors_to_start.clear()
@@ -68,10 +68,11 @@ class LogicController:
         self._should_run = False
         self.anim_state = AnimState.UNDEFINED
         self.anim_start_started_at_ms = 0
-        self.next_state = AnimState.WELCOME_ANIM
+        self.next_state = AnimState.PULSES
         self.update_delay_ms = Config.LOGIC_FRAME_DURATION_MS
         self.welcome_anim = WelcomeAnim()
         self.pulse_anim = PulsedGradient()
+        self.spread_motors: int = 0  # how many motors around current clock
         self.clock_anim = Pulse(num_periods=Config.ON_THE_CLOCK_NUM_PERIODS)
         self.motor_checker = MotorChecker(
             arduinos_controller)
@@ -121,6 +122,18 @@ class LogicController:
                 self.hour_changed()
 
     # self.update_lock IS ALREADY LOCKED
+    def _update_motors_list_to_check(self):
+        center_motor_idx = self.current_hour % 12
+        print(
+            f"Pulse: Check motors center_motor_idx={center_motor_idx} self.spread_motors={self.spread_motors}")
+        indexes = set([center_motor_idx])
+        for i in range(self.spread_motors):
+            indexes.add((center_motor_idx-i-1) % 12)
+            indexes.add((center_motor_idx+i+1) % 12)
+        print(indexes)
+        self.motor_checker.check(list(indexes))
+
+    # self.update_lock IS ALREADY LOCKED
     def _check_state(self, elapsed: int):
         if self.anim_state != self.next_state:
             print(
@@ -130,7 +143,7 @@ class LogicController:
             self.anim_start_started_at_ms = elapsed
             if self.anim_state == AnimState.PULSES:
                 self.pulse_anim.reset()
-                self.motor_checker.check(self.current_hour % 12)
+                self._update_motors_list_to_check()
 
     def _run(self):
         elapsed = 0
@@ -219,9 +232,16 @@ class LogicController:
                 f"update: Undefined anim state {self.anim_state}, resetting to PULSES")
             self.next_state = AnimState.PULSES
 
-    def set_grad_size(self, size: int):
+    def set_nebulosity(self, neb: float):
+        # max spread = 13
+        spread = int(13*(1-neb))
+        print(f"Got nebulosity {neb} -> spread= {spread}")
         with self.update_lock:
-            self.pulse_anim.set_size(size)
+            self.pulse_anim.set_size(spread)
+            if self.anim_state == AnimState.PULSES:
+                self.spread_motors = int((1-neb)*5)
+                print(f"set self.spread_motors={self.spread_motors}")
+                self._update_motors_list_to_check()
 
     def set_grad_color(self, typ: int, r: float, g: float, b: float):
         with self.update_lock:
