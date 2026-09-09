@@ -33,6 +33,9 @@ class SensorReader:
         self.unresponsive_boards: Set[int] = set([0, 1, 2, 3])
         self.lst_cmd_motor_id = 0
 
+    def all_boards_connected(self) -> bool:
+        return len(self.unresponsive_boards) == 0
+
     def _check_boards_ok(self):
         now = time.time()
         for d_id, last_time in self.board_ids.items():
@@ -46,6 +49,19 @@ class SensorReader:
         print(self.sensors)
         print("Unresponsive boards:")
         print(self.unresponsive_boards)
+
+    def _update_sensor(self, sensor_id: int, speed: float, is_rotating: int):
+        # current_speed = self.sensors[sensor_id]
+        # current_is_rotating = self.is_rotating[sensor_id]
+        # diff = speed - current_speed
+        # if self.ignored_updates_count[sensor_id] < 10 and current_is_rotating and diff < -0.5:
+        #    self.ignored_updates_count[sensor_id] += 1
+        #    print(
+        #        f"IGNORE {self.ignored_updates_count[sensor_id]} Update sensor_id={sensor_id} current_speed={current_speed} current_is_rotating={current_is_rotating} new_is_rotating={is_rotating} new_speed={speed}  diff={diff}")
+        #    return
+        # self.ignored_updates_count[sensor_id] = 0
+        self.sensors[sensor_id] = speed
+        self.is_rotating[sensor_id] = is_rotating
 
     def on_sensor_line(self, line: str) -> List[int]:
         ret = []
@@ -79,12 +95,12 @@ class SensorReader:
             idx_0 = sensors_mapping[idx_start]
             idx_1 = sensors_mapping[idx_start+1]
             idx_2 = sensors_mapping[idx_start+2]
-            self.sensors[idx_0] = float(v0)
-            self.sensors[idx_1] = float(v1)
-            self.sensors[idx_2] = float(v2)
-            self.is_rotating[idx_0] = int(r0)
-            self.is_rotating[idx_1] = int(r1)
-            self.is_rotating[idx_2] = int(r2)
+            self._update_sensor(sensor_id=idx_0,
+                                speed=float(v0), is_rotating=int(r0))
+            self._update_sensor(
+                sensor_id=idx_1, speed=float(v1), is_rotating=int(r1))
+            self._update_sensor(
+                sensor_id=idx_2, speed=float(v2), is_rotating=int(r2))
             ret.append(idx_0)
             ret.append(idx_1)
             ret.append(idx_2)

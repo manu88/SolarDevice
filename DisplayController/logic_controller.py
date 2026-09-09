@@ -4,7 +4,7 @@ import datetime
 from enum import Enum
 from display_controller import DisplayController
 from arduinos_controller import ArduinosController
-from anims import PulsedGradient, WelcomeAnim, Pulse, PulsedAnimation
+from anims import WelcomeAnim, Pulse, PulsedAnimation
 from conf import Config
 from osc_server_interface import OSCServerInterface
 
@@ -44,6 +44,8 @@ class MotorChecker:
         if is_rotating:
             return
         if speed < Config.RESTART_IF_UNDER_SPEED:
+            print(
+                f"restart motor {index} because speed {speed}<{Config.RESTART_IF_UNDER_SPEED}")
             self._motors_to_start.add(index)
 
     def _do_check_motors(self):
@@ -51,8 +53,6 @@ class MotorChecker:
             f"_do_check_motors: {len(self.indices_to_check)} motors to CHECK")
         for i in self.indices_to_check:
             self._do_check_motor(i)
-        print(
-            f"_do_check_motors: got {len(self._motors_to_start)} motors to START")
 
     def update(self, elapsed_ms: int):
         if len(self._motors_to_start) > 0:
@@ -62,7 +62,6 @@ class MotorChecker:
                 idx, Config.SERVO_PULSE_DURATION_MS)
         if elapsed_ms - self.last_check_ms >= self.check_every_ms:
             self.last_check_ms = elapsed_ms
-            print(f"Time to check motors :{self.indices_to_check}")
             self._do_check_motors()
 
 
