@@ -82,3 +82,7 @@ Note: la nébulosité s'exprime entre 0 (pas de nuages) et 1 (temps couvert)
 ## Câblage Arduino
 
 [![alt](cablageArduinos.png)]
+
+## Troubleshooting
+
+Voir [ici](troubleshooting.md)
