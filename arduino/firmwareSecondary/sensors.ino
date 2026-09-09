@@ -5,7 +5,7 @@
 #define START_MIN_SPEED (float)0.3f
 #define START_MAX_SPEED (float)3.f
 
-const int minPeakDiff = 15;
+const int minPeakDiff = 8;
 #define IDLE_INTERVAL_MS 5000
 
 struct SensorReading {
