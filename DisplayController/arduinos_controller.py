@@ -55,6 +55,9 @@ class ArduinosController:
             self.set_motor(i, duration_ms)
 
     def set_motor(self, servo_idx: int, duration_ms: int):
+        if self.sensors.all_boards_connected() is False:
+            print("Waiting for all boards to be up before sending any motors")
+            return
         index = servos_mapping[servo_idx % 12]
         real_servo_idx = index % 3
         board_id = index//3
