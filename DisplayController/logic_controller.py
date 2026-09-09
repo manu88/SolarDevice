@@ -86,6 +86,7 @@ class LogicController:
             arduinos_controller)
 
         self.current_hour = -1
+        self.current_min = -1
         self.update_lock = Lock()
         self.realtime = True
         self.last_time_sent_sensor = 0
@@ -118,17 +119,11 @@ class LogicController:
         with self.update_lock:
             if self.realtime is False:
                 return
-            if hh != self.current_hour:
-                print(f"(2)Hour changed from {self.current_hour} to {hh}")
-                self.current_hour = hh
-                self.hour_changed()
+            self._check_hour(hh, mm)
 
     def on_clock2(self, hh: int, mm: int):
         with self.update_lock:
-            if hh != self.current_hour:
-                print(f"(3)Hour changed from {self.current_hour} to {hh}")
-                self.current_hour = hh
-                self.hour_changed()
+            self._check_hour(hh, mm)
 
     # self.update_lock IS ALREADY LOCKED
     def _update_motors_list_to_check(self):
@@ -189,9 +184,10 @@ class LogicController:
             print(f"paint: Undefined anim state {self.anim_state}")
 
     # self.update_lock IS ALREADY LOCKED
-    def hour_changed(self):
+    def hour_changed(self, num_periods: int):
         self.motor_checker.check_all()
         self.next_state = AnimState.ON_THE_CLOCK
+        self.clock_anim.num_periods = num_periods
 
     # self.update_lock IS ALREADY LOCKED
     def update_on_the_clock(self, elapsed_ms):
@@ -213,18 +209,28 @@ class LogicController:
             self.last_time_sent_hour = elapsed_ms
             self.osc_server.send_hour(self.current_hour)
 
+    def _check_hour(self, hh: int, mm: int):
+        if hh != self.current_hour:
+            print(
+                f"(1)Hour changed from {self.current_hour} to {hh}")
+            self.current_hour = hh
+            self.current_min = mm
+            self.hour_changed(Config.ON_THE_CLOCK_NUM_PERIODS)
+
+        elif self.anim_state == AnimState.PULSES and mm != self.current_min and mm in [15, 30, 45]:
+            print(f"Minutes changed to from {self.current_min} to {mm}")
+            self.current_min = mm
+            self.hour_changed(Config.ON_THE_QUARTER_NUM_PERIODS)
+
     # self.update_lock IS ALREADY LOCKED
+
     def update(self, elapsed_ms):
         self.send_osc_data(elapsed_ms)
         self.motor_checker.update(elapsed_ms)
         if self.realtime and self.anim_state != AnimState.WELCOME_ANIM:
-            current_hour = datetime.datetime.now().hour
-            if current_hour != self.current_hour:
-                print(
-                    f"(1)Hour changed from {self.current_hour} to {current_hour}")
-                self.current_hour = current_hour
-                self.hour_changed()
-                return
+            self._check_hour(hh=datetime.datetime.now().hour,
+                             mm=datetime.datetime.now().minute)
+
         if self.anim_state == AnimState.WELCOME_ANIM:
             if self.welcome_anim.update(elapsed_ms):
                 print("Welcom anim done")
