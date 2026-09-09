@@ -50,15 +50,17 @@ class Chenillard:
         self.start_time = start_time
         self.remains = self.ttl_ms
 
-    def paint(self,  display_controller: DisplayController):
+    def paint(self, sun_pos: int,  display_controller: DisplayController):
         percent = min(self.remains/(self.ttl_ms*1.5), 1)
         if percent >= 1:
             return
-        color = int(255*(1-percent)**2)
-        pix_pos = ((self.current_hour*2)-self.current_pos) % 24
-        display_controller.set_pix1(pix_pos, color, color, color)
-        pix_pos = ((self.current_hour*2)+self.current_pos) % 24
-        display_controller.set_pix1(pix_pos, color, color, color)
+        r = int(Config.CHENILLARD_COLOR[0]*(1-percent)**2)
+        g = int(Config.CHENILLARD_COLOR[1]*(1-percent)**2)
+        b = int(Config.CHENILLARD_COLOR[2]*(1-percent)**2)
+        pix_pos = (sun_pos-self.current_pos) % 24
+        display_controller.set_pix1(pix_pos, r, g, b)
+        pix_pos = (sun_pos+self.current_pos+1) % 24
+        display_controller.set_pix1(pix_pos, r, g, b)
 
     def update(self, elapsed_ms: int):
         if elapsed_ms - self.last_change_time >= self.time_to_change:
@@ -143,7 +145,7 @@ class PulsedAnimation:
 
     def paint(self,  sun_pos: int, sun_val: int, display_controller: DisplayController):
         self.gradient.paint(sun_pos, sun_val, display_controller)
-        self.anim.paint(display_controller)
+        self.anim.paint(sun_pos, display_controller)
 
     def update(self, elapsed_ms: int):
         if self.gradient.update(elapsed_ms):
