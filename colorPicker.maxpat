@@ -9,7 +9,7 @@
             "modernui": 1
         },
         "classnamespace": "box",
-        "rect": [ 595.0, 207.0, 1000.0, 780.0 ],
+        "rect": [ 766.0, 355.0, 1000.0, 780.0 ],
         "boxes": [
             {
                 "box": {
@@ -203,7 +203,7 @@
                     "numoutlets": 1,
                     "outlettype": [ "" ],
                     "patching_rect": [ 387.0, 366.0, 72.0, 22.0 ],
-                    "text": "0 0 8"
+                    "text": "1 1 2"
                 }
             },
             {
@@ -225,7 +225,7 @@
                     "numoutlets": 1,
                     "outlettype": [ "" ],
                     "patching_rect": [ 254.0, 366.0, 79.0, 22.0 ],
-                    "text": "5 10 43"
+                    "text": "4 5 15"
                 }
             },
             {
@@ -247,7 +247,7 @@
                     "numoutlets": 1,
                     "outlettype": [ "" ],
                     "patching_rect": [ 63.0, 356.0, 106.0, 22.0 ],
-                    "text": "225 221 235"
+                    "text": "8 10 42"
                 }
             },
             {
@@ -360,7 +360,7 @@
                     "numinlets": 1,
                     "numoutlets": 0,
                     "patching_rect": [ 227.0, 588.0, 138.0, 22.0 ],
-                    "text": "udpsend 127.0.0.1 8010"
+                    "text": "udpsend 127.0.0.1 8090"
                 }
             },
             {
