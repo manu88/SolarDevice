@@ -4,7 +4,7 @@ import datetime
 from enum import Enum
 from display_controller import DisplayController
 from arduinos_controller import ArduinosController
-from anims import WelcomeAnim, Pulse, PulsedAnimation
+from anims import WelcomeAnim, Pulse, PulsedGradient
 from conf import Config
 from osc_server_interface import OSCServerInterface
 
@@ -79,7 +79,7 @@ class LogicController:
         self.next_state = AnimState.WELCOME_ANIM
         self.update_delay_ms = Config.LOGIC_FRAME_DURATION_MS
         self.welcome_anim = WelcomeAnim()
-        self.pulse_anim = PulsedAnimation()
+        self.pulse_anim = PulsedGradient()
         self.spread_motors: int = 0  # how many motors around current clock
         self.clock_anim = Pulse(num_periods=Config.ON_THE_CLOCK_NUM_PERIODS)
         self.motor_checker = MotorChecker(
