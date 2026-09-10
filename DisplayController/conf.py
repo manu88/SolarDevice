@@ -19,3 +19,4 @@ class Config:
                        AFTERNOON_COLORS, EVENING_COLORS, NIGHT_COLORS]
 
     CHENILLARD_COLOR = [100, 100, 100]
+    MAX_MOTOR_SPREAD = 3
