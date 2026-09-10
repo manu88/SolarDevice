@@ -276,7 +276,7 @@ class LogicController:
         print(f"set_spread {level} -> spread= {spread}")
         self.pulse_anim.set_size(spread)
         if self.anim_state == AnimState.PULSES:
-            self.spread_motors = min(int(level*5), 1)
+            self.spread_motors = min(int(level*5), 3)
             print(f"set self.spread_motors={self.spread_motors}")
             self._update_motors_list_to_check()
 
