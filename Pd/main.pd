@@ -1,4 +1,4 @@
-#N canvas 466 -920 1194 503 12;
+#N canvas 466 38 1194 503 12;
 #N canvas 860 156 764 256 init 0;
 #X obj 278 132 config config.txt;
 #X obj 145 16 loadbang;
@@ -26,7 +26,7 @@
 #X connect 7 0 0 0;
 #X connect 8 0 2 0;
 #X restore 51 71 pd init;
-#N canvas 0 86 735 550 receive_params 0;
+#N canvas -747 103 735 550 receive_params 1;
 #X obj 87 121 iemnet/udpreceive 8012;
 #X obj 104 198 osc/unpackOSC;
 #N canvas 92 131 1254 789 sensors 0;
