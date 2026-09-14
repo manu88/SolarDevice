@@ -39,11 +39,17 @@ class OSCServer(OSCServerInterface):
 
     def osc_nebulosity(self, _, neb: float):
         self.logic.set_nebulosity(neb)
-        self.osc_client.send_message("/nebulosity", [neb])
+        try:
+            self.osc_client.send_message("/nebulosity", [neb])
+        except Exception:
+            pass
 
     def osc_luminosity(self, _, lum: float):
         self.logic.set_luminosity(lum)
-        self.osc_client.send_message("/luminosity", [lum])
+        try:
+            self.osc_client.send_message("/luminosity", [lum])
+        except Exception:
+            pass
 
     def osc_day(self, _, state: float):
         self.logic.set_day_state(int(state))
@@ -73,7 +79,10 @@ class OSCServer(OSCServerInterface):
         self.server.shutdown()
 
     def send_hour(self, hour: int):
-        self.osc_client.send_message("/clock", [hour, 0])
+        try:
+            self.osc_client.send_message("/clock", [hour, 0])
+        except Exception:
+            pass
 
     def send_current_sensor(self, index: int, value: float, is_rotating: int):
         try:
