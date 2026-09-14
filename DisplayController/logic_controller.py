@@ -165,6 +165,9 @@ class LogicController:
         #    print(f"Got exception in main logic loop: {e}")
         print("logic returned")
 
+    def is_doing_quarterly_anim(self) -> bool:
+        return self.anim_state == AnimState.ON_THE_CLOCK and self.clock_anim.num_periods == Config.ON_THE_QUARTER_NUM_PERIODS
+
     # self.update_lock IS ALREADY LOCKED
     def state_changed(self):
         print(f"NEW STATE {self.anim_state}")
@@ -207,7 +210,11 @@ class LogicController:
                 index_sensor, value, is_rotating)
         if elapsed_ms - self.last_time_sent_hour >= Config.SEND_CURRENT_HOUR_EVERY_MS:
             self.last_time_sent_hour = elapsed_ms
-            self.osc_server.send_hour(self.current_hour)
+            hour_to_send = self.current_hour
+            if self.is_doing_quarterly_anim():
+                print("Send hour -1 because doing quaterly anim")
+                hour_to_send = (hour_to_send - 1) % 24
+            self.osc_server.send_hour(hour_to_send)
 
     def _check_hour(self, hh: int, mm: int):
         if hh != self.current_hour:
