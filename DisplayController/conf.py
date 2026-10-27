@@ -5,7 +5,7 @@ class Config:
     LOGIC_FRAME_DURATION_MS = 40
     SEND_CURRENT_SPEED_EVERY_MS = 1000
     SEND_CURRENT_HOUR_EVERY_MS = 10000
-    ON_THE_CLOCK_NUM_PERIODS = 60  # chaque heure
+    ON_THE_CLOCK_NUM_PERIODS = 15  # chaque heure
     ON_THE_QUARTER_NUM_PERIODS = 15  # chaque 15 minutes
     SUN_MIN_VAL = 150
 
