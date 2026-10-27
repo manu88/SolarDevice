@@ -5,7 +5,7 @@ After=network.target
 [Service]
 Type=simple
 Nice=-20
-ExecStartPre=amixer -c 3 set Master 80%
+ExecStartPre=amixer -c 3 set Master 100%
 ExecStart=pd -nogui main.pd  -path /home/solar/
 Restart=on-failure
 RestartSec=10s
