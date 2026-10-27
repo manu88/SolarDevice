@@ -1,4 +1,4 @@
-#N canvas 0 93 818 626 12;
+#N canvas 583 88 818 626 12;
 #X msg 206 120 save 0;
 #X msg 206 151 save 1;
 #X obj 69 564 nbx 5 17 -1e+37 1e+37 0 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
@@ -88,6 +88,13 @@
 #X text 261 305 OK;
 #X obj 70 508 pattr 5000 preset.txt;
 #X obj 214 564 outlet;
+#X msg 509 531 save 50;
+#X msg 596 557 load 51;
+#X msg 596 531 load 50;
+#X msg 509 557 save 51;
+#X msg 509 583 save 52;
+#X msg 596 583 load 52;
+#X text 672 563 POUR PRESERVER;
 #X connect 0 0 87 0;
 #X connect 1 0 87 0;
 #X connect 3 0 87 0;
@@ -144,3 +151,9 @@
 #X connect 66 0 87 0;
 #X connect 87 0 2 0;
 #X connect 87 1 88 0;
+#X connect 89 0 87 0;
+#X connect 90 0 87 0;
+#X connect 91 0 87 0;
+#X connect 92 0 87 0;
+#X connect 93 0 87 0;
+#X connect 94 0 87 0;
