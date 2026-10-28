@@ -1,6 +1,6 @@
 #N canvas 289 45 1145 896 10;
 #X obj 599 -8 cnv 15 277 900 empty empty empty 46 13 0 14 #9cd080 #404040 0;
-#N canvas 851 87 877 871 output 1;
+#N canvas 851 87 877 871 output 0;
 #X obj 353 490 t b;
 #X obj 353 437 f;
 #X obj 353 515 f;
@@ -42,8 +42,8 @@
 #X text 114 386 automatically start DSP -->;
 #X obj 170 281 lop~ 200;
 #X text 58 358 2 sub \, 3 \, 4 hps;
-#X obj 31 276 hip~ 500;
-#X obj 102 278 hip~ 500;
+#X obj 31 276 hip~ 300;
+#X obj 102 278 hip~ 300;
 #X connect 0 0 2 0;
 #X connect 1 0 4 0;
 #X connect 2 0 24 0;
