@@ -44,7 +44,7 @@
 #X text 58 358 2 sub \, 3 \, 4 hps;
 #X obj 31 276 hip~ 100;
 #X obj 102 278 hip~ 100;
-#X obj 161 305 *~ 0.9;
+#X obj 161 305 *~ 0.8;
 #X connect 0 0 2 0;
 #X connect 1 0 4 0;
 #X connect 2 0 24 0;
