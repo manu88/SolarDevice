@@ -45,7 +45,7 @@ class OSCServer(OSCServerInterface):
             pass
 
     def osc_luminosity(self, _, lum: float):
-        self.logic.set_luminosity(lum)
+        self.logic.set_luminosity(1.0)
         try:
             self.osc_client.send_message("/luminosity", [lum])
         except Exception:
